@@ -11,3 +11,5 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/xiyuansun/realEstAnalytics
 BugReports: https://github.com/xiyuansun/realEstAnalytics/issues
+Suggests: 
+    testthat
