@@ -11,12 +11,9 @@
 #' @return A data frame with columns corresponding to zpid, Date, and Zestimate information
 #' @examples
 #' library(tidyverse)
-#'
-#' zapi_key = 'X1-ZWz181ckl6u9e3_9k5bc'
-#'
+#' set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+#' zapi_key = getOption('ZillowR-zws_id')
 #' zpid='1341571'
-#'
-#'
 #' GetZestimate(zpids=zpid,rentzestimate=TRUE,api_key=zapi_key)
 
 GetZestimate <- function(zpids, rentzestimate=FALSE, api_key, raw=FALSE){
@@ -44,11 +41,16 @@ GetZestimate <- function(zpids, rentzestimate=FALSE, api_key, raw=FALSE){
 
 zesthelper <- function(zpid, rentzestimate, api_key, raw=FALSE){
   urlrent <- tolower(as.character(rentzestimate))
-
+  url = 'http://www.zillow.com/webservice/GetZestimate.htm'
   #read data from API then get to the nodes
-  xmlresult <- read_xml(paste0("http://www.zillow.com/webservice/GetZestimate.htm?zws-id=", api_key,
-                               "&zpid=",zpid, "&rentzestimate=",urlrent)) %>%
+  request <- url_encode_request(url,
+                                'zpid' = zpid,
+                                'rentzestimate' = rentzestimate,
+                                'zws-id' = api_key
+  )
+  xmlresult <- read_xml(request) %>%
     xml_nodes('response')
+
   if(raw==TRUE){return(xmlresult)}
   #check to make sure address worked, if not return NAs
   if(xmlresult %>% xml_nodes('zestimate') %>% html_text() %>% length() == 0){
@@ -116,4 +118,3 @@ extract_rent_zestimates <- function(xmlres){
 
   return(zestimate_data)
 }
-
