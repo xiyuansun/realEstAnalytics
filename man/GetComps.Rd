@@ -25,7 +25,9 @@ If \code{raw=T}, a raw XML document. If \code{raw=F} (default), a data frame wit
 For a given address, extract property information including building data and Zestimates. At least one of zipcode or city/state information must be included.
 }
 \examples{
-zapi_key = 'X1-ZWz181ckl6u9e3_9k5bc'
-GetComps('1341571', count=10, rentzestimate=FALSE, api_key=zapi_key,raw=FALSE)
+set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+zapi_key = getOption('ZillowR-zws_id')
+zpid='1341571'
+GetComps(zpid, count=10, rentzestimate=FALSE, api_key=zapi_key,raw=FALSE)
 
 }

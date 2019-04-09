@@ -10,8 +10,10 @@
 #' @import lubridate rvest assertthat xml2
 #' @return If \code{raw=T}, a raw XML document. If \code{raw=F} (default), a data frame with columns corresponding to address information, Zestimates, and property information. The number of columns varies by property use type.
 #' @examples
-#' zapi_key = 'X1-ZWz181ckl6u9e3_9k5bc'
-#' GetComps('1341571', count=10, rentzestimate=FALSE, api_key=zapi_key,raw=FALSE)
+#' set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+#' zapi_key = getOption('ZillowR-zws_id')
+#' zpid='1341571'
+#' GetComps(zpid, count=10, rentzestimate=FALSE, api_key=zapi_key,raw=FALSE)
 #'
 
 GetComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE){
@@ -20,12 +22,20 @@ GetComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE){
   assertthat::assert_that(is.logical(raw))
   assertthat::assert_that(is.numeric(count))
 
+  url = "http://www.zillow.com/webservice/GetComps.htm"
+  request <- url_encode_request(url,
+                                'zpid' = zpid,
+                                'count' = count,
+                                'rentzestimate' = rentzestimate,
+                                'zws-id' = api_key
+  )
   #read data from API then get to the nodes
-  xmlresult <-   read_xml(paste0("http://www.zillow.com/webservice/GetComps.htm?zws-id=", zapi_key,
-                                 "&zpid=",zpid,"&count=",count,"&rentzestimate=",as.character(rentzestimate)))
+  xmlresult <-   read_xml(request)
   if(raw==TRUE){return(xmlresult)}
 
-  xmlresult<- xmlresult %>% xml_nodes('response') %>% xml_nodes('properties')
+  xmlresult<- xmlresult %>%
+    xml_nodes('response') %>%
+    xml_nodes('properties')
 
   #check to make sure address worked
   if(xmlresult %>% html_text() %>% length() == 0){
@@ -46,8 +56,8 @@ GetComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE){
   #rentzestimate data
   rentzestimate_data <- NULL
   if(rentzestimate==T){
-  rentzestimate_data <- xmlresult %>% lapply(extract_rent_zestimates_comps, count=count) %>% lapply(as.data.frame.list)
-  rentzestimate_data <- suppressWarnings(bind_rows(rentzestimate_data))
+    rentzestimate_data <- xmlresult %>% lapply(extract_rent_zestimates_comps, count=count) %>% lapply(as.data.frame.list)
+    rentzestimate_data <- suppressWarnings(bind_rows(rentzestimate_data))
   }
   #other property data
   compscore <- xmlresult%>% lapply(extract_compscores) %>% lapply(as.data.frame.list)
