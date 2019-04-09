@@ -10,8 +10,10 @@
 #' @import lubridate rvest assertthat xml2
 #' @return If \code{raw=T}, a raw XML document. If \code{raw=F} (default), a data frame with columns corresponding to address information, Zestimates, and property information. The number of columns varies by property use type.
 #' @examples
-#' zapi_key = 'X1-ZWz181ckl6u9e3_9k5bc'
-#' GetDeepComps('1341571', count=10, rentzestimate=FALSE, api_key=zapi_key,raw=FALSE)
+#' set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+#' zapi_key = getOption('ZillowR-zws_id')
+#' zpid='1341571'
+#' GetDeepComps(zpid, count=10, rentzestimate=FALSE, api_key=zapi_key,raw=FALSE)
 #'
 
 GetDeepComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE){
@@ -20,9 +22,15 @@ GetDeepComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE
   assertthat::assert_that(is.logical(raw))
   assertthat::assert_that(is.numeric(count))
 
+  url = "http://www.zillow.com/webservice/GetDeepComps.htm"
+  request <- url_encode_request(url,
+                                'zpid' = zpid,
+                                'count' = count,
+                                'rentzestimate' = rentzestimate,
+                                'zws-id' = api_key
+  )
   #read data from API then get to the nodes
-  xmlresult <-   read_xml(paste0("http://www.zillow.com/webservice/GetDeepComps.htm?zws-id=", zapi_key,
-                                 "&zpid=",zpid,"&count=",count,"&rentzestimate=",as.character(rentzestimate)))
+  xmlresult <- read_xml(request)
   if(raw==TRUE){return(xmlresult)}
 
   xmlresult<- xmlresult %>% xml_nodes('response') #%>% xml_nodes('properties')
@@ -36,11 +44,15 @@ GetDeepComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE
   }
 
   #address data
-  address_data <- xmlresult %>% lapply(extract_address_comps,count=count) %>%  lapply(as.data.frame.list)
+  address_data <- xmlresult %>%
+    lapply(extract_address_comps,count=count) %>%
+    lapply(as.data.frame.list)
   address_data <- suppressWarnings(bind_rows(address_data))
 
   #zestimate data
-  zestimate_data <- xmlresult %>% lapply(extract_zestimates_comps, count=count) %>% lapply(as.data.frame.list)
+  zestimate_data <- xmlresult %>%
+    lapply(extract_zestimates_comps, count=count) %>%
+    lapply(as.data.frame.list)
   zestimate_data <- suppressWarnings(bind_rows(zestimate_data))
 
   #rentzestimate data
@@ -141,8 +153,8 @@ extract_otherdata <- function(xmlres){
   richzpids <- richzpids %>% unlist()
   otherdata <- data.frame(zpid=richzpids,varnames, richdata) %>% spread(key=varnames,value=richdata)
 
-   otherdata <- otherdata %>%  mutate_all(as.character) %>% mutate_at(-c(5), as.numeric) #%>%
-    #mutate_at(5, mdy)
+  otherdata <- otherdata %>%  mutate_all(as.character) %>% mutate_at(-c(5), as.numeric) #%>%
+  #mutate_at(5, mdy)
 
   return(otherdata)
 }
