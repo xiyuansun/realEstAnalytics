@@ -25,11 +25,8 @@ and returns the search results for all addresses
 }
 \examples{
 library(tidyverse)
-
-zapi_key = 'X1-ZWz181ckl6u9e3_9k5bc'
-
+set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+zapi_key = getOption('ZillowR-zws_id')
 zpid='1341571'
-
-
 GetZestimate(zpids=zpid,rentzestimate=TRUE,api_key=zapi_key)
 }
