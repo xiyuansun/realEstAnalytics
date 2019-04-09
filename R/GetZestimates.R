@@ -32,7 +32,7 @@ GetZestimate <- function(zpids, rentzestimate=FALSE, api_key, raw=FALSE){
     i=1
     outdf <- results[[1]]
     while(i<length(results)){
-      outdf <- suppressWarnings(full_join(outdf,results[[i+1]]))
+      outdf <- suppressWarnings(suppressMessages(full_join(outdf,results[[i+1]])))
       i=i+1
     }
     return(outdf)

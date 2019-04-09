@@ -72,7 +72,7 @@ GetDeepComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE
   if(rentzestimate==T) {outdf <- data.frame(address_data,zestimate_data,rentzestimate_data,compscore)}
   if(rentzestimate==F) {outdf <- data.frame(address_data,zestimate_data,compscore)}
 
-  outdf <- outdf  %>% full_join(richprop)
+  outdf <- suppressMessages(full_join(outdf,richprop))
   #return the dataframe
   return(outdf)
 }
