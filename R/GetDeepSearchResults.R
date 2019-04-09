@@ -12,7 +12,8 @@
 #' @import lubridate rvest assertthat xml2
 #' @return If \code{raw=T}, the XML document directly from the API call. If \code{raw=F} (default), a data frame with columns corresponding to address information, Zestimates, and property information. The number of columns varies by property use type.
 #' @examples
-#' zapi_key = 'X1-ZWz181ckl6u9e3_9k5bc'
+#' set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+#' zapi_key = getOption('ZillowR-zws_id')
 #' GetDeepSearchResults(address='312 Hayward Ave.', city='Ames', state='IA', rentzestimate=TRUE, zipcode='50014', api_key=zapi_key)
 #'
 
@@ -23,15 +24,24 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, r
                           msg='Error: Invalid address/city/zip combo')
   assertthat::assert_that(is.character(api_key), msg='invalid api key')
 
+  url = 'http://www.zillow.com/webservice/GetDeepSearchResults.htm'
   #parse address to url encoding
   address_as_url <- URLencode(address)
   #parse city names with spaces in them
   cityspace <- city %>% str_replace(" ","-")
+  citystatezip = paste0(cityspace,if(!is.null(city)){','}, state,if(!is.null(state)){','},
+                        zipcode)
+  request <- url_encode_request(url,
+                                'address' = address,
+                                'citystatezip' = citystatezip,
+                                'rentzestimate' = rentzestimate,
+                                'zws-id' = api_key
+  )
+
+
+
   #read data from API then get to the nodes
-  xmlresult <- read_xml(paste0("http://www.zillow.com/webservice/GetDeepSearchResults.htm?zws-id=", api_key,
-                               "&address=",address_as_url,
-                               "&citystatezip=",cityspace,if(!is.null(city)){','}, state,if(!is.null(state)){','},
-                               zipcode,"&rentzestimate=",as.character(rentzestimate)))
+  xmlresult <- read_xml(request)
   if(raw==T) return(xmlresult)
   xmlresult<- xmlresult%>% xml_nodes('result')
 
@@ -60,11 +70,11 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, r
   #rentzestimate data
   rent_zestimate_data <- NULL
   if(rentzestimate==T){
-  rent_zestimate_data <- xmlresult %>% lapply(extract_rent_zestimates) %>% lapply(as.data.frame.list)
-  rent_zestimate_data <- suppressWarnings(bind_rows(rent_zestimate_data))
+    rent_zestimate_data <- xmlresult %>% lapply(extract_rent_zestimates) %>% lapply(as.data.frame.list)
+    rent_zestimate_data <- suppressWarnings(bind_rows(rent_zestimate_data))
 
-  #combine all of the data into 1 data frame
-  outdf <- data.frame(address_data,zestimate_data,rent_zestimate_data,richprop)
+    #combine all of the data into 1 data frame
+    outdf <- data.frame(address_data,zestimate_data,rent_zestimate_data,richprop)
   }
 
   #return the dataframe
@@ -141,4 +151,12 @@ extract_otherdata <- function(xmlres){
 
   return(otherdata)
 }
+
+
+
+
+
+
+
+
 
