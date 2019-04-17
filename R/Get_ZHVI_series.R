@@ -13,10 +13,10 @@
 #' @examples
 #'
 #' #2 bedrooms by zipcode
-#' get_ZHVI_series(bedrooms=2, tier='B',geography="Zip")
+#' #get_ZHVI_series(bedrooms=2, tier='B',geography="Zip")
 #'
 #' #the ZHVI summary for all homes by State
-#' get_ZHVI_series(geography="State", summary=T)
+#' #get_ZHVI_series(geography="State", summary=T)
 #'
 #'
 get_ZHVI_series <- function(bedrooms=1, geography="Metro", allhomes = F, tier='ALL', summary = F, other=NULL){

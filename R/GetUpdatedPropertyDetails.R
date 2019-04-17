@@ -22,7 +22,7 @@
 #' @return A data frame with columns corresponding to zpid, Date, and updated property information
 #'
 #' @export
-#' @importFrom lubridate rvest assertthat xml2
+#' @import lubridate rvest assertthat xml2
 #'
 #' @examples
 #' \dontrun{
@@ -42,7 +42,7 @@ GetUpdatedPropertyDetails <- function(
   url = 'http://www.zillow.com/webservice/GetUpdatedPropertyDetails.htm'
   request <- url_encode_request(url,
                                 'zpid' = zpid,
-                                'zws-id' = zapi_key)
+                                'zws-id' = api_key)
   xmlresult <- read_xml(request) %>%
     xml_nodes('response')
 

@@ -1,6 +1,9 @@
 
 context('GetChart')
 
+set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+zws_id = getOption('ZillowR-zws_id')
+
 test_that(" provide the correct zip code", {
   # expect an error due to incorrect zip code
   expect_error(GetChart(zpid = abc,zws_id ='X1-ZWz181enkd4cgb_82rpe', unit_type = 'dollar', width = 600, height = 300,chartDuration = '10years'))

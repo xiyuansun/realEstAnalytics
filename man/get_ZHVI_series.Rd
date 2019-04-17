@@ -27,10 +27,10 @@ reads the static .csv file for the desired Zillow Home Values series based on da
 \examples{
 
 #2 bedrooms by zipcode
-get_ZHVI_series(bedrooms=2, tier='B',geography="Zip")
+#get_ZHVI_series(bedrooms=2, tier='B',geography="Zip")
 
 #the ZHVI summary for all homes by State
-get_ZHVI_series(geography="State", summary=T)
+#get_ZHVI_series(geography="State", summary=T)
 
 
 }
