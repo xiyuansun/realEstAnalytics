@@ -1,6 +1,9 @@
 
 context('GetDeepSearchResults')
 
+set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+zapi_key = getOption('ZillowR-zws_id')
+
 test_that(" provide the correct adress", {
   # expect an error due to incorrect address
   expect_error(GetDeepSearchResults(address= abc, city='Ames', state='IA', zipcode='50014', api_key=zapi_key))
