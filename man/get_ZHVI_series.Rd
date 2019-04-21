@@ -17,20 +17,20 @@ get_ZHVI_series(bedrooms = 1, geography = "Metro", allhomes = F,
 \item{tier}{one of 'ALL','T' (for top), 'B' (for bottom), or 'M' (for median)}
 
 \item{summary}{logical, if \code{TRUE}, the ZHVI summary for all homes is returned}
+
+\item{other}{Other possible options from the Zillow home data series. Default is \code{NULL}. Possible options are strings "Median Home Price Per Sq Ft", and "Increasing" or "Decreasing"}
 }
 \value{
 A tibble
 }
 \description{
-reads the static .csv file for the desired Zillow Home Values series based on data type and geography, by building a url path to the .csv file hosted by Zillow
+Reads the static .csv file for Zillow Home Values series by type and geography, building a url path to the .csv file.
 }
 \examples{
-
-#2 bedrooms by zipcode
-#get_ZHVI_series(bedrooms=2, tier='B',geography="Zip")
+get_ZHVI_series(bedrooms=2, tier='B',geography="Zip")
 
 #the ZHVI summary for all homes by State
-#get_ZHVI_series(geography="State", summary=T)
+get_ZHVI_series(geography="State", summary=TRUE)
 
 
 }

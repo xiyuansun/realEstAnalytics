@@ -26,8 +26,11 @@ For a given address, extract property information including building data and Ze
 }
 \examples{
 set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+
 zapi_key = getOption('ZillowR-zws_id')
+
 zpid='1341571'
+
 GetDeepComps(zpid, count=10, rentzestimate=FALSE, api_key=zapi_key,raw=FALSE)
 
 }

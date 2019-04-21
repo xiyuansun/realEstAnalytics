@@ -11,8 +11,11 @@
 #' @return If \code{raw=T}, a raw XML document. If \code{raw=F} (default), a data frame with columns corresponding to address information, Zestimates, and property information. The number of columns varies by property use type.
 #' @examples
 #' set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+#'
 #' zapi_key = getOption('ZillowR-zws_id')
+#'
 #' zpid='1341571'
+#'
 #' GetDeepComps(zpid, count=10, rentzestimate=FALSE, api_key=zapi_key,raw=FALSE)
 #'
 
@@ -77,84 +80,3 @@ GetDeepComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE
   return(outdf)
 }
 
-#############################
-extract_address_comps <- function(xmlres,count){
-  address_data <- xmlres %>% xml_nodes('address') %>% xml_children %>%  xml_text() %>%
-    matrix(ncol=6,byrow=T) %>% data.frame()
-  names(address_data) <- c("address", "zipcode", "city", "state", "lat","long")
-  address_data <- address_data %>% mutate_at(c("lat","long"),as.character) %>% mutate_at(c("lat","long"),as.numeric)
-
-  region_data <- xmlres %>% xml_nodes('localRealEstate') %>% xml_children() %>%  xml_attrs() %>%
-    unlist() %>% as.character() %>% matrix(nrow=count+1, byrow=T) %>% data.frame()
-  names(region_data) <- c('region_name','region_id','type')
-  return(data.frame(address_data,region_data))
-}
-
-extract_zestimates_comps <- function(xmlres, count){
-  zestimate_data <- xmlres %>% xml_nodes('zestimate')
-
-  highlow <- zestimate_data %>% xml_nodes('valuationRange') %>% xml_children() %>% xml_text() %>%
-    matrix(ncol=2, byrow=T) %>% data.frame()
-
-  zestimate_data <- zestimate_data %>% xml_children() %>% xml_text() %>%
-    matrix(ncol=6, byrow=T) %>% data.frame()
-
-  zestimate_data <- cbind(zestimate_data[c(1,2,4,6)], highlow)
-  names(zestimate_data) <- c("zestimate", "zest_lastupdated","zest_monthlychange","zest_percentile","zestimate_low","zestimate_high")
-
-  zestimate_data <- zestimate_data %>%
-    mutate_at(c(1,3:6),as.character) %>% mutate_at(c(1,3:6),as.numeric) %>%
-    mutate_at(2,mdy)
-
-  return(zestimate_data)
-}
-
-extract_rent_zestimates_comps <- function(xmlres, count){
-  zestimate_data <- xmlres %>% xml_nodes('rentzestimate')
-
-  highlow <- zestimate_data %>% xml_nodes('valuationRange') %>% xml_children() %>% xml_text() %>%
-    matrix(nrow=1+count,ncol=2, byrow=T) %>% data.frame()
-
-  zestimate_data <- zestimate_data %>% xml_children() %>% xml_text() %>%
-    matrix(nrow=1+count,ncol=5, byrow=T) %>% data.frame()
-
-  zestimate_data <- cbind(zestimate_data[c(1,2,4)], highlow)
-  names(zestimate_data) <- c("rentzestimate", "rent_lastupdated","rent_monthlychange","rentzestimate_low","rentzestimate_high")
-
-  zestimate_data <- zestimate_data %>%
-    mutate_at(c(1,3:5),as.character) %>% mutate_at(c(1,3:5),as.numeric) %>%
-    mutate_at(2,mdy)
-
-  return(zestimate_data)
-}
-
-extract_compscores<- function(xmlres){
-  scores <- xmlres %>% xml_nodes('comparables') %>%
-    xml_children() %>% xml_attrs() %>%
-    unlist() %>% as.numeric
-  zpid <- xmlres %>% xml_nodes('comparables') %>%
-    xml_nodes('zpid') %>% xml_text() %>%
-    as.numeric
-  out <- data.frame(zpid,compscore=scores)
-  return(out)
-}
-
-extract_otherdata <- function(xmlres){
-  zpids <- xmlres %>% xml_nodes('zpid') %>% xml_text()
-  #return(zpids)
-  chars <- c('taxAssessmentYear','taxAssessment','yearBuilt','lotSizeSqFt','finishedSqFt',
-             'bathrooms','bedrooms','totalRooms','lastSoldDate','lastSoldPrice')
-  richdata <- chars %>% lapply(xml_nodes, x=xmlres) %>% lapply(xml_text) %>% unlist()
-
-  richzpids <- chars %>% lapply(xml_nodes, x=xmlres) %>% lapply(xml_parent) %>%
-    lapply(xml_nodes,'zpid') %>% lapply(xml_text)
-
-  varnames <- rep(chars, times=c(sapply(richzpids,length)))
-  richzpids <- richzpids %>% unlist()
-  otherdata <- data.frame(zpid=richzpids,varnames, richdata) %>% spread(key=varnames,value=richdata)
-
-  otherdata <- otherdata %>%  mutate_all(as.character) %>% mutate_at(-c(5), as.numeric) #%>%
-  #mutate_at(5, mdy)
-
-  return(otherdata)
-}

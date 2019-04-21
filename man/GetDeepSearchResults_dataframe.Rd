@@ -19,6 +19,8 @@ GetDeepSearchResults_dataframe(.df, col.address, col.zipcode = NULL,
 
 \item{col.state}{a numeric value specifying which column contains the state abbrev. (required if no zipcode information)}
 
+\item{rentzestimate}{if \code{TRUE}, additional zestimates for rental prices are returned.}
+
 \item{api_key}{a character string specifying the unique Zillow API key}
 
 \item{raw}{logical, if \code{TRUE}, a list with raw XML documents  (i.e., the original ZillowR call) for each property in the data frame is returned}
@@ -31,12 +33,15 @@ A wrapper for \code{GetDeepSearchResults} that takes data frames with address in
 and returns the search results for all addresses
 }
 \examples{
-library(tidyverse)
+
 
 zapi_key = 'X1-ZWz181ckl6u9e3_9k5bc'
 
 adrs <- c('733 Normandy Ct', '600 South Quail Ct','2902 Wood St', '3425 Locust St.')
+
 data.frame(address=adrs,zipcode=c('67114','67114','50014', '64109'),
 state=c("KS","KS","IA","MO"), city=c("Newton","Newton","Ames","Kansas City")) \%>\%
-GetDeepSearchResults_dataframe(col.address=1, col.zipcode=2, col.city=4,col.state=3,api_key=zapi_key)
+
+GetDeepSearchResults_dataframe(col.address=1, col.zipcode=2, col.city=4,
+col.state=3,api_key=zapi_key)
 }

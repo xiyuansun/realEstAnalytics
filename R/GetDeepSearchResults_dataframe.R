@@ -8,19 +8,23 @@
 #' @param col.city a numeric value specifying which column contains the city (required if no zipcode information)
 #' @param col.state a numeric value specifying which column contains the state abbrev. (required if no zipcode information)
 #' @param api_key a character string specifying the unique Zillow API key
+#' @param rentzestimate if \code{TRUE}, additional zestimates for rental prices are returned.
 #' @param raw logical, if \code{TRUE}, a list with raw XML documents  (i.e., the original ZillowR call) for each property in the data frame is returned
 #' @export
 #' @import lubridate rvest assertthat xml2
 #' @return A data frame with columns corresponding to address, property, and Zestimate information
 #' @examples
-#' library(tidyverse)
+#'
 #'
 #' zapi_key = 'X1-ZWz181ckl6u9e3_9k5bc'
 #'
 #' adrs <- c('733 Normandy Ct', '600 South Quail Ct','2902 Wood St', '3425 Locust St.')
+#'
 #' data.frame(address=adrs,zipcode=c('67114','67114','50014', '64109'),
 #' state=c("KS","KS","IA","MO"), city=c("Newton","Newton","Ames","Kansas City")) %>%
-#' GetDeepSearchResults_dataframe(col.address=1, col.zipcode=2, col.city=4,col.state=3,api_key=zapi_key)
+#'
+#' GetDeepSearchResults_dataframe(col.address=1, col.zipcode=2, col.city=4,
+#' col.state=3,api_key=zapi_key)
 
 GetDeepSearchResults_dataframe <- function(.df, col.address, col.zipcode=NULL, col.city=NULL, col.state=NULL, rentzestimate=F, api_key, raw=FALSE){
   assertthat::assert_that(!is.null(col.zipcode) | (!is.null(col.state)&!is.null(col.city)), msg='Missing either zip or city/state info')
@@ -46,19 +50,5 @@ GetDeepSearchResults_dataframe <- function(.df, col.address, col.zipcode=NULL, c
   }
   return(outdf)
   }
-}
-
-applier <- function(namedvector, api_key, rentzestimate, raw=FALSE){
-  city=namedvector['city']
-  state=namedvector['state']
-  zip=namedvector['zip']
-  if(!'city' %in% names(namedvector) | !'state' %in% names(namedvector)){
-    state<-city<-NULL
-  }
-  if(!'zip' %in% names(namedvector)){
-    zip<-NULL
-  }
-  return(GetDeepSearchResults(api_key=api_key,address=as.character(namedvector['address']),
-                              zipcode=zip,city=city,state=state, rentzestimate=rentzestimate, raw=raw))
 }
 

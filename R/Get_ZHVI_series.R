@@ -1,22 +1,20 @@
 #' Get Zillow Home Value Index time series data
-#' @description reads the static .csv file for the desired Zillow Home Values series based on data type and geography, by building a url path to the .csv file hosted by Zillow
+#' @description Reads the static .csv file for Zillow Home Values series by type and geography, building a url path to the .csv file.
 #' @name get_ZHVI_series
 #' @param bedrooms a numeric value specifying the number of bedrooms. If not needed, leave at the default (1)
 #' @param geography string specifying the desired geographic region to summarise. Choices are 'Metro','City','State','Neighborhood','Zip', and 'County'.
 #' @param allhomes logical, set to \code{TRUE} If you do not want a specific # of bedrooms or type of home
 #' @param tier one of 'ALL','T' (for top), 'B' (for bottom), or 'M' (for median)
 #' @param summary logical, if \code{TRUE}, the ZHVI summary for all homes is returned
-#' @param other
+#' @param other Other possible options from the Zillow home data series. Default is \code{NULL}. Possible options are strings "Median Home Price Per Sq Ft", and "Increasing" or "Decreasing"
 #' @export
 #' @import lubridate rvest assertthat xml2
 #' @return A tibble
 #' @examples
-#'
-#' #2 bedrooms by zipcode
-#' #get_ZHVI_series(bedrooms=2, tier='B',geography="Zip")
+#' get_ZHVI_series(bedrooms=2, tier='B',geography="Zip")
 #'
 #' #the ZHVI summary for all homes by State
-#' #get_ZHVI_series(geography="State", summary=T)
+#' get_ZHVI_series(geography="State", summary=TRUE)
 #'
 #'
 get_ZHVI_series <- function(bedrooms=1, geography="Metro", allhomes = F, tier='ALL', summary = F, other=NULL){
@@ -46,44 +44,4 @@ get_ZHVI_series <- function(bedrooms=1, geography="Metro", allhomes = F, tier='A
 
 
 
-
-##################
-##Helpers
-build_path_geog <- function(geography){
-  assertthat::assert_that(geography %in% c('Metro','City','State','Neighborhood','Zip', 'County'), msg = 'invalid geography type')
-  pathG <- paste0(geography,'/',geography,'_')
-  return(pathG)
-}
-
-build_path_bed<- function(bedrooms, rental=F){
-  options <- c(1:5,'C','SFR')
-  assert_that(as.character(bedrooms) %in% options, msg='Specify bedrooms (1-5) or C for condo or SFR for single family residence')
-  if(bedrooms %in% c(1:4)){
-    pathb <- paste0(bedrooms,'bedroom')
-    if(rental==T) pathb <- paste0(bedrooms,'Bedroom')
-  }
-  if(bedrooms == 5){
-    pathb <- '5BedroomOrMore'
-  }
-  if(bedrooms == 'C'){
-    pathb <- 'Condominum'
-  }
-  if(bedrooms == 'SFR'){
-    pathb <- 'SingleFamilyResidence'
-  }
-  return(pathb)
-}
-
-build_path_allhomes <- function(tier='ALL', other=NULL){
-
-  tierpath <- data.frame(tie = c('ALL','B','T','M'),
-                         path = c('AllHomes','BottomTier','TopTier','MedianValuePerSqft_AllHomes'))
-  pathb <- tierpath$path[tierpath$tie==tier] %>% as.character()
-  if(tier=='ALL' & !is.null(other)){
-    path_o <- paste0('PctOfHomes',other,'InValues_',pathb)
-    if(other=='Median Home Price Per Sq Ft') path_o <- paste0('MedianValuePerSqft_',pathb)
-    pathb <- path_o
-  }
-  return(pathb)
-}
 
