@@ -1,4 +1,4 @@
-# @importFrom methods is
+#' @importFrom methods is
 validate_arg <- function(x,
                          required = FALSE,
                          class = NULL,

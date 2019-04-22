@@ -1,12 +1,18 @@
 #' Get Zestimates for a given Zillow property ID
-#' @description Returns a dataframe with the Zillow zestimate information for a given Zillow property ID.
+#'
+#' Returns a dataframe with the Zillow zestimate information for a given Zillow property ID.
+#'
 #' @name GetZestimates
-#' @param zpids a single value or vector of Zillow property ids
+#' @param zpids a single value or vector of Zillow property IDs
 #' @param rentzestimate if \code{TRUE}, gets the rent zestimate.
 #' @param api_key character string specifying Zillow API key
 #' @param raw logical, if \code{TRUE} the raw XML data from the API call is returned (i.e., the original ZillowR call)
 #' @export
-#' @import lubridate rvest assertthat xml2
+#' @import xml2
+#' @importFrom dplyr full_join
+#' @importFrom assertthat assert_that
+#' @importFrom tibble as_tibble
+#' @import magrittr
 #' @return A data frame with columns corresponding to zpid, Date, and Zestimate information
 #' @examples
 #'
@@ -37,7 +43,7 @@ GetZestimate <- function(zpids, rentzestimate=FALSE, api_key, raw=FALSE){
       outdf <- suppressWarnings(suppressMessages(full_join(outdf,results[[i+1]])))
       i=i+1
     }
-    return(outdf)
+    return(outdf %>% as_tibble)
   }
 }
 

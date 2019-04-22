@@ -10,21 +10,24 @@ get_rental_listings(bedrooms = 1, type = NULL, geography = "Zip",
 \arguments{
 \item{bedrooms}{a numeric value specifying the number of bedrooms. If not needed, leave at the default (1)}
 
-\item{type}{(optional) a character string specifying housing type, from NULL,'SFR','Multi','Duplex','Condo/Co-op','Studio', and 'SFR/Condo'.}
+\item{type}{(optional) a character string specifying housing type, from NULL, 'SFR', 'Multi', 'Duplex', 'Condo/Co-op', 'Studio', and 'SFR/Condo'.}
 
-\item{geography}{string specifying the desired geographic region to summarise. Choices are 'Metro','City','State','Neighborhood','Zip', and 'County'.}
+\item{geography}{string specifying the desired geographic region to summarise. Choices are 'Metro','City', 'State', 'Neighborhood', 'Zip', and 'County'.}
 
 \item{rate}{a string specifying the rate, either 'Total' or 'PerSqFt'}
 }
 \value{
-A tibble
+A tibble. Columns returned correspond to geographic region information and monthly observations for each region.
 }
 \description{
-reads the static .csv file for the desired Zillow Home Values series based on data type and geography, by building a url path to the .csv file hosted by Zillow
+Reads the static .csv file for the desired Zillow Home Values series based on data type and geography,
+by building a URL path to the .csv file hosted by Zillow.
+Data is available for a variety of sizes and types, and can be returned in either gross prices or by $ per square foot.
 }
 \examples{
-
+#5 bedrooms by zipcode
 get_rental_listings(bedrooms=5, rate='PerSqFt', type="Studio",geography="Zip")
 
+#1 bedroom multi-family homes by state.
 get_rental_listings(bedrooms=1, rate='Total', type="Multi", geography="State")
 }

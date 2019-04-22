@@ -1,4 +1,7 @@
-#' @import lubridate rvest assertthat xml2
+#' @importFrom lubridate mdy
+#' @importFrom assertthat assert_that
+#' @import xml2 dplyr
+#' @import magrittr
 #'
 extract_address <- function(xmlres){
   address_data <- xmlres %>% xml_nodes('address') %>% xml_children %>%  xml_text() %>%

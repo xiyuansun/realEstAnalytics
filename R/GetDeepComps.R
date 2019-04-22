@@ -1,13 +1,21 @@
-#' Get the results for comparable recent property sales for a given property with additional property data
-#' @description For a given address, extract property information including building data and Zestimates. At least one of zipcode or city/state information must be included.
+#' Get comparable recent property sales for a given property with additional property data
+#'
+#' For a given address, extract property information including building data and Zestimates.
+#' At least one of zipcode or city/state information must be included.
+#'
 #' @name GetDeepComps
-#' @param zpid The Zillow property id
+#' @param zpid The Zillow property id to search.
 #' @param count (integer) How many comparables to return?
-#' @param rentzestimate if \code{TRUE}, gets the rent zestimate.
-#' @param api_key character string specifying Zillow API key
-#' @param raw logical, if \code{TRUE} the raw XML data from the API call is returned (i.e., the original ZillowR call)
+#' @param rentzestimate (logical) If \code{TRUE}, gets the rent zestimate.
+#' @param api_key A character string specifying your unique Zillow API key
+#' @param raw (logical) If \code{TRUE} the raw XML data from the API call is returned (i.e., the original ZillowR call)
 #' @export
-#' @import lubridate rvest assertthat xml2
+#' @importFrom dplyr bind_rows full_join
+#' @importFrom rvest html_text
+#' @importFrom assertthat assert_that
+#' @importFrom tibble as_tibble
+#' @import xml2
+#' @import magrittr
 #' @return If \code{raw=T}, a raw XML document. If \code{raw=F} (default), a data frame with columns corresponding to address information, Zestimates, and property information. The number of columns varies by property use type.
 #' @examples
 #' set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
@@ -16,7 +24,7 @@
 #'
 #' zpid='1341571'
 #'
-#' GetDeepComps(zpid, count=10, rentzestimate=FALSE, api_key=zapi_key,raw=FALSE)
+#' GetDeepComps(zpid, count=10, rentzestimate=TRUE, api_key=zapi_key, raw=FALSE)
 #'
 
 GetDeepComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE){
@@ -73,9 +81,9 @@ GetDeepComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE
 
   #combine all of the data into 1 data frame
   if(rentzestimate==T) {outdf <- data.frame(address_data,zestimate_data,rentzestimate_data,compscore)}
-  if(rentzestimate==F) {outdf <- data.frame(address_data,zestimate_data,compscore)}
+  if(rentzestimate==F) {outdf <- data.frame(address_data,zestimate_data,compscore) }
 
-  outdf <- suppressMessages(full_join(outdf,richprop))
+  outdf <- suppressMessages(full_join(outdf,richprop))  %>% as_tibble
   #return the dataframe
   return(outdf)
 }

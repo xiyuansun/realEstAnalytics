@@ -1,23 +1,36 @@
-#' @import lubridate rvest assertthat xml2
+#' @importFrom lubridate mdy
+#' @importFrom assertthat assert_that
+#' @import xml2 dplyr
+#' @importFrom tidyr spread
+#' @import magrittr
 
 
 extract_address_comps <- function(xmlres,count){
+  #find the address data from the API
   address_data <- xmlres %>% xml_nodes('address') %>% xml_children %>%  xml_text() %>%
     matrix(ncol=6,byrow=T) %>% data.frame()
+
+  #formatting
   names(address_data) <- c("address", "zipcode", "city", "state", "lat","long")
   address_data <- address_data %>% mutate_at(c("lat","long"),as.character) %>% mutate_at(c("lat","long"),as.numeric)
+
+  #local real estate data
   region_data <- xmlres %>% xml_nodes('localRealEstate') %>% xml_children() %>%  xml_attrs() %>%
     unlist() %>% as.character() %>% matrix(nrow=count+1, byrow=T) %>% data.frame()
+
   names(region_data) <- c('region_name','region_id','type')
   return(data.frame(address_data,region_data))
 }
 
 extract_zestimates_comps <- function(xmlres, count){
+  #find the zestimates from the API call
   zestimate_data <- xmlres %>% xml_nodes('zestimate')
 
+  #unnesting the valuation range sub-list
   highlow <- zestimate_data %>% xml_nodes('valuationRange') %>% xml_children() %>% xml_text() %>%
     matrix(ncol=2, byrow=T) %>% data.frame()
 
+  #formatting
   zestimate_data <- zestimate_data %>% xml_children() %>% xml_text() %>%
     matrix(ncol=6, byrow=T) %>% data.frame()
 

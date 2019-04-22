@@ -1,4 +1,5 @@
-#' @import lubridate rvest assertthat xml2
+#' @importFrom assertthat assert_that
+#' @import magrittr
 
 ##################
 ##Helpers

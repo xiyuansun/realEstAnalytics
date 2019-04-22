@@ -1,5 +1,8 @@
 #' Get the 'Deep Search' results from the Zillow API
-#' @description For a given address, extract property information including building data and Zestimates. At least one of zipcode or city/state information must be included.
+#'
+#' For a given address, extract property information including building data and Zestimates.
+#' At least one of zipcode or city/state information must be included.
+#'
 #' @name GetDeepSearchResults
 #' @param address (required) A character string specifying the address
 #' @param city An optional character string specifying the city name
@@ -9,7 +12,14 @@
 #' @param api_key (required) A unique character string specifying the Zillow user's API key
 #' @param raw (optional) If \code{TRUE}, the raw xml document from the API call is returned. If \code{FALSE}, the data is extracted and formatted into a data frame.
 #' @export
-#' @import lubridate rvest assertthat xml2
+#' @importFrom rvest html_text
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr bind_rows
+#' @importFrom stringr str_replace
+#' @importFrom utils URLencode
+#' @importFrom tibble as_tibble
+#' @import magrittr
+#' @import xml2
 #' @return If \code{raw=T}, the XML document directly from the API call. If \code{raw=F} (default), a data frame with columns corresponding to address information, Zestimates, and property information. The number of columns varies by property use type.
 #' @examples
 #' set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
@@ -80,7 +90,7 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, r
   }
 
   #return the dataframe
-  return(outdf)
+  return(outdf %>% as_tibble)
 }
 
 

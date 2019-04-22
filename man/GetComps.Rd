@@ -8,21 +8,22 @@ GetComps(zpid, count = 10, rentzestimate = FALSE, api_key,
   raw = FALSE)
 }
 \arguments{
-\item{zpid}{The Zillow property id}
+\item{zpid}{The Zillow property id to serach for}
 
 \item{count}{(integer) How many comparables to return?}
 
-\item{rentzestimate}{if \code{TRUE}, gets the rent zestimate.}
+\item{rentzestimate}{(logical) If \code{TRUE}, gets the rent zestimate.}
 
-\item{api_key}{character string specifying Zillow API key}
+\item{api_key}{A character string specifying your unique Zillow API key}
 
-\item{raw}{logical, if \code{TRUE} the raw XML data from the API call is returned (i.e., the original ZillowR call)}
+\item{raw}{(logical) If \code{TRUE} the raw XML data from the API call is returned (i.e., the original ZillowR call)}
 }
 \value{
 If \code{raw=T}, a raw XML document. If \code{raw=F} (default), a data frame with columns corresponding to address information, Zestimates, and property information. The number of columns varies by property use type.
 }
 \description{
-For a given address, extract property information including building data and Zestimates. At least one of zipcode or city/state information must be included.
+For a given address, extract property information including building data and Zestimates.
+At least one of zipcode or city/state information must be included.
 }
 \examples{
 set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')

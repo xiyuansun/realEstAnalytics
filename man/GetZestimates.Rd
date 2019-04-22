@@ -8,7 +8,7 @@
 GetZestimate(zpids, rentzestimate = FALSE, api_key, raw = FALSE)
 }
 \arguments{
-\item{zpids}{a single value or vector of Zillow property ids}
+\item{zpids}{a single value or vector of Zillow property IDs}
 
 \item{rentzestimate}{if \code{TRUE}, gets the rent zestimate.}
 

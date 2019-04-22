@@ -1,18 +1,23 @@
 Package: realEstAnalytics
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Interfacing with Zillow's API in R
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: as.person(c(
+    "Xiyuan Sun <xiyuansu@iastate.edu> [aut, cre]", 
+    "Gani Agadilov <agadilov@iastate.edu> [aut]",
+    "Oscar Aguilar <oaguilar@iastate.edu> [aut]",
+    "Steve Harms <stharms@iastate.edu> [aut]"
+  ))
+Maintainer: Xiyuan Sun <xiyuansu@iastate.edu>
+Description: This \code{R} package supplies functions for several different calls to Zillow's Real Estate API directly from R and returns the property data in a tidy format. NOTE: A valid Zillow Web Services ID (ZWSID) that can be obtained by signing up
+ at https://www.zillow.com/webservice/Registration.htm .
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/xiyuansun/realEstAnalytics
 BugReports: https://github.com/xiyuansun/realEstAnalytics/issues
-Depends: R (>= 2.10), tidyverse
-Imports: lubridate , assertthat , xml2, RCurl, XML, rvest
+Depends: R (>= 2.10)
+Imports: lubridate , assertthat , xml2, RCurl, XML, rvest, dplyr, tidyr, readr, stringr, magrittr, tibble, utils, methods
 Suggests: 
     testthat
 RoxygenNote: 6.1.1.9000
