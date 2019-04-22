@@ -8,7 +8,7 @@
 GetZestimate(zpids, rentzestimate = FALSE, api_key, raw = FALSE)
 }
 \arguments{
-\item{zpids}{a single value or vector of Zillow property ids}
+\item{zpids}{a single value or vector of Zillow property IDs}
 
 \item{rentzestimate}{if \code{TRUE}, gets the rent zestimate.}
 
@@ -20,13 +20,15 @@ GetZestimate(zpids, rentzestimate = FALSE, api_key, raw = FALSE)
 A data frame with columns corresponding to zpid, Date, and Zestimate information
 }
 \description{
-A wrapper for \code{GetDeepSearchResults} that takes data frames with address information as inputs rather than a single address,
-and returns the search results for all addresses
+Returns a dataframe with the Zillow zestimate information for a given Zillow property ID.
 }
 \examples{
-library(tidyverse)
+
 set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+
 zapi_key = getOption('ZillowR-zws_id')
+
 zpid='1341571'
+
 GetZestimate(zpids=zpid,rentzestimate=TRUE,api_key=zapi_key)
 }

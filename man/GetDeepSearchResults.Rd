@@ -26,11 +26,14 @@ GetDeepSearchResults(address, city = NULL, state = NULL,
 If \code{raw=T}, the XML document directly from the API call. If \code{raw=F} (default), a data frame with columns corresponding to address information, Zestimates, and property information. The number of columns varies by property use type.
 }
 \description{
-For a given address, extract property information including building data and Zestimates. At least one of zipcode or city/state information must be included.
+For a given address, extract property information including building data and Zestimates.
+At least one of zipcode or city/state information must be included.
 }
 \examples{
 set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
 zapi_key = getOption('ZillowR-zws_id')
-GetDeepSearchResults(address='312 Hayward Ave.', city='Ames', state='IA', rentzestimate=TRUE, zipcode='50014', api_key=zapi_key)
+
+GetDeepSearchResults(address='312 Hayward Ave.', city='Ames', state='IA',
+ rentzestimate=TRUE, zipcode='50014', api_key=zapi_key)
 
 }
