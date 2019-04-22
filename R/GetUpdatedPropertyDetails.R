@@ -56,7 +56,7 @@ GetUpdatedPropertyDetails <- function(
   }
 
   address_data <- xmlresult %>%
-    lapply(extract_address) %>%
+    lapply(extract_address_e) %>%
     lapply(as.data.frame.list)
   address_data <- suppressWarnings(bind_rows(address_data))
 
@@ -75,7 +75,7 @@ GetUpdatedPropertyDetails <- function(
   return(outdf)
 }
 
-extract_address <- function(xmlres){
+extract_address_e <- function(xmlres){
   #xmlres <- xmlresult
   address_data <- xmlres %>% xml_nodes('address') %>% xml_children %>%  xml_text() %>%
     matrix(ncol=6,byrow=T) %>% data.frame()
