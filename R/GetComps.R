@@ -76,6 +76,6 @@ GetComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE){
   if(rentzestimate==F) {outdf <- data.frame(address_data,zestimate_data,compscore)}
 
   #return the dataframe
-  return(outdf  %>% as_tibble)
+  return(outdf  %>% as_tibble %>% mutate_at('zpid', as.factor))
 }
 

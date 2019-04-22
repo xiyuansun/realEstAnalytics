@@ -90,7 +90,7 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, r
   }
 
   #return the dataframe
-  return(outdf %>% as_tibble)
+  return(outdf %>% as_tibble %>% mutate_at('zpid', as.factor))
 }
 
 

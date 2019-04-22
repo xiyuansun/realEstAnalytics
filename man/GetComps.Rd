@@ -8,7 +8,7 @@ GetComps(zpid, count = 10, rentzestimate = FALSE, api_key,
   raw = FALSE)
 }
 \arguments{
-\item{zpid}{The Zillow property id to serach for}
+\item{zpid}{The Zillow property id to search for}
 
 \item{count}{(integer) How many comparables to return?}
 
