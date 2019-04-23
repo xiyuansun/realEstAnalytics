@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 # realEstAnalytics
 
 <!-- badges: start -->
+[![Travis build status](https://travis-ci.org/xiyuansun/realEstAnalytics.svg?branch=master)](https://travis-ci.org/xiyuansun/realEstAnalytics)
 <!-- badges: end -->
 
 The goal of realEstAnalytics is to ...
@@ -24,7 +25,8 @@ The goal of realEstAnalytics is to ...
 You can install the released version of realEstAnalytics from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("realEstAnalytics")
+library(devtools)
+install_github("xiyuansun/realEstAnalytics")
 ```
 
 ## Example
@@ -34,6 +36,9 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example}
 library(realEstAnalytics)
 ## basic example code
+
+
+
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
