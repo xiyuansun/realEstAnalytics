@@ -36,23 +36,15 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example}
 library(realEstAnalytics)
 ## basic example code
+set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+zapi_key = getOption('ZillowR-zws_id')
+zpid='48749425'
+GetZestimate(zpids=zpid,rentzestimate=TRUE,api_key=zapi_key)
+GetDeepSearchResults(address='312 Hayward Ave.', city='Ames', state='IA', rentzestimate=TRUE, zipcode='50014', api_key=zapi_key)
+GetUpdatedPropertyDetails(zpid=zpid,api_key= zapi_key)
 
 
 
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!

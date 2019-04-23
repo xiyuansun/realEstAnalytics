@@ -34,28 +34,45 @@ library(realEstAnalytics)
 #> Warning: replacing previous import 'dplyr::setdiff' by 'lubridate::setdiff'
 #> when loading 'realEstAnalytics'
 ## basic example code
+set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+zapi_key = getOption('ZillowR-zws_id')
+zpid='48749425'
+GetZestimate(zpids=zpid,rentzestimate=TRUE,api_key=zapi_key)
+#> Warning in as.POSIXlt.POSIXct(x, tz): unknown timezone 'zone/tz/2019a.1.0/
+#> zoneinfo/America/Chicago'
+#> # A tibble: 1 x 20
+#>   address zipcode city  state   lat  long region_name region_id type 
+#>   <fct>   <fct>   <fct> <fct> <dbl> <dbl> <fct>       <fct>     <fct>
+#> 1 2114 B… 98109   Seat… WA     47.6 -122. East Queen… 271856    neig…
+#> # … with 11 more variables: zestimate <dbl>, zest_lastupdated <date>,
+#> #   zest_monthlychange <dbl>, zest_percentile <dbl>, zestimate_low <dbl>,
+#> #   zestimate_high <dbl>, rentzestimate <dbl>, rent_lastupdated <date>,
+#> #   rent_monthlychange <dbl>, rentzestimate_low <dbl>,
+#> #   rentzestimate_high <dbl>
+GetDeepSearchResults(address='312 Hayward Ave.', city='Ames', state='IA', rentzestimate=TRUE, zipcode='50014', api_key=zapi_key)
+#> # A tibble: 3 x 24
+#>   address zipcode city  state   lat  long region_name region_id type 
+#>   <chr>   <fct>   <fct> <fct> <dbl> <dbl> <fct>       <fct>     <fct>
+#> 1 312 Ha… 50014   Ames  IA     42.0 -93.7 South Camp… 764178    neig…
+#> 2 312 Ha… 50014   Ames  IA     42.0 -93.7 South Camp… 764178    neig…
+#> 3 312 Ha… 50014   Ames  IA     42.0 -93.7 South Camp… 764178    neig…
+#> # … with 15 more variables: zestimate <dbl>, zest_lastupdated <date>,
+#> #   zest_monthlychange <dbl>, zest_percentile <dbl>, zestimate_low <dbl>,
+#> #   zestimate_high <dbl>, rentzestimate <dbl>, rent_lastupdated <date>,
+#> #   rent_monthlychange <dbl>, rentzestimate_low <dbl>,
+#> #   rentzestimate_high <dbl>, zpid <fct>, bathrooms <dbl>, bedrooms <dbl>,
+#> #   finishedSqFt <dbl>
+GetUpdatedPropertyDetails(zpid=zpid,api_key= zapi_key)
+#>              address zipcode    city state      lat      long      useCode
+#> 1 2114 Bigelow Ave N   98109 Seattle    WA 47.63793 -122.3479 SingleFamily
+#>   bedrooms bathrooms finishedSqFt lotSizeSqFt yearBuilt yearUpdated
+#> 1        4       3.0         3470        4680      1924        2003
+#>   numFloors basement        roof                  view parkingType
+#> 1         2 Finished Composition Water, City, Mountain  Off-street
+#>   heatingSources heatingSystem
+#> 1            Gas    Forced air
+#>                                                                                         rooms
+#> 1 Laundry room, Walk-in closet, Master bath, Office, Dining room, Family room, Breakfast nook
+#>   currentMonth total
+#> 1            1     1
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
