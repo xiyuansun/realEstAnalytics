@@ -66,7 +66,7 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, r
   }
 
   #address data
-  address_data <- xmlresult %>% lapply(extract_address) %>%  lapply(as.data.frame.list)
+  address_data <- xmlresult %>% lapply(extract_address_search) %>%  lapply(as.data.frame.list)
   address_data <- suppressWarnings(bind_rows(address_data))
 
   #zestimate data
@@ -90,7 +90,9 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, r
   }
 
   #return the dataframe
-  return(outdf %>% as_tibble %>% mutate_at('zpid', as.factor))
+  return(outdf %>% mutate_at(1:4, as.character) %>%
+           mutate_at('zpid', as.character) %>% mutate_if(is.factor, as.character) %>%
+           as_tibble())
 }
 
 

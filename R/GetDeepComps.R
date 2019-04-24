@@ -85,6 +85,6 @@ GetDeepComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE
 
   outdf <- suppressMessages(full_join(outdf,richprop))  %>% as_tibble
   #return the dataframe
-  return(outdf%>% mutate_at('zpid', as.factor))
+  return(outdf%>% mutate_at('zpid', as.character)%>% mutate_if(is.factor, as.character))
 }
 

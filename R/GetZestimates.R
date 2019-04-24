@@ -43,7 +43,7 @@ GetZestimate <- function(zpids, rentzestimate=FALSE, api_key, raw=FALSE){
       outdf <- suppressWarnings(suppressMessages(full_join(outdf,results[[i+1]])))
       i=i+1
     }
-    return(outdf %>% as_tibble)
+    return(outdf %>% as_tibble %>% mutate_if(is.factor, as.character))
   }
 }
 

@@ -54,7 +54,7 @@ GetDeepSearchResults_dataframe <- function(.df, col.address, col.zipcode=NULL, c
     outdf <- suppressWarnings(suppressMessages(full_join(outdf,propdata[[i+1]])))
     i=i+1
   }
-  return(outdf %>% as_tibble %>% mutate_at('zpid', as.factor))
+  return(outdf %>% as_tibble %>% mutate_at('zpid', as.character))
   }
 }
 

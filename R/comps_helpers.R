@@ -88,7 +88,8 @@ extract_otherdata <- function(xmlres){
   richzpids <- richzpids %>% unlist()
   otherdata <- data.frame(zpid=richzpids,varnames, richdata) %>% spread(key=varnames,value=richdata)
 
-  otherdata <- otherdata %>%  mutate_all(as.character) %>% mutate_at(-c(5), as.numeric) #%>%
+  otherdata <- otherdata %>%  mutate_all(as.character) %>%
+    mutate_at(which(!(names(otherdata)%in%c('lastSoldDate'))),as.numeric) #%>%
   #mutate_at(5, mdy)
 
   return(otherdata)

@@ -2,11 +2,11 @@
 #' @importFrom assertthat assert_that
 #' @import magrittr
 #' @import xml2 dplyr
-extract_address <- function(xmlres){
+extract_address_search <- function(xmlres){
   address_data <- xmlres %>% xml_nodes('address') %>% xml_children %>%  xml_text() %>%
     matrix(ncol=6,byrow=T) %>% data.frame()
   names(address_data) <- c("address", "zipcode", "city", "state", "lat","long")
-  address_data <- address_data %>% mutate_at(c(1:6),as.character) %>% mutate_at(c("lat","long"),as.numeric)
+  address_data <- address_data %>% mutate_all(as.character) %>% mutate_at(c("lat","long"),as.numeric)
 
   nrs <- which((xmlres %>% xml_nodes('address') %>% xml_children %>%  xml_name)=='city') %>% length()
   region_data <- xmlres %>% xml_nodes('localRealEstate') %>% xml_children() %>%  xml_attrs() %>%
@@ -66,8 +66,10 @@ extract_otherdata_search <- function(xmlres){
   varnames <- rep(chars, times=c(sapply(richzpids,length)))
   richzpids <- richzpids %>% unlist()
   otherdata <- data.frame(zpid=richzpids,varnames, richdata) %>% spread(key=varnames,value=richdata)
-
-  otherdata <- otherdata %>%  mutate_all(as.character) %>% mutate_at(-c(5), as.numeric) #%>%
+  #return(names(otherdata))
+  otherdata <- otherdata %>%  mutate_all(as.character) %>%
+    mutate_at(which(!(names(otherdata)%in%c('lastSoldDate'))),as.numeric) #%>%
+  #  mutate_at(which(colnames(otherdata)=='lastSoldDate'), as.character) #%>%
   #mutate_at(5, mdy)
 
   return(otherdata)
