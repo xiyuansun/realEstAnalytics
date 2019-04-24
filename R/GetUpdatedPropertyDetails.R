@@ -22,7 +22,7 @@
 #' @return A data frame with columns corresponding to zpid, Date, and updated property information
 #'
 #' @export
-#' @import lubridate rvest assertthat xml2
+#' @import rvest assertthat xml2
 #'
 #' @examples
 #' \dontrun{
