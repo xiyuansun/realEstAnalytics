@@ -6,7 +6,7 @@ extract_address <- function(xmlres){
   address_data <- xmlres %>% xml_nodes('address') %>% xml_children %>%  xml_text() %>%
     matrix(ncol=6,byrow=T) %>% data.frame()
   names(address_data) <- c("address", "zipcode", "city", "state", "lat","long")
-  address_data <- address_data %>% mutate_at(c("lat","long"),as.character) %>% mutate_at(c("lat","long"),as.numeric)
+  address_data <- address_data %>% mutate_at(c(1:6),as.character) %>% mutate_at(c("lat","long"),as.numeric)
 
   nrs <- which((xmlres %>% xml_nodes('address') %>% xml_children %>%  xml_name)=='city') %>% length()
   region_data <- xmlres %>% xml_nodes('localRealEstate') %>% xml_children() %>%  xml_attrs() %>%
@@ -53,7 +53,7 @@ extract_rent_zestimates <- function(xmlres){
   return(zestimate_data)
 }
 
-extract_otherdata <- function(xmlres){
+extract_otherdata_search <- function(xmlres){
   zpids <- xmlres %>% xml_nodes('zpid') %>% xml_text()
   #return(zpids)
   chars <- c('taxAssessmentYear','taxAssessment','yearBuilt','lotSizeSqFt','finishedSqFt',

@@ -74,7 +74,7 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, r
   zestimate_data <- suppressWarnings(bind_rows(zestimate_data))
 
   #other property data
-  richprop <- xmlresult %>% extract_otherdata
+  richprop <- xmlresult %>% extract_otherdata_search
 
   #combine all of the data into 1 data frame
   outdf <- data.frame(address_data,zestimate_data,richprop)

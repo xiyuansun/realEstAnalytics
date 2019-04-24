@@ -12,7 +12,7 @@ extract_address_comps <- function(xmlres,count){
 
   #formatting
   names(address_data) <- c("address", "zipcode", "city", "state", "lat","long")
-  address_data <- address_data %>% mutate_at(c("lat","long"),as.character) %>% mutate_at(c("lat","long"),as.numeric)
+  address_data <- address_data %>% mutate_at(c(1:6),as.character) %>% mutate_at(c("lat","long"),as.numeric)
 
   #local real estate data
   region_data <- xmlres %>% xml_nodes('localRealEstate') %>% xml_children() %>%  xml_attrs() %>%

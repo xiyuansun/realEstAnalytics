@@ -19,5 +19,8 @@ BugReports: https://github.com/xiyuansun/realEstAnalytics/issues
 Depends: R (>= 2.10)
 Imports: lubridate , assertthat , xml2, RCurl, XML, rvest, dplyr, tidyr, readr, stringr, magrittr, tibble, utils, methods, shiny
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 RoxygenNote: 6.1.1.9000
+VignetteBuilder: knitr
