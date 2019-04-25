@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/xiyuansun/realEstAnalytics.svg?branch=master)](https://travis-ci.org/xiyuansun/realEstAnalytics)
+[![Codecov test coverage](https://codecov.io/gh/xiyuansun/realEstAnalytics/branch/master/graph/badge.svg)](https://codecov.io/gh/xiyuansun/realEstAnalytics?branch=master)
 <!-- badges: end -->
 
 The goal of realEstAnalytics is to ...

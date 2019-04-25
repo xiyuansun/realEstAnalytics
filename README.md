@@ -7,6 +7,8 @@
 
 [![Travis build
 status](https://travis-ci.org/xiyuansun/realEstAnalytics.svg?branch=master)](https://travis-ci.org/xiyuansun/realEstAnalytics)
+[![Codecov test
+coverage](https://codecov.io/gh/xiyuansun/realEstAnalytics/branch/master/graph/badge.svg)](https://codecov.io/gh/xiyuansun/realEstAnalytics?branch=master)
 <!-- badges: end -->
 
 The goal of realEstAnalytics is to …
@@ -27,12 +29,6 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(realEstAnalytics)
-#> Warning: replacing previous import 'dplyr::intersect' by
-#> 'lubridate::intersect' when loading 'realEstAnalytics'
-#> Warning: replacing previous import 'dplyr::union' by 'lubridate::union'
-#> when loading 'realEstAnalytics'
-#> Warning: replacing previous import 'dplyr::setdiff' by 'lubridate::setdiff'
-#> when loading 'realEstAnalytics'
 ## basic example code
 set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
 zapi_key = getOption('ZillowR-zws_id')
@@ -42,7 +38,7 @@ GetZestimate(zpids=zpid,rentzestimate=TRUE,api_key=zapi_key)
 #> zoneinfo/America/Chicago'
 #> # A tibble: 1 x 20
 #>   address zipcode city  state   lat  long region_name region_id type 
-#>   <fct>   <fct>   <fct> <fct> <dbl> <dbl> <fct>       <fct>     <fct>
+#>   <chr>   <chr>   <chr> <chr> <dbl> <dbl> <chr>       <chr>     <chr>
 #> 1 2114 B… 98109   Seat… WA     47.6 -122. East Queen… 271856    neig…
 #> # … with 11 more variables: zestimate <dbl>, zest_lastupdated <date>,
 #> #   zest_monthlychange <dbl>, zest_percentile <dbl>, zestimate_low <dbl>,
@@ -52,7 +48,7 @@ GetZestimate(zpids=zpid,rentzestimate=TRUE,api_key=zapi_key)
 GetDeepSearchResults(address='312 Hayward Ave.', city='Ames', state='IA', rentzestimate=TRUE, zipcode='50014', api_key=zapi_key)
 #> # A tibble: 3 x 24
 #>   address zipcode city  state   lat  long region_name region_id type 
-#>   <chr>   <fct>   <fct> <fct> <dbl> <dbl> <fct>       <fct>     <fct>
+#>   <chr>   <chr>   <chr> <chr> <dbl> <dbl> <chr>       <chr>     <chr>
 #> 1 312 Ha… 50014   Ames  IA     42.0 -93.7 South Camp… 764178    neig…
 #> 2 312 Ha… 50014   Ames  IA     42.0 -93.7 South Camp… 764178    neig…
 #> 3 312 Ha… 50014   Ames  IA     42.0 -93.7 South Camp… 764178    neig…
@@ -60,7 +56,7 @@ GetDeepSearchResults(address='312 Hayward Ave.', city='Ames', state='IA', rentze
 #> #   zest_monthlychange <dbl>, zest_percentile <dbl>, zestimate_low <dbl>,
 #> #   zestimate_high <dbl>, rentzestimate <dbl>, rent_lastupdated <date>,
 #> #   rent_monthlychange <dbl>, rentzestimate_low <dbl>,
-#> #   rentzestimate_high <dbl>, zpid <fct>, bathrooms <dbl>, bedrooms <dbl>,
+#> #   rentzestimate_high <dbl>, zpid <chr>, bathrooms <dbl>, bedrooms <dbl>,
 #> #   finishedSqFt <dbl>
 GetUpdatedPropertyDetails(zpid=zpid,api_key= zapi_key)
 #>              address zipcode    city state      lat      long      useCode
