@@ -32,7 +32,8 @@
 
 <meta property="og:title" content="Get the 'Deep Search' results from the Zillow API — GetDeepSearchResults" />
 
-<meta property="og:description" content="For a given address, extract property information including building data and Zestimates. At least one of zipcode or city/state information must be included." />
+<meta property="og:description" content="For a given address, extract property information including building data and Zestimates.
+At least one of zipcode or city/state information must be included." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -78,6 +79,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/zillow-vignette.html">Exploring Zillow Real Estate Data: Introduction to realEstAnalytics</a>
+    </li>
+  </ul>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -106,7 +119,8 @@
 
     <div class="ref-description">
     
-    <p>For a given address, extract property information including building data and Zestimates. At least one of zipcode or city/state information must be included.</p>
+    <p>For a given address, extract property information including building data and Zestimates.
+At least one of zipcode or city/state information must be included.</p>
     
     </div>
 
@@ -156,27 +170,19 @@
 <span class='no'>zapi_key</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>'ZillowR-zws_id'</span>)
 
 <span class='fu'>GetDeepSearchResults</span>(<span class='kw'>address</span><span class='kw'>=</span><span class='st'>'312 Hayward Ave.'</span>, <span class='kw'>city</span><span class='kw'>=</span><span class='st'>'Ames'</span>, <span class='kw'>state</span><span class='kw'>=</span><span class='st'>'IA'</span>,
- <span class='kw'>rentzestimate</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>zipcode</span><span class='kw'>=</span><span class='st'>'50014'</span>, <span class='kw'>api_key</span><span class='kw'>=</span><span class='no'>zapi_key</span>)</div><div class='output co'>#&gt;                    address zipcode city state     lat      long
-#&gt; 1 312 Hayward Ave UNIT 202   50014 Ames    IA 42.0198 -93.65168
-#&gt; 2  312 Hayward Ave UNIT 12   50014 Ames    IA 42.0198 -93.65168
-#&gt; 3 312 Hayward Ave UNIT 102   50014 Ames    IA 42.0198 -93.65168
-#&gt;         region_name region_id         type zestimate zest_lastupdated
-#&gt; 1 South Campus Area    764178 neighborhood        NA       1970-01-01
-#&gt; 2 South Campus Area    764178 neighborhood        NA       1970-01-01
-#&gt; 3 South Campus Area    764178 neighborhood        NA       1970-01-01
-#&gt;   zest_monthlychange zest_percentile zestimate_low zestimate_high rentzestimate
-#&gt; 1                 NA               0            NA             NA           775
-#&gt; 2                 NA               0            NA             NA           620
-#&gt; 3                 NA               0            NA             NA           690
-#&gt;   rent_lastupdated rent_monthlychange rentzestimate_low rentzestimate_high
-#&gt; 1       2019-04-20                  9               643                938
-#&gt; 2       2019-04-20                -43               527                744
-#&gt; 3       2019-04-20                 NA               628                793
-#&gt;         zpid bathrooms bedrooms finishedSqFt
-#&gt; 1 2084934591         1        1          400
-#&gt; 2 2085723922         1        0          250
-#&gt; 3 2091021458         1        2          500</div><div class='input'>
-</div></pre>
+ <span class='kw'>rentzestimate</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>zipcode</span><span class='kw'>=</span><span class='st'>'50014'</span>, <span class='kw'>api_key</span><span class='kw'>=</span><span class='no'>zapi_key</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 24</span><span>
+#&gt;   address zipcode city  state   lat  long region_name region_id type  zestimate
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> 312 Ha~ 50014   Ames  IA     42.0 -</span><span style='color: #BB0000;'>93.7</span><span> South Camp~ 764178    neig~        </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'>2</span><span> 312 Ha~ 50014   Ames  IA     42.0 -</span><span style='color: #BB0000;'>93.7</span><span> South Camp~ 764178    neig~        </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'>3</span><span> 312 Ha~ 50014   Ames  IA     42.0 -</span><span style='color: #BB0000;'>93.7</span><span> South Camp~ 764178    neig~        </span><span style='color: #BB0000;'>NA</span><span>
+#&gt; </span><span style='color: #555555;'># ... with 14 more variables: zest_lastupdated </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span style='color: #555555;'>,
+#&gt; #   zest_monthlychange </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, zest_percentile </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, zestimate_low </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   zestimate_high </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, rentzestimate </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, rent_lastupdated </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span style='color: #555555;'>,
+#&gt; #   rent_monthlychange </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, rentzestimate_low </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   rentzestimate_high </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, zpid </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, bathrooms </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, bedrooms </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   finishedSqFt </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -193,7 +199,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by The package maintainer.</p>
+  <p>Developed by Xiyuan Sun, Gani Agadilov, Oscar Aguilar, Steve Harms.</p>
 </div>
 
 <div class="pkgdown">

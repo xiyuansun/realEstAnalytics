@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the results for comparable recent property sales for a given property with additional property data — GetDeepComps • realEstAnalytics</title>
+<title>Get comparable recent property sales for a given property with additional property data — GetDeepComps • realEstAnalytics</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Get the results for comparable recent property sales for a given property with additional property data — GetDeepComps" />
+<meta property="og:title" content="Get comparable recent property sales for a given property with additional property data — GetDeepComps" />
 
-<meta property="og:description" content="For a given address, extract property information including building data and Zestimates. At least one of zipcode or city/state information must be included." />
+<meta property="og:description" content="For a given address, extract property information including building data and Zestimates.
+At least one of zipcode or city/state information must be included." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -78,6 +79,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/zillow-vignette.html">Exploring Zillow Real Estate Data: Introduction to realEstAnalytics</a>
+    </li>
+  </ul>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -99,14 +112,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the results for comparable recent property sales for a given property with additional property data</h1>
+    <h1>Get comparable recent property sales for a given property with additional property data</h1>
     <small class="dont-index">Source: <a href='https://github.com/xiyuansun/realEstAnalytics/blob/master/R/GetDeepComps.R'><code>R/GetDeepComps.R</code></a></small>
     <div class="hidden name"><code>GetDeepComps.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>For a given address, extract property information including building data and Zestimates. At least one of zipcode or city/state information must be included.</p>
+    <p>For a given address, extract property information including building data and Zestimates.
+At least one of zipcode or city/state information must be included.</p>
     
     </div>
 
@@ -118,7 +132,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>zpid</th>
-      <td><p>The Zillow property id</p></td>
+      <td><p>The Zillow property id to search.</p></td>
     </tr>
     <tr>
       <th>count</th>
@@ -126,15 +140,15 @@
     </tr>
     <tr>
       <th>rentzestimate</th>
-      <td><p>if <code>TRUE</code>, gets the rent zestimate.</p></td>
+      <td><p>(logical) If <code>TRUE</code>, gets the rent zestimate.</p></td>
     </tr>
     <tr>
       <th>api_key</th>
-      <td><p>character string specifying Zillow API key</p></td>
+      <td><p>A character string specifying your unique Zillow API key</p></td>
     </tr>
     <tr>
       <th>raw</th>
-      <td><p>logical, if <code>TRUE</code> the raw XML data from the API call is returned (i.e., the original ZillowR call)</p></td>
+      <td><p>(logical) If <code>TRUE</code> the raw XML data from the API call is returned (i.e., the original ZillowR call)</p></td>
     </tr>
     </table>
     
@@ -145,69 +159,34 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='zillow_web_service_id.html'>set_zillow_web_service_id</a></span>(<span class='st'>'X1-ZWz181enkd4cgb_82rpe'</span>)
+
 <span class='no'>zapi_key</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>'ZillowR-zws_id'</span>)
+
 <span class='no'>zpid</span><span class='kw'>=</span><span class='st'>'1341571'</span>
-<span class='fu'>GetDeepComps</span>(<span class='no'>zpid</span>, <span class='kw'>count</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>rentzestimate</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>api_key</span><span class='kw'>=</span><span class='no'>zapi_key</span>,<span class='kw'>raw</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;                address zipcode   city state      lat      long region_name
-#&gt; 1      733 Normandy Ct   67114 Newton    KS 38.06469 -97.35825      Newton
-#&gt; 2    906 E Broadway St   67114 Newton    KS 38.05029 -97.33022      Newton
-#&gt; 3        2137 Beltline   67114 Newton    KS 38.01605 -97.35733      Newton
-#&gt; 4      400 Homewood Ln   67114 Newton    KS 38.02281 -97.35082      Newton
-#&gt; 5   411 Meadowbrook Dr   67114 Newton    KS 38.02329 -97.35186      Newton
-#&gt; 6    132 Wheatridge Ct   67114 Newton    KS 38.02209 -97.34761      Newton
-#&gt; 7        7 S Kansas Ct   67114 Newton    KS 38.03397 -97.33806      Newton
-#&gt; 8  721 Country Club Dr   67114 Newton    KS 38.03479 -97.33421      Newton
-#&gt; 9      911 S Walnut St   67114 Newton    KS 38.03432 -97.33924      Newton
-#&gt; 10       921 S Plum St   67114 Newton    KS 38.03305 -97.34982      Newton
-#&gt; 11       500 Cherry Ln   67114 Newton    KS 38.03401 -97.35198      Newton
-#&gt;    region_id type zestimate zest_lastupdated zest_monthlychange zest_percentile
-#&gt; 1      19619 city    398794       2019-04-20                 NA              99
-#&gt; 2      19619 city     90372       2019-04-20                 NA              50
-#&gt; 3      19619 city    269883       2019-04-20                 NA              98
-#&gt; 4      19619 city    176742       2019-04-20                 NA              88
-#&gt; 5      19619 city    167591       2019-04-20                 NA              87
-#&gt; 6      19619 city    148759       2019-04-20                 NA              80
-#&gt; 7      19619 city    203142       2019-04-20                 NA              94
-#&gt; 8      19619 city    232841       2019-04-20                 NA              96
-#&gt; 9      19619 city    115006       2019-04-20                 NA              63
-#&gt; 10     19619 city    114302       2019-04-20                 NA              62
-#&gt; 11     19619 city    125739       2019-04-20                 NA              70
-#&gt;    zestimate_low zestimate_high      zpid compscore bathrooms bedrooms
-#&gt; 1         354927         438673   1341571        NA       3.5        7
-#&gt; 2          85853          98505   1339410        16       2.0        5
-#&gt; 3         256389         283377 109818062        18       3.0        6
-#&gt; 4         167905         185579  80865410        17       3.0        5
-#&gt; 5         157536         182674  80865235        17       3.0        4
-#&gt; 6         141321         156197   1341819        18       3.0        5
-#&gt; 7         192985         213299 109780123        15       3.0        3
-#&gt; 8         221199         244483   1340091        16       3.0        3
-#&gt; 9         109256         120756   1338699        17       2.0        3
-#&gt; 10        108587         120017   1338444        18       2.0        3
-#&gt; 11        116937         132026   1338374        15       3.0        3
-#&gt;    finishedSqFt lastSoldDate lastSoldPrice lotSizeSqFt taxAssessment
-#&gt; 1          3229   06/01/2007        429000       17172        440800
-#&gt; 2          1726   12/18/2018            NA        7840        110500
-#&gt; 3          2669   06/15/2018        262900       13503        228000
-#&gt; 4          2464   03/08/2019            NA        8276        158000
-#&gt; 5          2700   05/31/2018            NA       13068        131580
-#&gt; 6          1764   08/10/2018            NA       10018        126680
-#&gt; 7          2492   05/25/2018            NA       17424        186100
-#&gt; 8          2805   09/25/2018            NA       23522        217350
-#&gt; 9          2371   05/25/2018            NA       13939         96900
-#&gt; 10         1920   08/10/2018            NA        7405         88500
-#&gt; 11         2100   07/20/2018            NA        8800         92920
-#&gt;    taxAssessmentYear totalRooms yearBuilt
-#&gt; 1               2018         13      1994
-#&gt; 2               2018          7      1926
-#&gt; 3               2018         18      2008
-#&gt; 4               2018          8      2006
-#&gt; 5               2018          7      2006
-#&gt; 6               2018          8      1999
-#&gt; 7               2018          6      2002
-#&gt; 8               2018          7      1979
-#&gt; 9               2018          6      1965
-#&gt; 10              2018         11      1958
-#&gt; 11              2018         10      1975</div><div class='input'>
-</div></pre>
+
+<span class='fu'>GetDeepComps</span>(<span class='no'>zpid</span>, <span class='kw'>count</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>rentzestimate</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>api_key</span><span class='kw'>=</span><span class='no'>zapi_key</span>, <span class='kw'>raw</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 11 x 32</span><span>
+#&gt;    address zipcode city  state   lat  long region_name region_id type  zestimate
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> 733 No~ 67114   Newt~ KS     38.1 -</span><span style='color: #BB0000;'>97.4</span><span> Newton      19619     city     </span><span style='text-decoration: underline;'>399</span><span>445
+#&gt; </span><span style='color: #555555;'> 2</span><span> 2137 B~ 67114   Newt~ KS     38.0 -</span><span style='color: #BB0000;'>97.4</span><span> Newton      19619     city     </span><span style='text-decoration: underline;'>270</span><span>121
+#&gt; </span><span style='color: #555555;'> 3</span><span> 400 Ho~ 67114   Newt~ KS     38.0 -</span><span style='color: #BB0000;'>97.4</span><span> Newton      19619     city     </span><span style='text-decoration: underline;'>176</span><span>919
+#&gt; </span><span style='color: #555555;'> 4</span><span> 411 Me~ 67114   Newt~ KS     38.0 -</span><span style='color: #BB0000;'>97.4</span><span> Newton      19619     city     </span><span style='text-decoration: underline;'>167</span><span>707
+#&gt; </span><span style='color: #555555;'> 5</span><span> 132 Wh~ 67114   Newt~ KS     38.0 -</span><span style='color: #BB0000;'>97.3</span><span> Newton      19619     city     </span><span style='text-decoration: underline;'>149</span><span>292
+#&gt; </span><span style='color: #555555;'> 6</span><span> 721 Co~ 67114   Newt~ KS     38.0 -</span><span style='color: #BB0000;'>97.3</span><span> Newton      19619     city     </span><span style='text-decoration: underline;'>232</span><span>918
+#&gt; </span><span style='color: #555555;'> 7</span><span> 906 E ~ 67114   Newt~ KS     38.1 -</span><span style='color: #BB0000;'>97.3</span><span> Newton      19619     city      </span><span style='text-decoration: underline;'>90</span><span>206
+#&gt; </span><span style='color: #555555;'> 8</span><span> 7 S Ka~ 67114   Newt~ KS     38.0 -</span><span style='color: #BB0000;'>97.3</span><span> Newton      19619     city     </span><span style='text-decoration: underline;'>203</span><span>053
+#&gt; </span><span style='color: #555555;'> 9</span><span> 911 S ~ 67114   Newt~ KS     38.0 -</span><span style='color: #BB0000;'>97.3</span><span> Newton      19619     city     </span><span style='text-decoration: underline;'>115</span><span>029
+#&gt; </span><span style='color: #555555;'>10</span><span> 921 S ~ 67114   Newt~ KS     38.0 -</span><span style='color: #BB0000;'>97.3</span><span> Newton      19619     city     </span><span style='text-decoration: underline;'>114</span><span>523
+#&gt; </span><span style='color: #555555;'>11</span><span> 500 Ch~ 67114   Newt~ KS     38.0 -</span><span style='color: #BB0000;'>97.4</span><span> Newton      19619     city     </span><span style='text-decoration: underline;'>125</span><span>918
+#&gt; </span><span style='color: #555555;'># ... with 22 more variables: zest_lastupdated </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span style='color: #555555;'>,
+#&gt; #   zest_monthlychange </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, zest_percentile </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, zestimate_low </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   zestimate_high </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, rentzestimate </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, rent_lastupdated </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span style='color: #555555;'>,
+#&gt; #   rent_monthlychange </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, rentzestimate_low </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   rentzestimate_high </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, zpid </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, compscore </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, bathrooms </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   bedrooms </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, finishedSqFt </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, lastSoldDate </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,
+#&gt; #   lastSoldPrice </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, lotSizeSqFt </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, taxAssessment </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   taxAssessmentYear </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, totalRooms </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, yearBuilt </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -224,7 +203,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by The package maintainer.</p>
+  <p>Developed by Xiyuan Sun, Gani Agadilov, Oscar Aguilar, Steve Harms.</p>
 </div>
 
 <div class="pkgdown">
