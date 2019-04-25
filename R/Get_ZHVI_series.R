@@ -28,7 +28,7 @@
 get_ZHVI_series <- function(bedrooms=1, geography="Metro", allhomes = F, tier='ALL', summary = F, other=NULL){
   initial_link <- 'http://files.zillowstatic.com/research/public/'
   if(allhomes==F & summary==F){
-    assert_that(bedrooms %in% c(1:5), msg='invalid number of rooms')
+    assert_that(bedrooms %in% c(1:5,'C','SFR'), msg='invalid number of rooms')
     pathb <- build_path_bed(bedrooms)
   }
   if(allhomes == T & summary==F){
