@@ -19,11 +19,11 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/xiyuansun/realEstAnalytics/branch/master/graph/badge.svg)](https://codecov.io/gh/xiyuansun/realEstAnalytics?branch=master)
 <!-- badges: end -->
 
-The goal of realEstAnalytics is to ...
+The goal of realEstAnalytics is to provide an R function for each zillow API service, making it easy to make API calls and process the responses into R-friendly data structures. 
 
 ## Installation
 
-You can install the released version of realEstAnalytics from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of realEstAnalytics from [Github](https://github.com) with:
 
 ``` r
 library(devtools)
@@ -37,6 +37,7 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example}
 library(realEstAnalytics)
 ## basic example code
+
 set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
 zapi_key = getOption('ZillowR-zws_id')
 zpid='48749425'
