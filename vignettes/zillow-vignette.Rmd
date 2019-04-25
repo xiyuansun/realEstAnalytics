@@ -1,0 +1,339 @@
+---
+title: "Exploring Zillow Real Estate Data: Introduction to realEstAnalytics"
+author: "Steve Harms"
+date: "`r Sys.Date()`"
+output: html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(realEstAnalytics)
+set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
+YOURAPIKEYHERE = getOption('ZillowR-zws_id')
+```
+
+#Introduction
+Zillow has collected and analyzed enormous amounts of property data in order to help prospective buyers, sellers, and renters make informed decisions in their real estate transactions. Zillow has been kind enough to make much of this data available to the public through its APIs and other locations on their site. This vignette is an introduction to the `realEstAnalytics` package, which contains several functions that supply calls to Zillow's Real Estate API. The returned data are available in their raw XML form, or in a tidy format that allows for quick and clean manipulation and analysis of the data. 
+
+#Installing and Loading the realEstAnalytics Package
+The `realEstAnalytics` package is hosted on github. It can be installed with the `devtools` package, and then loaded as with any other `R` package.
+```{r, eval = FALSE}
+#installing and loading realEstAnalytics
+devtools::install_github('xiyuansun/realEstAnalytics')
+
+library(realEstAnalytics)
+```
+
+`realEstAnalytics` does not have any dependencies other than the latest version of `R`, but does import functions from a number of other packages to aid in reading and tidying the XML data. See the documentation for this list, and be careful with the namespaces of any other packages you may be using in conjunction with `realEstAnalytics`.
+
+#Obtaining and setting your Zillow Web Service ID (API key)
+Before you can make any calls to any of Zillow's APIs, you must register with Zillow by signing up at https://www.zillow.com/howto/api/APIOverview.htm (make sure you read the Terms of Service!). Once you have registered, Zillow will send you a unique API key, formally called a ZWSID. Keep this in a safe, non-public place to be referenced later. Before we go further, it should be noted that Zillow will prevent excessive calls, and thus may block your ZWSID if you issue more than 1,000 API requests in a day (so be careful!).
+
+Once you have obtained your ZWSID, you can set it in your `R` session with the `zillow_web_service_id()` function and retrieve it with `getOption('ZillowR-zws_id')` :
+```{r, eval=FALSE}
+#set the ZWS_ID
+set_zillow_web_service_id('YOUR_API_KEY')
+```
+```{r}
+#retrieve the current ZWS_ID in use
+zapi_key = getOption('ZillowR-zws_id')
+```
+
+It is helpful to set this when you start your session, so that you do not need to continually reference it if making many calls to the API.
+
+#Returning Property Information with `GetDeepSearchResults` and `GetDeepSearchResults_dataframe`
+Suppose we're interested in moving to Newton, KS, and are considering a number of different homes in the area for purchase. One particular home we're interested in is located at 600 S. Quail Ct. in Newton. We can obtain information on the property using the `DeepSearchResults` function, which will pull the data corresponding to all of the Zillow Property IDs at a given address.
+```{r}
+GetDeepSearchResults('600 S. Quail Ct.', city='Newton',state='KS', zipcode=NULL,
+                     api_key=getOption('ZillowR-zws_id'))
+```
+
+The function returns a dataframe with variables corresponding to address and geographic location, as well as the property's Zillow property ID (`zpid`) and information corresponding to the Zestimate, which is Zillow's proprietary algorithm for estimating the property value. Additionally, there ar variables corresponding to the living space of the house (`bedrooms`,`bathrooms`,`finishedSqFt`, etc.), and property tax information. For example, our property has a Zillow estimated value of \$230,830, which is quite close to the last sale price of \$230,000 and well above the assessed property tax value of \$214,800.
+
+Note that we did not need to supply a zip code argument. In order for `DeepSearchResults` to work, we need only to specify either the city/state combination OR the zipcode. Sometimes it may help the search to be more specific by specifying the zipcode. The following code will produce the same result using only zipcode but no city/state combination:
+```{r}
+GetDeepSearchResults('600 S. Quail Ct.', zipcode=67114,
+                     rentzestimate=TRUE, api_key=getOption('ZillowR-zws_id'))
+```
+
+Additionally, we set `rentzestimate=TRUE` in the previous example, which tells the API call to return the Zillow estimated rental price data for the property in addition to the Zestimate for the property.
+
+One note of caution when using `GetDeepSearchResults` is that it will return the results for ALL of the Zillow property IDs at an address, which can cause difficulties if one is trying to get results for multiple addresses at once, such as using the function in conjunction with the `apply()` family of functions. To avoid this, one may be able to use `GetDeepSearchResults_dataframe`, which takes a data frame of addresses as its arguments. Suppose we want to look at the results for several results at once, and we have the data stored in a data frame named `newtonaddresses` in our environment. To get the search results for the full data frame, all we need to do is supply `GetDeepSearchResults_dataframe` with the data and the column numbers corresponding to the geographic information:
+```{r}
+library(dplyr)
+library(magrittr)
+addresses <- c('733 Normandy Ct.',
+  '600 S. Quail Ct.',
+  '105 S Logan St.',
+  '1412 W. 8th St.',
+  '2801 Goldenrod Rd.',
+  '2309 Ivy Ave.',
+  '121 S Hess Ave.',
+  '321 E Vesper St.',
+  '6219 NW Parkview St.',
+  '623 Meadowlark Ln.'
+  )
+
+cities <- c(rep('Newton', times=4),'North Newton','North Newton',
+            'Hesston','Hesston','Park City', 'Newton')
+
+zips <- c(rep(67114, times =4), 67117,67117,67062,67062,67219,67114) %>%
+  as.character()
+
+state <- rep('KS', times=length(zips))
+
+addex <- data.frame(address=addresses,zipcode=zips,city=cities,state=state)
+
+newtonaddresses <- GetComps(1340244, count=20, api_key = getOption('ZillowR-zws_id')) %>%
+  select(address,zipcode,city,state) %>% mutate_all(as.character) %>% 
+  rbind(c('3425 Locust St.', '64109', 'Kansas City', 'MO'), addex) %>%
+  sample_n(size=32)
+```
+```{r,eval=FALSE}
+#there are 32 addresses, some in different zipcodes, to look up
+#GetDeepSearchResults_dataframe will get the info for us:
+
+GetDeepSearchResults_dataframe(.df=newtonaddresses,
+                               col.address=1 , col.zipcode=2 , col.city=3 , col.state=4,
+                               api_key=getOption('ZillowR-zws_id'))
+```
+
+#Finding Comparable Properties with `GetComps` and `GetDeepComps`
+For every property, Zillow calculates a "Compscore" of comparable properties in the area. The 'Compscore' attribute is representative of the relevance of each property to the target, with a score of 0 being the closest and higher Compscores being less relevant. We have two options for API calls: `GetComps`, which retrieves only geographic, Zestimate, and Compscore information for the comparables, and `GetDeepComps`, which returns everything from `GetComps` as well as the specific property data that one would acquire through `GetDeepSearchResults`. We can retrieve up to 25 comparable properties with the `count` argument, although one should be careful not to exceed Zillow's API limit by calling this repeatedly. Note here that, instead of an address, these functions take the specific Zillow property ID (zpid) for the property, which can be found by first calling `GetDeepSearchResults` for the address:
+```{r}
+
+#retrieve the zpid from GetDeepSearchResults
+zpidex <- GetDeepSearchResults('600 S. Quail Ct.', zipcode=67114,
+                     rentzestimate=TRUE, api_key=getOption('ZillowR-zws_id'))$zpid
+
+#GetComps for the '600 S. Quail Ct.' address
+GetComps(zpidex, count=10, rentzestimate=TRUE, api_key = getOption('ZillowR-zws_id'))
+
+#GetDeepComps returns the same information as GetComps, with additional property data
+GetDeepComps(zpidex, count=10, rentzestimate=FALSE, api_key = getOption('ZillowR-zws_id'))
+```
+
+#Retrieving Basic Property Value Estimates with `GetZestimate`
+If you do not want all of the property information from `GetDeepSearchResults`, you can quickly retrieve the Zestimate and/or rent Zestimates of the property's value with `GetZestimate`, using the Zillow property ID. This function will also take a vector of property IDs in the `zpid` argument if you want to retrieve more than one Zestimate at once:
+```{r}
+#GetZestimate with a vector input
+GetZestimate(zpids=c(zpidex,109818062,1341669,1341715) ,
+             rentzestimate=TRUE , api_key=getOption('ZillowR-zws_id'))
+```
+
+#Combining the API Calls to Build a Local Housing Dataset
+Suppose we want to build a larger dataset based on only our original address. We have seen how `GetComps` can get a few comparable properties in the area. If we want to build a larger dataset, we can chain the `GetDeepSearchResults`,`GetComps`, and `GetDeepComps` functions together to get more properties in an area after starting with one location. To speed the cleaning and combining, we use `dplyr` and `%>%` from `magrittr` in the tidyverse family, with an `lapply`:
+```{r}
+library(purrr)
+#build a dataset in one sequence of commands
+#starting from one address
+richdata <- GetDeepSearchResults('600 S. Quail Ct.',
+                                 zipcode=67114,
+                     rentzestimate=TRUE,
+                     api_key=getOption('ZillowR-zws_id')) %>%
+  dplyr::select(zpid) %>%
+  purrr::as_vector("character") %>% 
+  GetComps(count=10, api_key=getOption('ZillowR-zws_id')) %>%
+  dplyr::select(zpid) %>%
+  purrr::as_vector("character") %>% 
+  lapply(GetDeepComps,
+         count=10,
+         api_key=getOption('ZillowR-zws_id')) %>% 
+  dplyr::bind_rows() %>% 
+  dplyr::distinct()
+
+head(richdata)
+dim(richdata)
+```
+
+What just happened here? We used our original address and obtained its Zillow property ID with `GetDeepSearchResults`, then used that ZPID with `GetComps` to get 10 comparable properties. Then we took the ZPIDs from those comparables and applied `GetDeepComps` to each, resulting in an expanded number of properties. We can then bind all of the data together with `bind_rows()` from the `dplyr` package, and take the distinct addresses to get a rich dataset for our area for purposes of analysis.
+*Note:* In this example we sent over 100 requests to the API. Remember that Zillow limits the number of requests you can make in a day, so be careful using these functions in conjunction with `apply()` or similar functions. You may get locked out!
+
+#Home Price Charts with `GetChart`
+You can obtain a URL for a the Zestimates for a property with `GetChart`. The return from the API is a link to the image of the chart, which can be displayed in `R` with whatever package you prefer. Sometimes the URLs need some cleaning in order to correctly be able to read the image.
+```{r}
+library(XML)
+#Get Chart returns a list with the API's response
+#The chart URL is in the `response` element in the `url` attribute
+chartex <- GetChart(zpid = 1340244, unit_type = 'dollar', width = 600, height = 300,
+          chartDuration = '10years', zws_id = getOption('ZillowR-zws_id'))
+XML::names.XMLNode(chartex$response)
+```
+```{r, eval=F, include=FALSE}
+#NOT RUN
+#In R, we can get the chart using a few manipulations
+library(magick)
+library(stringr)
+charturl <-'https://www.zillow.com:443/app?chartDuration=10years&amp;chartType=partner&amp;height=300&amp;page=webservice%2FGetChart&amp;service=chart&amp;width=600&amp;zpid=1340244'
+
+charturl.fix <- stringr::str_remove_all(charturl, 'amp\\;')
+
+#magick will display the chart
+magick::image_read(charturl.fix)
+```
+
+
+#Geographic Region Time Series Data with `Get_ZHVI_series` and `Get_rental_listings`
+Zillow also supplies some of its research data and aggregated listings data, hosted at https://www.zillow.com/research/data/ . These are static .csv files and don't require a Zillow Web Service ID for download, however the `realEstAnalytics` package supplies functions that can read these files directly into `R` and save you the time of downloading and saving them locally.
+`Get_ZHVI_series` and `Get_rental_listings` read the .csv files and return a dataframe for a variety of different series for a specified `geography`. The options available for these two functions are listed below.
+
+`get_ZHVI_series()`: '-' implies argument default.
+
+| ZHVI Series Name                |`bedrooms`|`allhomes`|`tier`   |`summary`|`other`                      |
+|---------------------------------|:--------:|:--------:|:-------:|:-------:|:---------------------------:|
+|ZHVI Summary (Current Month)     |     -    |    -     |   -     | `TRUE`  |            -                |
+|ZHVI All Homes (SFR, Condo/Co-op)|     -    |  `TRUE`  | `'ALL'` |    -    |            -                |
+|ZHVI All Homes- Bottom Tier      |     -    |  `TRUE`  |  `'B'`  |    -    |            -                |
+|ZHVI All Homes- Top Tier         |     -    |  `TRUE`  |  `'T'`  |    -    |            -                |
+|ZHVI Condo/Co-op                 |   `'C'`  |    -     |    -    |    -    |            -                |
+|ZHVI Single-Family Homes         | `'SFR'`  |    -     |    -    |    -    |            -                |
+|ZHVI 1-Bedroom                   |   1      |    -     |    -    |    -    |            -                |
+|ZHVI 2-Bedroom                   |   2      |    -     |    -    |    -    |            -                |
+|ZHVI 3-Bedroom                   |   3      |    -     |    -    |    -    |            -                |
+|ZHVI 4-Bedroom                   |   4      |    -     |    -    |    -    |            -                |
+|ZHVI 5+ Bedroom                  |   5      |    -     |    -    |    -    |            -                |
+|Median Home Value Per Sq Ft      |   -      |  `TRUE`  |    -    |    -    |`Median Home Price Per Sq Ft`|
+|Increasing Values (%)            |   -      |  `TRUE`  |    -    |    -    |`Increasing`                 |
+|Decreasing Values (%)            |   -      |  `TRUE`  |    -    |    -    |`Decreasing`                 |
+
+##
+
+`get_rental_listings`: '-' implies argument default.
+
+| Median Rental List Price ($) Series |`bedrooms`|`type`         |
+|:------------------------------------|:--------:|:-------------:|
+|SFR, Condo/Co-op                     |     -    |`'SFR/Condo'`  |
+|Multifamily 5+ Units                 |     -    |  `'Multi'`    |
+|Condo/Co-op                          |     -    |`'Condo/Co-op'`|
+|Duplex/Triplex                       |     -    |`'Duplex'`     |
+|Single-Family Residence              |     -    | `'SFR'`    |
+|Studio                               |     -    |  `'Studio'`   |
+|1-Bedroom                            |   1      |    -          |
+|2-Bedroom                            |   2      |    -          |
+|3-Bedroom                            |   3      |    -          |
+|4-Bedroom                            |   4      |    -          |
+|5+ Bedroom                           |   5      |    -          |
+
+The default for the `get_rental_listings` returns the median rental list price in absolute dollars, but each series is also available adjusted for size in dollars per square foot by specifying `rate='PerSqFt'`.
+
+Each call also requires a specified geographic level. Currently options for the `geography` argument are:
+
+* 'Metro'
+* 'City'
+* 'State'
+* 'Neighborhood'
+* 'Zip'
+* 'County'
+
+The 'Metro' level also includes the aggregated U.S. information.
+
+To see an example, consider once again the home we're interested in at 600 S. Quail Ct. in Newton, Kansas. We've already collected data on individual comparable properties in the area, but if we're interested in property values of the larger city, county, and state, we can pull the most recent time series data and filter each for the area we're interested in:
+```{r, echo = T, results = 'hide'}
+#What data do we want to filter?
+GetDeepSearchResults('600 S. Quail Ct.', zipcode=67114,
+                      rentzestimate=TRUE, api_key=getOption('ZillowR-zws_id')) %>%
+  dplyr::select(zipcode,city,state,bedrooms,zestimate)
+
+#Pull the data by state and zipcode for 4 bedrooms
+cityseries <- get_ZHVI_series(bedrooms=4,geography="Zip") %>%
+  dplyr::filter(RegionName=='67114')
+
+Stateseries <- get_ZHVI_series(bedrooms=4,geography="State") %>% 
+  dplyr::filter(RegionName=='Kansas')
+
+#Also, collect all top-tier home values in the city and state
+citytop <- get_ZHVI_series(allhomes=TRUE, tier='T', geography="Zip") %>%
+  dplyr::filter(RegionName=='67114')
+```
+```{r}
+names(citytop)[1:8]
+
+dim(citytop)
+```
+
+Some of these files are quite large, and may take time to read in. It is recommended to immediately filter with `dplyr::filter()` as the file is read rather than keeping the whole dataset in memory (unless you have a use for all of the regions in your analysis).
+
+The first 3 to 7 (depending on the dataset) columns returned correspond to geographic ID information, while the remaining columns are monthly time series observations. With only a few commands we can melt the data into a format that is ready for visualization. It's clear that our home is valued ($231,234) well above the median value for the zipcode, but this particular city appears to be much cheaper than the rest of the state of Kansas. It looks like Newton and Kansas did not recieve the worst of the housing crisis, and that the city and state are on a sharp upward trend.
+
+```{r, echo=TRUE, results='hide', warning=F}
+#melting the data using reshape2 and zoo
+topmelted <- citytop %>% 
+  reshape2::melt(id=1:7, variable.name='Date', value.name='MedianPrice') %>%
+  dplyr::mutate(Date=(zoo::as.yearmon(Date)))
+
+statemelted <- Stateseries %>%
+  reshape2::melt(id=1:3, variable.name='Date', value.name='MedianPrice') %>%
+  dplyr::mutate(Date=(zoo::as.yearmon(Date)))
+
+citymelted <- cityseries %>% 
+  reshape2::melt(id=1:7, variable.name='Date', value.name='MedianPrice') %>%
+  dplyr::mutate(Date=(zoo::as.yearmon(Date)))
+```
+```{r, echo=FALSE,fig.width=8.5, fig.height=7, warning=F}
+tscomb <- data.frame(Date=topmelted$Date, Zip=citymelted$MedianPrice, State=statemelted$MedianPrice,
+                     TopTier=topmelted$MedianPrice) %>%
+ reshape2::melt(id=1, variable.name="geography", value.name='price') 
+
+plotZHVI<- function(ts.melted, date.min=NULL, date.max=NULL){
+  if(is.null(date.min)) date.min = min(ts.melted$Date)
+  if(is.null(date.max)) date.max = max(ts.melted$Date)
+  ts.melted %>% dplyr::filter(dplyr::between(Date, zoo::as.yearmon(date.min), zoo::as.yearmon(date.max))) %>%
+    ggplot() + geom_line(aes(x=Date, y=price, col=geography),size=2)  +
+    zoo::scale_x_yearmon(n=30) +
+  scale_y_continuous(breaks=seq(round(min(ts.melted$price)-10000,-3),max(ts.melted$price)+10000, by=10000)) +
+    theme_bw() +
+    theme(plot.title = element_text(size = 20, face = "bold", hjust=0.5),
+          legend.title=element_text(size=12, face = "bold"),
+          legend.text=element_text(size=12),
+          axis.title.y = element_text(size=16, angle=90, vjust=0.5),
+          axis.title.x = element_text(size=16),
+          axis.text.x = element_text(angle = 90, hjust = 1)) + labs(x='Date',y="Median Home Price")
+}
+
+
+plotZHVI(ts.melted=tscomb) + ggtitle("Newton Kansas Median Home Values")
+```
+
+If we're interested in renting our new property, we can compare Zillow's rent estimate to the average for the state of Kansas. It would be more ideal to compare at a more granular level, but the rental value datasets for zipcode and county levels only contain a few of the most populus areas of the U.S., so we're out of luck.
+```{r, echo=TRUE, results='hide'}
+#The most recent rental listing value for 4BR homes in Kansas
+KSrentals <- get_rental_listings(bedrooms=4, rate='PerSqFt',geography="State") %>%
+  dplyr::filter(RegionName=='Kansas')
+```
+```{r}
+KSrentals %>% dplyr::last()
+
+#How does our target property compare?
+GetDeepSearchResults('600 S. Quail Ct.', zipcode=67114,
+                     rentzestimate=TRUE, api_key=getOption('ZillowR-zws_id')) %>%
+  dplyr::mutate(rentpersqft = rentzestimate/finishedSqFt) %>%
+  select(rentpersqft)
+```
+
+The most recent observation suggests that rent in Kansas is almost \$0.87 per square foot for 4 bedroom homes, but our target home's estimated rent value is approximately \$0.58. This generally holds in line with what we found with the property value previously. Our new home is much cheaper than the rest of the state.
+
+#Manipulate the XML Data Yourself with `raw=TRUE`
+In order to produce tidy and useful dataframe output with the functions in `realEstAnalytics`, the XML data returned from the API must be untangled. In the process, some data may be ignored or missed. If you're a skilled XML data cleaner, you can take your shot at extracting and cleaning the data by setting `raw=TRUE` in any of the functions that call Zillow's API. The return of the function is now the raw XML data instead of a dataframe, which can then be manipulated with a variety of packages (`xml2` is our recommendation).
+```{r}
+GetDeepSearchResults('600 S. Quail Ct.', zipcode=67114,
+                     rentzestimate=TRUE, api_key=getOption('ZillowR-zws_id'),
+                     raw=TRUE) %>% xml2::xml_children()
+```
+
+The returned XML document contains the request sent to the API, the message from the API call (success or not), and the response which contains the data requested. A previous package for Zillow's API in R, called `ZillowR`, returned only the raw XML as above. The `realEstAnalytics` package retains this option, but also allows gives you the option to bypass the extraction/cleaning stage.
+
+#Further Reading
+
+* For further documentation on Zillow's APIs, see https://www.zillow.com/howto/api/APIOverview.htm
+    * For a specific API, go to https://www.zillow.com/howto/api/ + 'APIname'.htm .
+    * Ex) https://www.zillow.com/howto/api/GetDeepSearchResults.htm gives documentation for `GetDeepSearchResults`
+* A previous implementation of Zillow API data in R is the package `ZillowR`. Documentation can be found at https://cran.r-project.org/web/packages/ZillowR/index.html
+* Suggested packages for data manipulation and XML parsing in R: `xml2`, `XML`, `rvest`, `tidyverse`, `purrr`
