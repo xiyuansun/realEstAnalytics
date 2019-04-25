@@ -10,7 +10,6 @@
 #' @param type (optional) a character string specifying housing type, from NULL, 'SFR', 'Multi', 'Duplex', 'Condo/Co-op', 'Studio', and 'SFR/Condo'.
 #' @param rate a string specifying the rate, either 'Total' or 'PerSqFt'
 #' @export
-#' @importFrom dplyr if_else
 #' @importFrom readr read_csv
 #' @return A tibble. Columns returned correspond to geographic region information and monthly observations for each region.
 #' @examples
@@ -30,8 +29,8 @@ get_rental_listings<- function(bedrooms=1, type=NULL, geography="Zip", rate='Tot
   }
 
   pathg <- build_path_geog(geography)
-
-  if_else(rate=='PerSqFt', ratep <- 'PerSqft', ratep <- NULL)
+  ratep <- NULL
+  if(rate=='PerSqFt'){ ratep <- 'PerSqft'}
   link <- paste0(initial_link,pathg,'MedianRentalPrice',ratep,'_',pathb,'.csv')
   print('attempting to read file:')
   print(as.character(link))

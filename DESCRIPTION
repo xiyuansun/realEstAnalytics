@@ -22,7 +22,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    covr,
-    magick
+    covr
 RoxygenNote: 6.1.1.9000
 VignetteBuilder: knitr
