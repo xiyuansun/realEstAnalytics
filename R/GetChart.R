@@ -39,9 +39,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' GetChart(zpid = 48749425)
-#' GetChart(zpid = 48749425, unit_type = 'dollar', width = 600, height = 300,
-#'          chartDuration = '10years')}
+#' GetChart(zpid = 1340244, unit_type = 'dollar', width = 600, height = 300,
+#'  chartDuration = '10years', zws_id = getOption('ZillowR-zws_id'))
+#'
+#' GetChart(zpid = 1340244, unit_type = 'percent', width = 800, height = 400,
+#' chartDuration = '5years', zws_id = getOption('ZillowR-zws_id'))
 GetChart <- function(
   zpid = NULL, unit_type = c('percent', 'dollar'),
   width = NULL, height = NULL, chartDuration = c('1year', '5years', '10years'),
@@ -57,11 +59,11 @@ GetChart <- function(
     validate_arg(zws_id, required = TRUE, class = 'character', length_min = 1, length_max = 1),
     validate_arg(url, required = TRUE, class = 'character', length_min = 1, length_max = 1)
   )
-  
+
   if (length(validation_errors) > 0) {
     stop(paste(validation_errors, collapse = '\n'))
   }
-  
+
   request <- url_encode_request(url,
                                 'zpid' = zpid,
                                 'unit-type' = unit_type,
@@ -70,12 +72,12 @@ GetChart <- function(
                                 'chartDuration' = chartDuration,
                                 'zws-id' = zws_id
   )
-  
+
   response <- tryCatch(
     RCurl::getURL(request),
     error = function(e) {stop(sprintf("Zillow API call with request '%s' failed with %s", request, e))}
   )
-  
+
   return(preprocess_response(response))
 }
 

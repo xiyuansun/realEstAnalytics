@@ -51,9 +51,3 @@ change. Optionally, the API accepts width and height parameters that
 constrain the size of the image. The historical data can be for the past 1
 year, 5 years or 10 years.
 }
-\examples{
-\dontrun{
-GetChart(zpid = 48749425)
-GetChart(zpid = 48749425, unit_type = 'dollar', width = 600, height = 300,
-         chartDuration = '10years')}
-}

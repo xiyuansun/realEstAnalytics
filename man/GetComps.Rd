@@ -27,8 +27,9 @@ At least one of zipcode or city/state information must be included.
 }
 \examples{
 set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
-zapi_key = getOption('ZillowR-zws_id')
-zpid='1341571'
-GetComps(zpid, count=10, rentzestimate=FALSE, api_key=zapi_key,raw=FALSE)
+
+#Comparable properties for 600 S. Quail Ct.
+GetComps(zpid='1340244', count=10, rentzestimate=TRUE,
+ api_key = getOption('ZillowR-zws_id'))
 
 }
