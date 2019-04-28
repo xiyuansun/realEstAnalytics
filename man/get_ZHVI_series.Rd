@@ -30,13 +30,13 @@ as well as tiers if you wish to view other data that is aggregated.
 }
 \examples{
 #All homes, bottom tier, by zipcode
-get_ZHVI_series(allhomes=TRUE, tier="B",geography="Zip")
+\dontrun{get_ZHVI_series(allhomes=TRUE, tier="B",geography="Zip")}
 
 #2 bedrooms by city
-get_ZHVI_series(bedrooms=2,geography="City")
+\dontrun{get_ZHVI_series(bedrooms=2,geography="City") }
 
 #the ZHVI summary for all homes by State
-get_ZHVI_series(geography="State", summary=TRUE)
+\dontrun{get_ZHVI_series(geography="State", summary=TRUE) }
 
 
 }
