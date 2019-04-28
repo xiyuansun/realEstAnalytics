@@ -30,13 +30,12 @@ For a given address, extract property information including building data and Ze
 At least one of zipcode or city/state information must be included.
 }
 \examples{
-set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
-zapi_key = getOption('ZillowR-zws_id')
+\dontrun{zapi_key = getOption('ZillowR-zws_id')}
 
-GetDeepSearchResults(address='600 S. Quail Ct.', zipcode='67114',
- rentzestimate=FALSE, api_key=zapi_key)
+\dontrun{GetDeepSearchResults(address='600 S. Quail Ct.', zipcode='67114',
+ rentzestimate=FALSE, api_key=zapi_key) }
 
-GetDeepSearchResults(address='312 Hayward Ave.', city='Ames', state='IA',
- rentzestimate=TRUE, zipcode='50014', api_key=zapi_key)
+\dontrun{GetDeepSearchResults(address='312 Hayward Ave.', city='Ames', state='IA',
+ rentzestimate=TRUE, zipcode='50014', api_key=zapi_key) }
 
 }

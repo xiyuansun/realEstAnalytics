@@ -24,18 +24,21 @@ YOURAPIKEYHERE = getOption('ZillowR-zws_id')
 
 The goal of realEstAnalytics is to provide an R function for each zillow API service, making it easy to make API calls and process the responses into R-friendly data structures. 
 
+## Website
+The package is hosted at https://www.realestanalyticsr.com/
+
 ## Installation
 
 You can install the released version of realEstAnalytics from [Github](https://github.com) with:
 
-``` r
+``` {r, eval=FALSE}
 library(devtools)
 devtools::install_github("xiyuansun/realEstAnalytics")
 ```
 
 ## Example
 
-Here are some basic examples of interfacing with Zillow's API in `R`.
+Here are some basic examples of interfacing with Zillow's API in `R`. All calls to the API require a unique Zillow API key, which you can acquire by signing up at https://www.zillow.com/howto/api/APIOverview.htm .
 
 First, you should always set your API key, also known as a Zillow Web Service ID (ZWSID):
 
@@ -50,13 +53,13 @@ set_zillow_web_service_id('YOUR_API_KEY')
 zapi_key = getOption('ZillowR-zws_id')
 ```
 
-You can get basic information on a property based on its address using `GetDeepSearchResults`:
+You can get basic information on a property based on its address using `GetDeepSearchResults`. The return is a dataframe with the property's estimated value as well as other characteristics (i.e., bedrooms, bathrooms, etc.). To get results for more than one address at once, we recommend `GetDeepSearchResults_dataframe` rather than using an `apply()` or other mapping function.
 ```{r}
 GetDeepSearchResults('600 S. Quail Ct.', city='Newton',state='KS', zipcode=NULL,
                      api_key=getOption('ZillowR-zws_id'))
 ```
 
-Use the `GetComps` or `GetDeepComps` to get comparable properties for a given Zillow Property ID:
+Use the `GetComps` or `GetDeepComps` to get comparable properties for a given Zillow Property ID (limit 25 comparables). The return is a data frame with just the comparable addresses and their Zestimate values, with more property information available with `GetDeepComps`.
 ```{r}
 #retrieve the zpid from GetDeepSearchResults
 zpidex <- GetDeepSearchResults('600 S. Quail Ct.', zipcode=67114,
@@ -66,14 +69,13 @@ zpidex <- GetDeepSearchResults('600 S. Quail Ct.', zipcode=67114,
 GetComps(zpidex, count=10, rentzestimate=TRUE, api_key = getOption('ZillowR-zws_id'))
 ```
 
-You can get the Zestimate (Zillow's estimated home value) with `GetZestimate`:
+You can get the Zestimate (Zillow's estimated home value) with `GetZestimate`. The return is a data frame with the Zillow-estimated value of the home, either the property value or the estimated rental value (if `rentzestimate=TRUE`). This function works with either a single Zillow property ID or a vector of IDs:
 ```{r}
-#GetZestimate with a vector input
 GetZestimate(zpids= zpidex ,
              rentzestimate=TRUE , api_key=getOption('ZillowR-zws_id'))
 ```
 
-There are also a few options for retrieving non-API data. Get the time series of property values aggregated by region and type with `get_rental_listings` and/or `get_ZHVI_series`:
+There are also a few options for retrieving non-API data. Get the time series of property values aggregated by region and type with `get_rental_listings` and/or `get_ZHVI_series`. These return dataframes of time series data for the selected geographic aggregation level and property type, read from a static .csv hosted by Zillow. For options on the arguments, see the introduction vignette.
 ```{r}
 #Pull the data by state and zipcode for 4 bedrooms
 cityseries <- get_ZHVI_series(bedrooms=4,geography="Zip")

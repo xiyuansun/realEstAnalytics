@@ -35,10 +35,9 @@ set contains the following attributes:
 }
 \examples{
 \dontrun{
-library(tidyverse)
-set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
 zapi_key = getOption('ZillowR-zws_id')
 zpid='48749425'
+
 GetUpdatedPropertyDetails(zpid,api_key= zapi_key)
 }
 }

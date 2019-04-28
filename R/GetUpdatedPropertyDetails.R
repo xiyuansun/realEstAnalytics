@@ -26,10 +26,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' library(tidyverse)
-#' set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
 #' zapi_key = getOption('ZillowR-zws_id')
 #' zpid='48749425'
+#'
 #' GetUpdatedPropertyDetails(zpid,api_key= zapi_key)
 #' }
 GetUpdatedPropertyDetails <- function(
@@ -88,15 +87,11 @@ extract_address_e <- function(xmlres){
 #extract_address(xmlresult)
 
 extract_editedfacts <- function(xmlres){
-
+  factsnames <- xmlres %>% xml_nodes('editedFacts') %>% xml_children() %>% xml_name()
   factsdata <- xmlres %>% xml_nodes('editedFacts') %>% xml_children %>%  xml_text() %>%
-    matrix(ncol=15,byrow=T) %>% data.frame()
+    matrix(ncol=length(factsnames),byrow=T) %>% data.frame()
 
-  names(factsdata) <- c("useCode","bedrooms","bathrooms",
-                        "finishedSqFt","lotSizeSqFt","yearBuilt",
-                        "yearUpdated","numFloors","basement",
-                        "roof","view","parkingType","heatingSources",
-                        "heatingSystem","rooms")
+  names(factsdata) <- c(factsnames)
 
   return(data.frame(factsdata))
 

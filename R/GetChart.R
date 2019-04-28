@@ -44,6 +44,7 @@
 #'
 #' GetChart(zpid = 1340244, unit_type = 'percent', width = 800, height = 400,
 #' chartDuration = '5years', zws_id = getOption('ZillowR-zws_id'))
+#' }
 GetChart <- function(
   zpid = NULL, unit_type = c('percent', 'dollar'),
   width = NULL, height = NULL, chartDuration = c('1year', '5years', '10years'),

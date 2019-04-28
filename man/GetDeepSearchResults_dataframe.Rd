@@ -33,8 +33,7 @@ A wrapper for \code{GetDeepSearchResults} that takes data frames with address in
 and returns the search results for all addresses
 }
 \examples{
-set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
-
+\dontrun{
 zapi_key = getOption('ZillowR-zws_id')
 
 adrs <- c('733 Normandy Ct', '600 South Quail Ct','2902 Wood St', '3425 Locust St.')
@@ -44,4 +43,5 @@ state=c("KS","KS","IA","MO"), city=c("Newton","Newton","Ames","Kansas City"))
 
 GetDeepSearchResults_dataframe(locations, col.address=1, col.zipcode=2,
 col.city=4, col.state=3,api_key=zapi_key)
+}
 }

@@ -26,10 +26,8 @@ For a given address, extract property information including building data and Ze
 At least one of zipcode or city/state information must be included.
 }
 \examples{
-set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
-
 #Comparable properties for 600 S. Quail Ct.
-GetComps(zpid='1340244', count=10, rentzestimate=TRUE,
- api_key = getOption('ZillowR-zws_id'))
+\dontrun{GetComps(zpid='1340244', count=10, rentzestimate=TRUE,
+ api_key = getOption('ZillowR-zws_id')) }
 
 }

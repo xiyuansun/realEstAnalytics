@@ -17,11 +17,9 @@
 #' @importFrom tibble as_tibble
 #' @return If \code{raw=T}, a raw XML document. If \code{raw=F} (default), a data frame with columns corresponding to address information, Zestimates, and property information. The number of columns varies by property use type.
 #' @examples
-#' set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
-#'
 #' #Comparable properties for 600 S. Quail Ct.
-#' GetComps(zpid='1340244', count=10, rentzestimate=TRUE,
-#'  api_key = getOption('ZillowR-zws_id'))
+#' \dontrun{GetComps(zpid='1340244', count=10, rentzestimate=TRUE,
+#'  api_key = getOption('ZillowR-zws_id')) }
 #'
 
 GetComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE){

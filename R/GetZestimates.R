@@ -15,14 +15,13 @@
 #' @import magrittr
 #' @return A data frame with columns corresponding to zpid, Date, and Zestimate information
 #' @examples
-#'
-#' set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
-#'
+#' \dontrun{
 #' zapi_key = getOption('ZillowR-zws_id')
 #'
 #' zpid='1341571'
 #'
 #' GetZestimate(zpids=zpid,rentzestimate=TRUE,api_key=zapi_key)
+#' }
 
 GetZestimate <- function(zpids, rentzestimate=FALSE, api_key, raw=FALSE){
   assertthat::assert_that((is.character(zpids)|is.numeric(zpids)), msg='Error: Check zpid formatting')

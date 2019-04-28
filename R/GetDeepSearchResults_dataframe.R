@@ -20,8 +20,7 @@
 #' @import xml2
 #' @return A data frame with columns corresponding to address, property, and Zestimate information
 #' @examples
-#' set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
-#'
+#' \dontrun{
 #' zapi_key = getOption('ZillowR-zws_id')
 #'
 #' adrs <- c('733 Normandy Ct', '600 South Quail Ct','2902 Wood St', '3425 Locust St.')
@@ -31,6 +30,7 @@
 #'
 #' GetDeepSearchResults_dataframe(locations, col.address=1, col.zipcode=2,
 #' col.city=4, col.state=3,api_key=zapi_key)
+#' }
 
 GetDeepSearchResults_dataframe <- function(.df, col.address, col.zipcode=NULL, col.city=NULL, col.state=NULL, rentzestimate=F, api_key, raw=FALSE){
   assertthat::assert_that(!is.null(col.zipcode) | (!is.null(col.state)&!is.null(col.city)), msg='Missing either zip or city/state info')

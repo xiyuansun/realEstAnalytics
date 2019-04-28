@@ -163,10 +163,11 @@ You can obtain a URL for a the Zestimates for a property with `GetChart`. The re
 library(XML)
 #Get Chart returns a list with the API's response
 #The chart URL is in the `response` element in the `url` attribute
-chartex <- GetChart(zpid = 1340244, unit_type = 'dollar', width = 600, height = 300,
+chartex <- GetChart(zpid = 93961896, unit_type = 'dollar', width = 600, height = 300,
           chartDuration = '10years', zws_id = getOption('ZillowR-zws_id'))
 XML::names.XMLNode(chartex$response)
 ```
+
 ```{r, eval=F, include=FALSE}
 #NOT RUN
 #In R, we can get the chart using a few manipulations
