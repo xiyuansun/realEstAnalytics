@@ -14,10 +14,17 @@
 #' @return A tibble. Columns returned correspond to geographic region information and monthly observations for each region.
 #' @examples
 #' #5 bedrooms by zipcode
-#' \dontrun{get_rental_listings(bedrooms=5, rate='PerSqFt', type="Studio",geography="Zip")}
+#' \dontrun{
+#'
+#' get_rental_listings(bedrooms=5, rate='PerSqFt', type="Studio",geography="Zip")
+#'
+#' }
 #'
 #' #1 bedroom multi-family homes by state.
-#' \dontrun{ get_rental_listings(bedrooms=1, rate='Total', type="Multi", geography="State")
+#' \dontrun{
+#'
+#' get_rental_listings(bedrooms=1, rate='Total', type="Multi", geography="State")
+#'
 #' }
 ####################
 get_rental_listings<- function(bedrooms=1, type=NULL, geography="Zip", rate='Total'){

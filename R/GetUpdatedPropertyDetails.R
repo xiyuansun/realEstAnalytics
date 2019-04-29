@@ -1,8 +1,9 @@
 #' Make request to Zillow API GetUpdatedPropertyDetails Web Service
 #'
 #' For a specified property, the GetUpdatedPropertyDetails API returns all of
-#' the home facts that have been edited by the home's owner or agent. The result
-#' set contains the following attributes:
+#' the home facts that have been edited by the home's owner or agent.
+#'
+#' @return The result set contains the following attributes:
 #'
 #' \itemize{
 #'   \item Property address

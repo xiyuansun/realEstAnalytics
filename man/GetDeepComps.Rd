@@ -22,14 +22,18 @@ GetDeepComps(zpid, count = 10, rentzestimate = FALSE, api_key,
 If \code{raw=T}, a raw XML document. If \code{raw=F} (default), a data frame with columns corresponding to address information, Zestimates, and property information. The number of columns varies by property use type.
 }
 \description{
-For a given address, extract property information including building data and Zestimates.
-At least one of zipcode or city/state information must be included.
+For a given Zillow property ID, find valuation data for comparable recent property sales,
+and return both the property valuation estimate as well as other property characteristics for each property
 }
 \examples{
 
 zpid='1340244'
 
-\dontrun{GetDeepComps(zpid, count=10, rentzestimate=TRUE,
- api_key= getOption('ZillowR-zws_id'), raw=FALSE) }
+\dontrun{
+
+GetDeepComps(zpid, count=10, rentzestimate=TRUE,
+ api_key= getOption('ZillowR-zws_id'), raw=FALSE)
+
+  }
 
 }

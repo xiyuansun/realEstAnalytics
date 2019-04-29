@@ -32,8 +32,12 @@ At least one of zipcode or city/state information must be included.
 \examples{
 \dontrun{zapi_key = getOption('ZillowR-zws_id')}
 
-\dontrun{GetDeepSearchResults(address='600 S. Quail Ct.', zipcode='67114',
- rentzestimate=FALSE, api_key=zapi_key) }
+\dontrun{
+
+GetDeepSearchResults(address='600 S. Quail Ct.', zipcode='67114',
+ rentzestimate=FALSE, api_key=zapi_key)
+
+ }
 
 \dontrun{GetDeepSearchResults(address='312 Hayward Ave.', city='Ames', state='IA',
  rentzestimate=TRUE, zipcode='50014', api_key=zapi_key) }

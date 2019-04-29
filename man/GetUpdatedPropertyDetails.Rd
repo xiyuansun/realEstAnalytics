@@ -15,14 +15,8 @@ information. Required.}
 \item{raw}{logical, if \code{TRUE} the raw XML data from the API call is returned (i.e., the original ZillowR call)}
 }
 \value{
-A data frame with columns corresponding to zpid, Date, and updated property information
-}
-\description{
-For a specified property, the GetUpdatedPropertyDetails API returns all of
-the home facts that have been edited by the home's owner or agent. The result
-set contains the following attributes:
-}
-\details{
+The result set contains the following attributes:
+
 \itemize{
   \item Property address
   \item Zillow property identifier
@@ -32,6 +26,12 @@ set contains the following attributes:
   \item Updated home facts such as beds, baths, square footage, home
       description, and neighborhood and school names
 }
+
+A data frame with columns corresponding to zpid, Date, and updated property information
+}
+\description{
+For a specified property, the GetUpdatedPropertyDetails API returns all of
+the home facts that have been edited by the home's owner or agent.
 }
 \examples{
 \dontrun{

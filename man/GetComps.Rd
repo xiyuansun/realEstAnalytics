@@ -10,7 +10,7 @@ GetComps(zpid, count = 10, rentzestimate = FALSE, api_key,
 \arguments{
 \item{zpid}{The Zillow property id to search for}
 
-\item{count}{(integer) How many comparables to return?}
+\item{count}{(integer) How many comparables to return? Maximum: 25}
 
 \item{rentzestimate}{(logical) If \code{TRUE}, gets the rent zestimate.}
 
@@ -22,12 +22,16 @@ GetComps(zpid, count = 10, rentzestimate = FALSE, api_key,
 If \code{raw=T}, a raw XML document. If \code{raw=F} (default), a data frame with columns corresponding to address information, Zestimates, and property information. The number of columns varies by property use type.
 }
 \description{
-For a given address, extract property information including building data and Zestimates.
-At least one of zipcode or city/state information must be included.
+For a given Zillow property ID, find valuation data for comparable recent property sales.
+The returned data frame contains address information and Zestimate/Rental valuation information for the comparables.
 }
 \examples{
+
+\dontrun{
 #Comparable properties for 600 S. Quail Ct.
-\dontrun{GetComps(zpid='1340244', count=10, rentzestimate=TRUE,
- api_key = getOption('ZillowR-zws_id')) }
+
+GetComps(zpid='1340244', count=10, rentzestimate=TRUE,
+ api_key = getOption('ZillowR-zws_id'))
+ }
 
 }

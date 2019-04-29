@@ -20,7 +20,7 @@ GetZestimate(zpids, rentzestimate = FALSE, api_key, raw = FALSE)
 A data frame with columns corresponding to zpid, Date, and Zestimate information
 }
 \description{
-Returns a dataframe with the Zillow zestimate information for a given Zillow property ID.
+Returns a dataframe with the Zillow zestimate and/or rental valuation information for a given Zillow property ID.
 }
 \examples{
 \dontrun{

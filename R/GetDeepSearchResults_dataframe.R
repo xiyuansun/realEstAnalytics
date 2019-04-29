@@ -30,6 +30,7 @@
 #'
 #' GetDeepSearchResults_dataframe(locations, col.address=1, col.zipcode=2,
 #' col.city=4, col.state=3,api_key=zapi_key)
+#'
 #' }
 
 GetDeepSearchResults_dataframe <- function(.df, col.address, col.zipcode=NULL, col.city=NULL, col.state=NULL, rentzestimate=F, api_key, raw=FALSE){

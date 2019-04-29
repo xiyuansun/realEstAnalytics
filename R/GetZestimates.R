@@ -1,6 +1,6 @@
 #' Get Zestimates for a given Zillow property ID
 #'
-#' Returns a dataframe with the Zillow zestimate information for a given Zillow property ID.
+#' Returns a dataframe with the Zillow zestimate and/or rental valuation information for a given Zillow property ID.
 #'
 #' @name GetZestimates
 #' @param zpids a single value or vector of Zillow property IDs

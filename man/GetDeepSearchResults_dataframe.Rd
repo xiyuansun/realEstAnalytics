@@ -43,5 +43,6 @@ state=c("KS","KS","IA","MO"), city=c("Newton","Newton","Ames","Kansas City"))
 
 GetDeepSearchResults_dataframe(locations, col.address=1, col.zipcode=2,
 col.city=4, col.state=3,api_key=zapi_key)
+
 }
 }

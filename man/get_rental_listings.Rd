@@ -26,9 +26,16 @@ Data is available for a variety of sizes and types, and can be returned in eithe
 }
 \examples{
 #5 bedrooms by zipcode
-\dontrun{get_rental_listings(bedrooms=5, rate='PerSqFt', type="Studio",geography="Zip")}
+\dontrun{
+
+get_rental_listings(bedrooms=5, rate='PerSqFt', type="Studio",geography="Zip")
+
+}
 
 #1 bedroom multi-family homes by state.
-\dontrun{ get_rental_listings(bedrooms=1, rate='Total', type="Multi", geography="State")
+\dontrun{
+
+get_rental_listings(bedrooms=1, rate='Total', type="Multi", geography="State")
+
 }
 }

@@ -1,7 +1,7 @@
 #' Get comparable recent property sales for a given property with additional property data
 #'
-#' For a given address, extract property information including building data and Zestimates.
-#' At least one of zipcode or city/state information must be included.
+#' For a given Zillow property ID, find valuation data for comparable recent property sales,
+#' and return both the property valuation estimate as well as other property characteristics for each property
 #'
 #' @name GetDeepComps
 #' @param zpid The Zillow property id to search.
@@ -21,8 +21,12 @@
 #'
 #' zpid='1340244'
 #'
-#' \dontrun{GetDeepComps(zpid, count=10, rentzestimate=TRUE,
-#'  api_key= getOption('ZillowR-zws_id'), raw=FALSE) }
+#' \dontrun{
+#'
+#' GetDeepComps(zpid, count=10, rentzestimate=TRUE,
+#'  api_key= getOption('ZillowR-zws_id'), raw=FALSE)
+#'
+#'   }
 #'
 
 GetDeepComps <- function(zpid, count=10, rentzestimate=FALSE, api_key, raw=FALSE){

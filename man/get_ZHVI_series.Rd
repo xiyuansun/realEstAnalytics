@@ -26,17 +26,28 @@ A tibble. Columns returned correspond to geographic identification information a
 \description{
 Reads the static .csv file for Zillow Home Values series by type and geography,
 building a URL path to the .csv file. Options are available for a variety of home sizes and types,
-as well as tiers if you wish to view other data that is aggregated.
+as well as tiers if you wish to view other data that is aggregated. The return is a dataframe with time series observations aggregated by region.
 }
 \examples{
 #All homes, bottom tier, by zipcode
-\dontrun{get_ZHVI_series(allhomes=TRUE, tier="B",geography="Zip")}
+\dontrun{
+
+get_ZHVI_series(allhomes=TRUE, tier="B",geography="Zip")
+
+}
 
 #2 bedrooms by city
-\dontrun{get_ZHVI_series(bedrooms=2,geography="City") }
+\dontrun{
+get_ZHVI_series(bedrooms=2,geography="City")
+
+}
 
 #the ZHVI summary for all homes by State
-\dontrun{get_ZHVI_series(geography="State", summary=TRUE) }
+\dontrun{
+
+get_ZHVI_series(geography="State", summary=TRUE)
+
+}
 
 
 }

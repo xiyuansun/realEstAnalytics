@@ -55,14 +55,14 @@ zapi_key = getOption('ZillowR-zws_id')
 
 ## Calling the Zillow API from R
 
-You can get basic information on a property based on its address using `GetDeepSearchResults`. The return is a dataframe with the property's estimated value as well as other characteristics (i.e., bedrooms, bathrooms, etc.). To get results for more than one address at once, we recommend `GetDeepSearchResults_dataframe` rather than using an `apply()` or other mapping function.
+You can get basic information on a property based on its address using `GetDeepSearchResults`. The return is a dataframe with the property's estimated value as well as other characteristics (i.e., bedrooms, bathrooms, etc.). To get results for more than one address at once, we recommend `GetDeepSearchResults_dataframe` rather than using an `apply()` or other mapping function, because some addresses have multiple properties.
 ```{r}
 GetDeepSearchResults('2902 Wood St.', city='Ames',state='IA', zipcode=50014,
                      rentzestimate=TRUE,
                      api_key=getOption('ZillowR-zws_id'))
 ```
 
-Use the `GetComps` or `GetDeepComps` to get comparable properties for a given Zillow Property ID (limit 25 comparables). The return is a data frame with just the comparable addresses and their Zestimate values, with more property information available with `GetDeepComps`.
+Use the `GetComps` or `GetDeepComps` to get comparable properties for a given Zillow Property ID (limit 25 comparables). The return is a data frame with the most comparable addresses and their Zestimate values, with more property information (i.e., the `GetDeepSearchResults` variables) available from `GetDeepComps`.
 ```{r}
 #retrieve the zpid from GetDeepSearchResults
 zpidex <- GetDeepSearchResults('600 S. Quail Ct.', zipcode=67114,
@@ -78,7 +78,7 @@ GetZestimate(zpids= zpidex ,
              rentzestimate=TRUE , api_key=getOption('ZillowR-zws_id'))
 ```
 
-If you want more detailed information on a specific property, you can specify the ZPID and return the results with `GetUpdatedPropertyDetails`:
+If you want more detailed information on a specific property (such as utilities, appliances, and other building information), you can specify the ZPID and return the results with `GetUpdatedPropertyDetails`:
 ```{r}
 GetUpdatedPropertyDetails(zpid=2084934591 ,
                            api_key= getOption('ZillowR-zws_id'))
@@ -100,5 +100,6 @@ For the median rental values:
 get_rental_listings(type='SFR', rate='PerSqFt',geography="State")
 ```
 
+For both functions, the return is a dataframe with the first few columns giving the geographic region and the rest corresponding to monthly observations. This dataframe can be reshaped or formatted as necessary for analysis.
 
 Please see the vignette (under articles) to see further documentation and examples of `realEstAnalytics`' capabilities.
