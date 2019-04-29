@@ -151,21 +151,13 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='zillow_web_service_id.html'>set_zillow_web_service_id</a></span>(<span class='st'>'X1-ZWz181enkd4cgb_82rpe'</span>)
-
+    <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='no'>zapi_key</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>'ZillowR-zws_id'</span>)
 
 <span class='no'>zpid</span><span class='kw'>=</span><span class='st'>'1341571'</span>
 
-<span class='fu'>GetZestimate</span>(<span class='kw'>zpids</span><span class='kw'>=</span><span class='no'>zpid</span>,<span class='kw'>rentzestimate</span><span class='kw'>=</span><span class='fl'>TRUE</span>,<span class='kw'>api_key</span><span class='kw'>=</span><span class='no'>zapi_key</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 1 x 20</span><span>
-#&gt;   address zipcode city  state   lat  long region_name region_id type  zestimate
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> 733 No~ 67114   Newt~ KS     38.1 -</span><span style='color: #BB0000;'>97.4</span><span> Newton      19619     city     </span><span style='text-decoration: underline;'>400</span><span>110
-#&gt; </span><span style='color: #555555;'># ... with 10 more variables: zest_lastupdated </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span style='color: #555555;'>,
-#&gt; #   zest_monthlychange </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, zest_percentile </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, zestimate_low </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   zestimate_high </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, rentzestimate </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, rent_lastupdated </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span style='color: #555555;'>,
-#&gt; #   rent_monthlychange </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, rentzestimate_low </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, rentzestimate_high </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div></span></pre>
+<span class='fu'>GetZestimate</span>(<span class='kw'>zpids</span><span class='kw'>=</span><span class='no'>zpid</span>,<span class='kw'>rentzestimate</span><span class='kw'>=</span><span class='fl'>TRUE</span>,<span class='kw'>api_key</span><span class='kw'>=</span><span class='no'>zapi_key</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

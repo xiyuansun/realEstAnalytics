@@ -53,9 +53,12 @@ set_zillow_web_service_id('YOUR_API_KEY')
 zapi_key = getOption('ZillowR-zws_id')
 ```
 
+## Calling the Zillow API from R
+
 You can get basic information on a property based on its address using `GetDeepSearchResults`. The return is a dataframe with the property's estimated value as well as other characteristics (i.e., bedrooms, bathrooms, etc.). To get results for more than one address at once, we recommend `GetDeepSearchResults_dataframe` rather than using an `apply()` or other mapping function.
 ```{r}
-GetDeepSearchResults('600 S. Quail Ct.', city='Newton',state='KS', zipcode=NULL,
+GetDeepSearchResults('2902 Wood St.', city='Ames',state='IA', zipcode=50014,
+                     rentzestimate=TRUE,
                      api_key=getOption('ZillowR-zws_id'))
 ```
 
@@ -75,12 +78,27 @@ GetZestimate(zpids= zpidex ,
              rentzestimate=TRUE , api_key=getOption('ZillowR-zws_id'))
 ```
 
-There are also a few options for retrieving non-API data. Get the time series of property values aggregated by region and type with `get_rental_listings` and/or `get_ZHVI_series`. These return dataframes of time series data for the selected geographic aggregation level and property type, read from a static .csv hosted by Zillow. For options on the arguments, see the introduction vignette.
+If you want more detailed information on a specific property, you can specify the ZPID and return the results with `GetUpdatedPropertyDetails`:
 ```{r}
-#Pull the data by state and zipcode for 4 bedrooms
-cityseries <- get_ZHVI_series(bedrooms=4,geography="Zip")
-
-head(cityseries)
+GetUpdatedPropertyDetails(zpid=2084934591 ,
+                           api_key= getOption('ZillowR-zws_id'))
 ```
+
+## Non-API Regional Time Series Data
+
+There are also a few options for retrieving non-API data. Get the time series of property values aggregated by region and type with `get_rental_listings` and/or `get_ZHVI_series`. These return dataframes of time series data for the selected geographic aggregation level and property type, read from a static .csv hosted by Zillow. For options on the arguments, see the introduction vignette.
+
+For the median home property values:
+```{r, eval=FALSE}
+#Pull the data by zipcode for 4 bedrooms
+get_ZHVI_series(bedrooms=3,geography="Zip")
+```
+
+For the median rental values:
+```{r, eval=FALSE}
+#Rental values for Single Family Residences by State
+get_rental_listings(type='SFR', rate='PerSqFt',geography="State")
+```
+
 
 Please see the vignette (under articles) to see further documentation and examples of `realEstAnalytics`' capabilities.

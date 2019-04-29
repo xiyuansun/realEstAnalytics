@@ -35,7 +35,9 @@ library(realEstAnalytics)
 `realEstAnalytics` does not have any dependencies other than the latest version of `R`, but does import functions from a number of other packages to aid in reading and tidying the XML data. See the documentation for this list, and be careful with the namespaces of any other packages you may be using in conjunction with `realEstAnalytics`.
 
 ## Obtaining and setting your Zillow Web Service ID (API key)
-Before you can make any calls to any of Zillow's APIs, you must register with Zillow by signing up at https://www.zillow.com/howto/api/APIOverview.htm (make sure you read the Terms of Service!). Once you have registered, Zillow will send you a unique API key, formally called a ZWSID. Keep this in a safe, non-public place to be referenced later. Before we go further, it should be noted that Zillow will prevent excessive calls, and thus may block your ZWSID if you issue more than 1,000 API requests in a day (so be careful!).
+Before you can make any calls to any of Zillow's APIs, you must register with Zillow by signing up at https://www.zillow.com/howto/api/APIOverview.htm (make sure you read the Terms of Service!). Once you have registered, Zillow will send you a unique API key, formally called a ZWSID. Keep this in a safe, non-public place to be referenced later.
+
+Before we go further, it should be noted that Zillow will prevent excessive calls, and thus may block your ZWSID if you issue more than 1,000 API requests in a day (so be careful!).
 
 Once you have obtained your ZWSID, you can set it in your `R` session with the `zillow_web_service_id()` function and retrieve it with `getOption('ZillowR-zws_id')` :
 ```{r, eval=FALSE}
@@ -49,14 +51,14 @@ zapi_key = getOption('ZillowR-zws_id')
 
 It is helpful to set this when you start your session, so that you do not need to continually reference it if making many calls to the API.
 
-## Returning Property Information with `GetDeepSearchResults` and `GetDeepSearchResults_dataframe`
+## Returning Property Information with `GetUpdatedPropertyDetails`,`GetDeepSearchResults` and `GetDeepSearchResults_dataframe`
 Suppose we're interested in moving to Newton, KS, and are considering a number of different homes in the area for purchase. One particular home we're interested in is located at 600 S. Quail Ct. in Newton. We can obtain information on the property using the `DeepSearchResults` function, which will pull the data corresponding to all of the Zillow Property IDs at a given address.
 ```{r}
 GetDeepSearchResults('600 S. Quail Ct.', city='Newton',state='KS', zipcode=NULL,
                      api_key=getOption('ZillowR-zws_id'))
 ```
 
-The function returns a dataframe with variables corresponding to address and geographic location, as well as the property's Zillow property ID (`zpid`) and information corresponding to the Zestimate, which is Zillow's proprietary algorithm for estimating the property value. Additionally, there ar variables corresponding to the living space of the house (`bedrooms`,`bathrooms`,`finishedSqFt`, etc.), and property tax information. For example, our property has a Zillow estimated value of \$230,830, which is quite close to the last sale price of \$230,000 and well above the assessed property tax value of \$214,800.
+The function returns a dataframe with variables corresponding to address and geographic location, as well as the property's Zillow property ID (`zpid`) and information corresponding to the Zestimate, which is Zillow's proprietary algorithm for estimating the property value. Additionally, there are variables corresponding to the living space of the house (`bedrooms`,`bathrooms`,`finishedSqFt`, etc.), and property tax information. For example, our property has a Zillow estimated value of \$230,830, which is quite close to the last sale price of \$230,000 and well above the assessed property tax value of \$214,800.
 
 Note that we did not need to supply a zip code argument. In order for `DeepSearchResults` to work, we need only to specify either the city/state combination OR the zipcode. Sometimes it may help the search to be more specific by specifying the zipcode. The following code will produce the same result using only zipcode but no city/state combination:
 ```{r}
@@ -66,7 +68,9 @@ GetDeepSearchResults('600 S. Quail Ct.', zipcode=67114,
 
 Additionally, we set `rentzestimate=TRUE` in the previous example, which tells the API call to return the Zillow estimated rental price data for the property in addition to the Zestimate for the property.
 
-One note of caution when using `GetDeepSearchResults` is that it will return the results for ALL of the Zillow property IDs at an address, which can cause difficulties if one is trying to get results for multiple addresses at once, such as using the function in conjunction with the `apply()` family of functions. To avoid this, one may be able to use `GetDeepSearchResults_dataframe`, which takes a data frame of addresses as its arguments. Suppose we want to look at the results for several results at once, and we have the data stored in a data frame named `newtonaddresses` in our environment. To get the search results for the full data frame, all we need to do is supply `GetDeepSearchResults_dataframe` with the data and the column numbers corresponding to the geographic information:
+One note of caution when using `GetDeepSearchResults` is that it will return the results for ALL of the Zillow property IDs at an address, which can cause difficulties if one is trying to get results for multiple addresses at once, such as using the function in conjunction with the `apply()` family of functions. To avoid this, one may be able to use `GetDeepSearchResults_dataframe`, which takes a data frame of addresses as its arguments.
+
+Suppose we want to look at the results for several results at once, and we have the data stored in a data frame named `newtonaddresses` in our environment. To get the search results for the full data frame, all we need to do is supply `GetDeepSearchResults_dataframe` with the data and the column numbers corresponding to the geographic information:
 ```{r}
 library(dplyr)
 library(magrittr)
@@ -106,8 +110,21 @@ GetDeepSearchResults_dataframe(.df=newtonaddresses,
                                api_key=getOption('ZillowR-zws_id'))
 ```
 
+If we want to find out more characteristics of the property that we could not find with `GetDeepSearchResults`, the function `GetUpdatedPropertyDetails` may help us out. It takes a Zillow Property ID and returns much of the non-value information from the search functions, as well as additional information about parking, HVAC, appliances, and more:
+```{r}
+exdetails <- GetUpdatedPropertyDetails(zpid=93961896 ,
+                           api_key= getOption('ZillowR-zws_id'))
+
+names(exdetails)
+```
+
+
 ## Finding Comparable Properties with `GetComps` and `GetDeepComps`
-For every property, Zillow calculates a "Compscore" of comparable properties in the area. The 'Compscore' attribute is representative of the relevance of each property to the target, with a score of 0 being the closest and higher Compscores being less relevant. We have two options for API calls: `GetComps`, which retrieves only geographic, Zestimate, and Compscore information for the comparables, and `GetDeepComps`, which returns everything from `GetComps` as well as the specific property data that one would acquire through `GetDeepSearchResults`. We can retrieve up to 25 comparable properties with the `count` argument, although one should be careful not to exceed Zillow's API limit by calling this repeatedly. Note here that, instead of an address, these functions take the specific Zillow property ID (zpid) for the property, which can be found by first calling `GetDeepSearchResults` for the address:
+For every property, Zillow calculates a "Compscore" of comparable properties in the area. The 'Compscore' attribute is representative of the relevance of each property to the target, with a score of 0 being the closest and higher Compscores being less relevant. We have two options for API calls: `GetComps`, which retrieves only geographic, Zestimate, and Compscore information for the comparables, and `GetDeepComps`, which returns everything from `GetComps` as well as the specific property data that one would acquire through `GetDeepSearchResults`.
+
+ We can retrieve up to 25 comparable properties with the `count` argument, although one should be careful not to exceed Zillow's API limit by calling this repeatedly. Note here that, instead of an address, these functions take the specific Zillow property ID (zpid) for the property, which can be found by first calling `GetDeepSearchResults` for the address.
+ 
+ Are we getting a good deal on our home at 600 S. Quail Court? We can look at the information on comparable recently sold properties in the area:
 ```{r}
 
 #retrieve the zpid from GetDeepSearchResults
@@ -130,7 +147,9 @@ GetZestimate(zpids=c(zpidex,109818062,1341669,1341715) ,
 ```
 
 ## Combining the API Calls to Build a Local Housing Dataset
-Suppose we want to build a larger dataset based on only our original address. We have seen how `GetComps` can get a few comparable properties in the area. If we want to build a larger dataset, we can chain the `GetDeepSearchResults`,`GetComps`, and `GetDeepComps` functions together to get more properties in an area after starting with one location. To speed the cleaning and combining, we use `dplyr` and `%>%` from `magrittr` in the tidyverse family, with an `lapply`:
+Suppose we want to build a larger dataset based on only our original address. This would facilitate an analysis of recent property sales in the general area to gain insight into the housing market.
+
+We have seen how `GetComps` can get a few comparable properties in the area. If we want to build a larger dataset, we can chain the `GetDeepSearchResults`,`GetComps`, and `GetDeepComps` functions together to get more properties in an area after starting with one location. To speed the cleaning and combining, we use `dplyr` and `%>%` from `magrittr` in the tidyverse family, with an `lapply`:
 ```{r}
 library(purrr)
 #build a dataset in one sequence of commands
@@ -155,6 +174,7 @@ dim(richdata)
 ```
 
 What just happened here? We used our original address and obtained its Zillow property ID with `GetDeepSearchResults`, then used that ZPID with `GetComps` to get 10 comparable properties. Then we took the ZPIDs from those comparables and applied `GetDeepComps` to each, resulting in an expanded number of properties. We can then bind all of the data together with `bind_rows()` from the `dplyr` package, and take the distinct addresses to get a rich dataset for our area for purposes of analysis.
+
 *Note:* In this example we sent over 100 requests to the API. Remember that Zillow limits the number of requests you can make in a day, so be careful using these functions in conjunction with `apply()` or similar functions. You may get locked out!
 
 ## Home Price Charts with `GetChart`
@@ -215,7 +235,7 @@ Zillow also supplies some of its research data and aggregated listings data, hos
 |Multifamily 5+ Units                 |     -    |  `'Multi'`    |
 |Condo/Co-op                          |     -    |`'Condo/Co-op'`|
 |Duplex/Triplex                       |     -    |`'Duplex'`     |
-|Single-Family Residence              |     -    | `'SFR'`    |
+|Single-Family Residence              |     -    | `'SFR'`       |
 |Studio                               |     -    |  `'Studio'`   |
 |1-Bedroom                            |   1      |    -          |
 |2-Bedroom                            |   2      |    -          |
@@ -262,7 +282,9 @@ dim(citytop)
 
 Some of these files are quite large, and may take time to read in. It is recommended to immediately filter with `dplyr::filter()` as the file is read rather than keeping the whole dataset in memory (unless you have a use for all of the regions in your analysis).
 
-The first 3 to 7 (depending on the dataset) columns returned correspond to geographic ID information, while the remaining columns are monthly time series observations. With only a few commands we can melt the data into a format that is ready for visualization. It's clear that our home is valued ($231,234) well above the median value for the zipcode, but this particular city appears to be much cheaper than the rest of the state of Kansas. It looks like Newton and Kansas did not recieve the worst of the housing crisis, and that the city and state are on a sharp upward trend.
+The first 3 to 7 (depending on the dataset) columns returned correspond to geographic ID information, while the remaining columns are monthly time series observations. With only a few commands we can melt the data into a format that is ready for visualization.
+
+It's clear that our home is valued ($231,234) well above the median value for the zipcode, but this particular city appears to be much cheaper than the rest of the state of Kansas. It looks like Newton and Kansas did not recieve the worst of the housing crisis, and that the city and state are on a sharp upward trend.
 
 ```{r, echo=TRUE, results='hide', warning=F}
 #melting the data using reshape2 and zoo
