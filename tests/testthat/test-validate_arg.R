@@ -132,3 +132,10 @@ test_that(" provide the correct input", {
 
 })
 
+test_that(" provide the correct input", {
+  # expect an error due to incorrect input
+  expect_error(validate_arg(x= NULL,required = TRUE,class = NULL,length_min = NULL,
+                            length_max = NULL,inclusion = NULL,exclusion = NULL,
+                            format = NULL,value_min = NULL,value_max =abc))
+
+})
