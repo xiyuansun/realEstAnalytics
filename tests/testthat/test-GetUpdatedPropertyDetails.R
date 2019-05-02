@@ -14,9 +14,9 @@ test_that(" provide the correct adress", {
 
 test_that(" provide the correct ZIP code for which to search", {
   # expect an error due to incorrect citystatezip
-  expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key = abc,raw=FALSE))
+  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key = abc,raw=FALSE))
   # expect an error due to incorrect citystatezip
-  expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key= a1b2c3,raw=FALSE))
+  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key= a1b2c3,raw=FALSE))
 })
 
 
@@ -29,44 +29,52 @@ test_that(" provide the correct adress", {
 
 test_that(" provide the correct ZIP code for which to search", {
   # expect an error due to incorrect citystatezip
-  expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key = abc,raw=FALSE))
+  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key = abc,raw=FALSE))
   # expect an error due to incorrect citystatezip
-  expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key= a1b2c3,raw=FALSE))
+  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key= a1b2c3,raw=FALSE))
 })
 
 test_that(" provide the correct ZIP code for which to search", {
   # expect an error due to incorrect citystatezip
-  expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key = abc,raw=TRUE))
+  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key = abc,raw=TRUE))
   # expect an error due to incorrect citystatezip
-  expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key= a1b2c3,raw=TRUE))
+  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key= a1b2c3,raw=TRUE))
 })
 
 test_that(" provide the correct input", {
   # expect an error due to incorrect input
-  expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key = zws_id,raw=abc))
+  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key = zws_id,raw=abc))
   # expect an error due to incorrect input
-  expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key= zws_id,raw=a1b2c3))
+  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key= zws_id,raw=a1b2c3))
 })
 
 test_that(" provide the correct input", {
   # expect an error due to incorrect input
-  expect_error(extract_editedfacts(abc))
+  expect_error(extract_editedfacts(abc,byrow=T))
   # expect an error due to incorrect input
-  expect_error(extract_editedfacts(a1b2c3))
+  expect_error(extract_editedfacts(a1b2c3,byrow=F))
 })
 
 test_that(" provide the correct input", {
   # expect an error due to incorrect input
-  expect_error(extract_pageview(abc))
+  expect_error(extract_pageview(abc,"total"))
   # expect an error due to incorrect input
-  expect_error(extract_pageview(a1b2c3))
+  expect_error(extract_pageview("currentMonth",abc))
 })
 
 test_that(" provide the correct input", {
   # expect an error due to incorrect input
-  expect_error(extract_address_e(abc))
+  expect_error(extract_address_e(c(abc, "zipcode", "city", "state", "lat","long")))
   # expect an error due to incorrect input
-  expect_error(extract_address_e(a1b2c3))
+  expect_error(extract_address_e(c("address", abc, "city", "state", "lat","long")))
+  # expect an error due to incorrect input
+  expect_error(extract_address_e(c("address", "zipcode", abc, "state", "lat","long")))
+  # expect an error due to incorrect input
+  expect_error(extract_address_e(c("address", "zipcode", "city", abc, "lat","long")))
+  # expect an error due to incorrect input
+  expect_error(extract_address_e(c("address", "zipcode", "city", "state", abc,"long")))
+  # expect an error due to incorrect input
+  expect_error(extract_address_e(c("address", "zipcode", "city", "state", "lat",abc)))
 })
 #test_that(" output is a list", {
   # expect list
