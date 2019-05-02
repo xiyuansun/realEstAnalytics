@@ -19,6 +19,22 @@ test_that(" provide the correct ZIP code for which to search", {
   expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key= a1b2c3,raw=FALSE))
 })
 
+11
+test1 <-test_that(" provide the correct adress", {
+  # expect an error due to incorrect address
+  expect_error(GetUpdatedPropertyDetails(zpid = abc,api_key = zws_id,raw=TRUE))
+  # expect an error due to incorrect adress
+  expect_error(GetUpdatedPropertyDetails(zpid = a1b2c3,api_key = zws_id,raw=TRUE))
+})
+
+test2 <- test_that(" provide the correct ZIP code for which to search", {
+  # expect an error due to incorrect citystatezip
+  expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key = abc,raw=FALSE))
+  # expect an error due to incorrect citystatezip
+  expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key= a1b2c3,raw=FALSE))
+})
+
+
 test_that(" provide the correct input", {
   # expect an error due to incorrect input
   expect_error(GetUpdatedPropertyDetails(zpid = 48749425,api_key = zws_id,raw=abc))
@@ -28,16 +44,23 @@ test_that(" provide the correct input", {
 
 test_that(" provide the correct input", {
   # expect an error due to incorrect input
-  expect_error(extract_editedfacts(raw=abc))
+  expect_error(extract_editedfacts(abc))
   # expect an error due to incorrect input
-  expect_error(extract_editedfacts(raw=a1b2c3))
+  expect_error(extract_editedfacts(a1b2c3))
 })
 
 test_that(" provide the correct input", {
   # expect an error due to incorrect input
-  expect_error(extract_pageview(raw=abc))
+  expect_error(extract_pageview(abc))
   # expect an error due to incorrect input
-  expect_error(extract_pageview(raw=a1b2c3))
+  expect_error(extract_pageview(a1b2c3))
+})
+
+test_that(" provide the correct input", {
+  # expect an error due to incorrect input
+  expect_error(xtract_address_e(abc))
+  # expect an error due to incorrect input
+  expect_error(xtract_address_e(a1b2c3))
 })
 #test_that(" output is a list", {
   # expect list
