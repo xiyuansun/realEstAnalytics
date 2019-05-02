@@ -9,20 +9,23 @@ extract_address_search <- function(xmlres){
   address_data <- address_data %>% mutate_all(as.character) %>% mutate_at(c("lat","long"),as.numeric)
 
   nrs <- which((xmlres %>% xml_nodes('address') %>% xml_children %>%  xml_name)=='city') %>% length()
+
+  rcount <- xmlres %>% xml_nodes('localRealEstate') %>% xml_name() %>% length()
   region_data <- xmlres %>% xml_nodes('localRealEstate') %>% xml_children() %>%  xml_attrs() %>%
-    unlist() %>% as.character() %>% matrix(nrow=nrs, byrow=T) %>% data.frame()
+    unlist() %>% as.character() %>% matrix(nrow=rcount, byrow=T) %>% data.frame()
+
   names(region_data) <- c('region_name','region_id','type')
   return(data.frame(address_data,region_data))
 }
 
 extract_zestimates <- function(xmlres){
   zestimate_data <- xmlres %>% xml_nodes('zestimate')
-
+  zcount <- xml_name(zestimate_data) %>% length()
   highlow <- zestimate_data %>% xml_nodes('valuationRange') %>% xml_children() %>% xml_text() %>%
-    matrix(ncol=2, byrow=T) %>% data.frame()
+    matrix(nrow=zcount, ncol=2, byrow=T) %>% data.frame()
 
   zestimate_data <- zestimate_data %>% xml_children() %>% xml_text() %>%
-    matrix(ncol=6, byrow=T) %>% data.frame()
+    matrix(nrow=zcount,ncol=6, byrow=T) %>% data.frame()
 
   zestimate_data <- cbind(zestimate_data[c(1,2,4,6)], highlow)
   names(zestimate_data) <- c("zestimate", "zest_lastupdated","zest_monthlychange","zest_percentile","zestimate_low","zestimate_high")
@@ -36,12 +39,12 @@ extract_zestimates <- function(xmlres){
 
 extract_rent_zestimates <- function(xmlres){
   zestimate_data <- xmlres %>% xml_nodes('rentzestimate')
-
+  zcount <- xml_name(zestimate_data) %>% length()
   highlow <- zestimate_data %>% xml_nodes('valuationRange') %>% xml_children() %>% xml_text() %>%
-    matrix(ncol=2, byrow=T) %>% data.frame()
+    matrix(nrow=zcount,ncol=2, byrow=T) %>% data.frame()
 
   zestimate_data <- zestimate_data %>% xml_children() %>% xml_text() %>%
-    matrix(ncol=5, byrow=T) %>% data.frame()
+    matrix(nrow=zcount,ncol=5, byrow=T) %>% data.frame()
 
   zestimate_data <- cbind(zestimate_data[c(1,2,4)], highlow)
   names(zestimate_data) <- c("rentzestimate", "rent_lastupdated","rent_monthlychange","rentzestimate_low","rentzestimate_high")

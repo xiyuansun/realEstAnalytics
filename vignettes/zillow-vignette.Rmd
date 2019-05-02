@@ -155,25 +155,25 @@ library(purrr)
 #build a dataset in one sequence of commands
 #starting from one address
 richdata <- GetDeepSearchResults('600 S. Quail Ct.',
-                                 zipcode=67114,
+                     zipcode=67114,
                      rentzestimate=TRUE,
                      api_key=getOption('ZillowR-zws_id')) %>%
   dplyr::select(zpid) %>%
   purrr::as_vector("character") %>% 
-  GetComps(count=10, api_key=getOption('ZillowR-zws_id')) %>%
+  GetComps(count=25, api_key=getOption('ZillowR-zws_id')) %>%
   dplyr::select(zpid) %>%
   purrr::as_vector("character") %>% 
   lapply(GetDeepComps,
-         count=10,
+         count=12,
          api_key=getOption('ZillowR-zws_id')) %>% 
   dplyr::bind_rows() %>% 
-  dplyr::distinct()
+  dplyr::distinct(zpid, .keep_all=TRUE)
 
 head(richdata)
 dim(richdata)
 ```
 
-What just happened here? We used our original address and obtained its Zillow property ID with `GetDeepSearchResults`, then used that ZPID with `GetComps` to get 10 comparable properties. Then we took the ZPIDs from those comparables and applied `GetDeepComps` to each, resulting in an expanded number of properties. We can then bind all of the data together with `bind_rows()` from the `dplyr` package, and take the distinct addresses to get a rich dataset for our area for purposes of analysis.
+What just happened here? We used our original address and obtained its Zillow property ID with `GetDeepSearchResults`, then used that ZPID with `GetComps` to get 25 comparable properties. Then we took the ZPIDs from those comparables and applied `GetDeepComps` to each, resulting in an expanded number of properties. We can then bind all of the data together with `bind_rows()` from the `dplyr` package, and take the distinct addresses to get a rich dataset for our area for purposes of analysis.
 
 *Note:* In this example we sent over 100 requests to the API. Remember that Zillow limits the number of requests you can make in a day, so be careful using these functions in conjunction with `apply()` or similar functions. You may get locked out!
 
