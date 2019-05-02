@@ -29,13 +29,6 @@ test_that(" provide the correct adress", {
 
 test_that(" provide the correct ZIP code for which to search", {
   # expect an error due to incorrect citystatezip
-  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key = abc,raw=FALSE))
-  # expect an error due to incorrect citystatezip
-  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key= a1b2c3,raw=FALSE))
-})
-
-test_that(" provide the correct ZIP code for which to search", {
-  # expect an error due to incorrect citystatezip
   expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key = abc,raw=TRUE))
   # expect an error due to incorrect citystatezip
   expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key= a1b2c3,raw=TRUE))
