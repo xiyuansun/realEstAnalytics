@@ -43,9 +43,9 @@ test_that(" provide the correct input", {
 
 test_that(" provide the correct input", {
   # expect an error due to incorrect input
-  expect_error(extract_editedfacts(abc)
+  expect_error(extract_editedfacts(abc))
   # expect an error due to incorrect input
-  expect_error(extract_editedfacts(a1b2c3)
+  expect_error(extract_editedfacts(a1b2c3))
 })
 
 test_that(" provide the correct input", {
