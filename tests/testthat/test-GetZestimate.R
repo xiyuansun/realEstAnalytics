@@ -37,3 +37,7 @@ test_that(" provide the correct api key", {
   expect_error(GetZestimate(zpids='1341571',rentzestimate=FALSE,api_key=a1b2c3))
 })
 
+test_that(" output is a dataframe", {
+  # expect data frame
+  expect_s3_class(GetZestimate(zpids='1341571',rentzestimate=FALSE,api_key=zapi_key), "data.frame")
+})
