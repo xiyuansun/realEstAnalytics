@@ -43,16 +43,16 @@ test_that(" provide the correct input", {
 
 test_that(" provide the correct input", {
   # expect an error due to incorrect input
-  expect_error(extract_editedfacts(abc,byrow=T))
+  expect_error(extract_editedfacts(abc)
   # expect an error due to incorrect input
-  expect_error(extract_editedfacts(a1b2c3,byrow=F))
+  expect_error(extract_editedfacts(a1b2c3)
 })
 
 test_that(" provide the correct input", {
   # expect an error due to incorrect input
-  expect_error(extract_pageview(abc,"total"))
+  expect_error(extract_pageview(abc))
   # expect an error due to incorrect input
-  expect_error(extract_pageview("currentMonth",abc))
+  expect_error(extract_pageview(a1b2c3))
 })
 
 test_that(" provide the correct input", {
