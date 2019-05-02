@@ -9,7 +9,7 @@ build_path_geog <- function(geography){
   return(pathG)
 }
 
-build_path_bed<- function(bedrooms, rental=F){
+build_path_bed <- function(bedrooms, rental=F){
   options <- c(1:5,'C','SFR')
   assert_that(as.character(bedrooms) %in% options, msg='Specify bedrooms (1-5) or C for condo or SFR for single family residence')
   if(bedrooms %in% c(1:4)){

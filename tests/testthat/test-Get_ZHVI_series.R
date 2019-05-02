@@ -3,7 +3,7 @@ context('Get_ZHVI_series')
 
 #' get_ZHVI_series(allhomes=TRUE, tier="B",geography="Zip")
 #'
- test16 <- test_that(" provide the correct number of bedrooms", {
+test_that(" provide the correct number of bedrooms", {
 # expect an error due to incorrect number of bedrooms
 expect_error(get_ZHVI_series(allhomes =abc, tier='B',geography="Zip"))
 # expect an error due to incorrect number of bedrooms
