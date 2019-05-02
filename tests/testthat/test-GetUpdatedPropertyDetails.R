@@ -7,9 +7,9 @@ zapi_key = getOption('ZillowR-zws_id')
 
 test_that(" provide the correct adress", {
   # expect an error due to incorrect address
-  expect_error(GetUpdatedPropertyDetails(zpid = abc,api_key = zws_id,raw=FALSE))
+  expect_error(GetUpdatedPropertyDetails(zpid = abc,api_key = zapi_key,raw=FALSE))
   # expect an error due to incorrect adress
-  expect_error(GetUpdatedPropertyDetails(zpid = a1b2c3,api_key = zws_id,raw=FALSE))
+  expect_error(GetUpdatedPropertyDetails(zpid = a1b2c3,api_key = zapi_key,raw=FALSE))
 })
 
 test_that(" provide the correct ZIP code for which to search", {
@@ -22,9 +22,9 @@ test_that(" provide the correct ZIP code for which to search", {
 
 test_that(" provide the correct adress", {
   # expect an error due to incorrect address
-  expect_error(GetUpdatedPropertyDetails(zpid = abc,api_key = zws_id,raw=TRUE))
+  expect_error(GetUpdatedPropertyDetails(zpid = abc,api_key = zapi_key,raw=TRUE))
   # expect an error due to incorrect adress
-  expect_error(GetUpdatedPropertyDetails(zpid = a1b2c3,api_key = zws_id,raw=TRUE))
+  expect_error(GetUpdatedPropertyDetails(zpid = a1b2c3,api_key = zapi_key,raw=TRUE))
 })
 
 test_that(" provide the correct ZIP code for which to search", {
@@ -36,9 +36,9 @@ test_that(" provide the correct ZIP code for which to search", {
 
 test_that(" provide the correct input", {
   # expect an error due to incorrect input
-  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key = zws_id,raw=abc))
+  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key = zapi_key,raw=abc))
   # expect an error due to incorrect input
-  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key= zws_id,raw=a1b2c3))
+  expect_error(GetUpdatedPropertyDetails(zpid = '48749425',api_key= zapi_key,raw=a1b2c3))
 })
 
 test_that(" provide the correct input", {
