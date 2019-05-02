@@ -80,7 +80,7 @@
       <h1>Exploring Zillow Real Estate Data: Introduction to realEstAnalytics</h1>
                         <h4 class="author">Steve Harms</h4>
             
-            <h4 class="date">2019-04-29</h4>
+            <h4 class="date">2019-05-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/xiyuansun/realEstAnalytics/blob/master/vignettes/zillow-vignette.Rmd"><code>vignettes/zillow-vignette.Rmd</code></a></small>
       <div class="hidden name"><code>zillow-vignette.Rmd</code></div>
@@ -152,48 +152,42 @@ zapi_key =<span class="st"> </span><span class="kw"><a href="https://www.rdocume
 <p>Additionally, we set <code>rentzestimate=TRUE</code> in the previous example, which tells the API call to return the Zillow estimated rental price data for the property in addition to the Zestimate for the property.</p>
 <p>One note of caution when using <code>GetDeepSearchResults</code> is that it will return the results for ALL of the Zillow property IDs at an address, which can cause difficulties if one is trying to get results for multiple addresses at once, such as using the function in conjunction with the <code><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply()</a></code> family of functions. To avoid this, one may be able to use <code>GetDeepSearchResults_dataframe</code>, which takes a data frame of addresses as its arguments.</p>
 <p>Suppose we want to look at the results for several results at once, and we have the data stored in a data frame named <code>newtonaddresses</code> in our environment. To get the search results for the full data frame, all we need to do is supply <code>GetDeepSearchResults_dataframe</code> with the data and the column numbers corresponding to the geographic information:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(magrittr)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'magrittr'</span>
-<span class="co">#&gt; The following object is masked from 'package:purrr':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     set_names</span>
-<span class="co">#&gt; The following object is masked from 'package:tidyr':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     extract</span>
-addresses &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'733 Normandy Ct.'</span>,
-  <span class="st">'600 S. Quail Ct.'</span>,
-  <span class="st">'105 S Logan St.'</span>,
-  <span class="st">'1412 W. 8th St.'</span>,
-  <span class="st">'2801 Goldenrod Rd.'</span>,
-  <span class="st">'2309 Ivy Ave.'</span>,
-  <span class="st">'121 S Hess Ave.'</span>,
-  <span class="st">'321 E Vesper St.'</span>,
-  <span class="st">'6219 NW Parkview St.'</span>,
-  <span class="st">'623 Meadowlark Ln.'</span>
-  )
-
-cities &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">'Newton'</span>, <span class="dt">times=</span><span class="dv">4</span>),<span class="st">'North Newton'</span>,<span class="st">'North Newton'</span>,
-            <span class="st">'Hesston'</span>,<span class="st">'Hesston'</span>,<span class="st">'Park City'</span>, <span class="st">'Newton'</span>)
-
-zips &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="dv">67114</span>, <span class="dt">times =</span><span class="dv">4</span>), <span class="dv">67117</span>,<span class="dv">67117</span>,<span class="dv">67062</span>,<span class="dv">67062</span>,<span class="dv">67219</span>,<span class="dv">67114</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>()
-
-state &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">'KS'</span>, <span class="dt">times=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(zips))
-
-addex &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">address=</span>addresses,<span class="dt">zipcode=</span>zips,<span class="dt">city=</span>cities,<span class="dt">state=</span>state)
-
-newtonaddresses &lt;-<span class="st"> </span><span class="kw"><a href="../reference/GetComps.html">GetComps</a></span>(<span class="dv">1340244</span>, <span class="dt">count=</span><span class="dv">20</span>, <span class="dt">api_key =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">select</span>(address,zipcode,city,state) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_all</span>(as.character) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">rbind</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'3425 Locust St.'</span>, <span class="st">'64109'</span>, <span class="st">'Kansas City'</span>, <span class="st">'MO'</span>), addex) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">sample_n</span>(<span class="dt">size=</span><span class="dv">32</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#there are 32 addresses, some in different zipcodes, to look up</span>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(newtonaddresses)
+<span class="co">#&gt; # A tibble: 6 x 4</span>
+<span class="co">#&gt;   address            zipcode city        state</span>
+<span class="co">#&gt;   &lt;chr&gt;              &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;</span>
+<span class="co">#&gt; 1 506 Autumn Glen Ct 67114   Newton      KS   </span>
+<span class="co">#&gt; 2 733 Normandy Ct.   67114   Newton      KS   </span>
+<span class="co">#&gt; 3 427 Victoria Rd    67114   Newton      KS   </span>
+<span class="co">#&gt; 4 121 S Hess Ave.    67062   Hesston     KS   </span>
+<span class="co">#&gt; 5 3425 Locust St.    64109   Kansas City MO   </span>
+<span class="co">#&gt; 6 441 Meadowbrook Ct 67114   Newton      KS</span>
 <span class="co">#GetDeepSearchResults_dataframe will get the info for us:</span>
 
 <span class="kw"><a href="../reference/GetDeepSearchResults_dataframe.html">GetDeepSearchResults_dataframe</a></span>(<span class="dt">.df=</span>newtonaddresses,
                                <span class="dt">col.address=</span><span class="dv">1</span> , <span class="dt">col.zipcode=</span><span class="dv">2</span> , <span class="dt">col.city=</span><span class="dv">3</span> , <span class="dt">col.state=</span><span class="dv">4</span>,
-                               <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))</code></pre></div>
+                               <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))
+<span class="co">#&gt; # A tibble: 37 x 26</span>
+<span class="co">#&gt;    address zipcode city  state   lat  long region_name region_id type </span>
+<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span>
+<span class="co">#&gt;  1 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  2 733 No~ 67114   Newt~ KS     38.1 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  3 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  4 121 S ~ 67062   Hess~ KS     38.1 -97.4 Hesston     52496     city </span>
+<span class="co">#&gt;  5 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
+<span class="co">#&gt;  6 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
+<span class="co">#&gt;  7 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
+<span class="co">#&gt;  8 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
+<span class="co">#&gt;  9 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
+<span class="co">#&gt; 10 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
+<span class="co">#&gt; # ... with 27 more rows, and 17 more variables: zestimate &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   zest_lastupdated &lt;date&gt;, zest_monthlychange &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;, zestimate_high &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   zpid &lt;chr&gt;, bathrooms &lt;dbl&gt;, bedrooms &lt;dbl&gt;, finishedSqFt &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   lastSoldDate &lt;chr&gt;, lotSizeSqFt &lt;dbl&gt;, taxAssessment &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   taxAssessmentYear &lt;dbl&gt;, totalRooms &lt;dbl&gt;, yearBuilt &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   lastSoldPrice &lt;dbl&gt;</span></code></pre></div>
 <p>If we want to find out more characteristics of the property that we could not find with <code>GetDeepSearchResults</code>, the function <code>GetUpdatedPropertyDetails</code> may help us out. It takes a Zillow Property ID and returns much of the non-value information from the search functions, as well as additional information about parking, HVAC, appliances, and more:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">exdetails &lt;-<span class="st"> </span><span class="kw"><a href="../reference/GetUpdatedPropertyDetails.html">GetUpdatedPropertyDetails</a></span>(<span class="dt">zpid=</span><span class="dv">93961896</span> ,
                            <span class="dt">api_key=</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))
@@ -227,16 +221,16 @@ zpidex &lt;-<span class="st"> </span><span class="kw"><a href="../reference/GetD
 <span class="co">#&gt;    address zipcode city  state   lat  long region_name region_id type </span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span>
 <span class="co">#&gt;  1 600 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  2 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  3 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  4 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  5 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  6 2109 S~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  7 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  8 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  9 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 10 3000 A~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 11 605 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  2 919 N ~ 67114   Newt~ KS     38.1 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  3 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  4 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  5 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  6 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  7 2109 S~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  8 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  9 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt; 10 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt; 11 3000 A~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
 <span class="co">#&gt; # ... with 13 more variables: zestimate &lt;dbl&gt;, zest_lastupdated &lt;date&gt;,</span>
 <span class="co">#&gt; #   zest_monthlychange &lt;dbl&gt;, zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, rentzestimate &lt;dbl&gt;, rent_lastupdated &lt;date&gt;,</span>
@@ -249,12 +243,12 @@ zpidex &lt;-<span class="st"> </span><span class="kw"><a href="../reference/GetD
 <span class="co">#&gt;    address zipcode city  state   lat  long region_name region_id type </span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span>
 <span class="co">#&gt;  1 600 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  2 919 N ~ 67114   Newt~ KS     38.1 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  3 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  4 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  5 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  6 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  7 2109 S~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  2 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  3 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  4 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  5 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  6 2109 S~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  7 605 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
 <span class="co">#&gt;  8 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
 <span class="co">#&gt;  9 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
 <span class="co">#&gt; 10 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
@@ -296,19 +290,19 @@ zpidex &lt;-<span class="st"> </span><span class="kw"><a href="../reference/GetD
 <span class="co">#build a dataset in one sequence of commands</span>
 <span class="co">#starting from one address</span>
 richdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/GetDeepSearchResults.html">GetDeepSearchResults</a></span>(<span class="st">'600 S. Quail Ct.'</span>,
-                                 <span class="dt">zipcode=</span><span class="dv">67114</span>,
+                     <span class="dt">zipcode=</span><span class="dv">67114</span>,
                      <span class="dt">rentzestimate=</span><span class="ot">TRUE</span>,
                      <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(zpid) <span class="op">%&gt;%</span>
 <span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/as_vector.html">as_vector</a></span>(<span class="st">"character"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="../reference/GetComps.html">GetComps</a></span>(<span class="dt">count=</span><span class="dv">10</span>, <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/GetComps.html">GetComps</a></span>(<span class="dt">count=</span><span class="dv">25</span>, <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(zpid) <span class="op">%&gt;%</span>
 <span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/as_vector.html">as_vector</a></span>(<span class="st">"character"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">lapply</a></span>(GetDeepComps,
-         <span class="dt">count=</span><span class="dv">10</span>,
+         <span class="dt">count=</span><span class="dv">12</span>,
          <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span>()
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span>(zpid, <span class="dt">.keep_all=</span><span class="ot">TRUE</span>)
 
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(richdata)
 <span class="co">#&gt; # A tibble: 6 x 27</span>
@@ -327,8 +321,8 @@ richdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Ge
 <span class="co">#&gt; #   lastSoldPrice &lt;dbl&gt;, lotSizeSqFt &lt;dbl&gt;, taxAssessment &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   taxAssessmentYear &lt;dbl&gt;, totalRooms &lt;dbl&gt;, yearBuilt &lt;dbl&gt;</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(richdata)
-<span class="co">#&gt; [1] 104  27</span></code></pre></div>
-<p>What just happened here? We used our original address and obtained its Zillow property ID with <code>GetDeepSearchResults</code>, then used that ZPID with <code>GetComps</code> to get 10 comparable properties. Then we took the ZPIDs from those comparables and applied <code>GetDeepComps</code> to each, resulting in an expanded number of properties. We can then bind all of the data together with <code>bind_rows()</code> from the <code>dplyr</code> package, and take the distinct addresses to get a rich dataset for our area for purposes of analysis.</p>
+<span class="co">#&gt; [1] 54 27</span></code></pre></div>
+<p>What just happened here? We used our original address and obtained its Zillow property ID with <code>GetDeepSearchResults</code>, then used that ZPID with <code>GetComps</code> to get 25 comparable properties. Then we took the ZPIDs from those comparables and applied <code>GetDeepComps</code> to each, resulting in an expanded number of properties. We can then bind all of the data together with <code>bind_rows()</code> from the <code>dplyr</code> package, and take the distinct addresses to get a rich dataset for our area for purposes of analysis.</p>
 <p><em>Note:</em> In this example we sent over 100 requests to the API. Remember that Zillow limits the number of requests you can make in a day, so be careful using these functions in conjunction with <code><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply()</a></code> or similar functions. You may get locked out!</p>
 </div>
 <div id="home-price-charts-with-getchart" class="section level2">
@@ -604,16 +598,11 @@ citytop &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get
 <p>It’s clear that our home is valued ($231,234) well above the median value for the zipcode, but this particular city appears to be much cheaper than the rest of the state of Kansas. It looks like Newton and Kansas did not recieve the worst of the housing crisis, and that the city and state are on a sharp upward trend.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#melting the data using reshape2 and zoo</span>
 topmelted &lt;-<span class="st"> </span>citytop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>reshape2<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/reshape2/topics/melt">melt</a></span>(<span class="dt">id=</span><span class="dv">1</span><span class="op">:</span><span class="dv">7</span>, <span class="dt">variable.name=</span><span class="st">'Date'</span>, <span class="dt">value.name=</span><span class="st">'MedianPrice'</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">Date=</span>(zoo<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/zoo/topics/yearmon">as.yearmon</a></span>(Date)))
-
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span>( <span class="dt">key=</span><span class="st">'Date'</span>, <span class="dt">value=</span><span class="st">'MedianPrice'</span>,<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">Date=</span>(<span class="kw">as.yearmon</span>(Date)))
 statemelted &lt;-<span class="st"> </span>Stateseries <span class="op">%&gt;%</span>
-<span class="st">  </span>reshape2<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/reshape2/topics/melt">melt</a></span>(<span class="dt">id=</span><span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">variable.name=</span><span class="st">'Date'</span>, <span class="dt">value.name=</span><span class="st">'MedianPrice'</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">Date=</span>(zoo<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/zoo/topics/yearmon">as.yearmon</a></span>(Date)))
-
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span>( <span class="dt">key=</span><span class="st">'Date'</span>, <span class="dt">value=</span><span class="st">'MedianPrice'</span>,<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">Date=</span>(<span class="kw">as.yearmon</span>(Date)))
 citymelted &lt;-<span class="st"> </span>cityseries <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>reshape2<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/reshape2/topics/melt">melt</a></span>(<span class="dt">id=</span><span class="dv">1</span><span class="op">:</span><span class="dv">7</span>, <span class="dt">variable.name=</span><span class="st">'Date'</span>, <span class="dt">value.name=</span><span class="st">'MedianPrice'</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">Date=</span>(zoo<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/zoo/topics/yearmon">as.yearmon</a></span>(Date)))</code></pre></div>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span>( <span class="dt">key=</span><span class="st">'Date'</span>, <span class="dt">value=</span><span class="st">'MedianPrice'</span>,<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">Date=</span>(<span class="kw">as.yearmon</span>(Date)))</code></pre></div>
 <p><img src="zillow-vignette_files/figure-html/unnamed-chunk-17-1.png" width="816"></p>
 <p>If we’re interested in renting our new property, we can compare Zillow’s rent estimate to the average for the state of Kansas. It would be more ideal to compare at a more granular level, but the rental value datasets for zipcode and county levels only contain a few of the most populus areas of the U.S., so we’re out of luck.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#The most recent rental listing value for 4BR homes in Kansas</span>

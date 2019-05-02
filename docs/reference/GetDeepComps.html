@@ -32,8 +32,8 @@
 
 <meta property="og:title" content="Get comparable recent property sales for a given property with additional property data — GetDeepComps" />
 
-<meta property="og:description" content="For a given address, extract property information including building data and Zestimates.
-At least one of zipcode or city/state information must be included." />
+<meta property="og:description" content="For a given Zillow property ID, find valuation data for comparable recent property sales,
+and return both the property valuation estimate as well as other property characteristics for each property" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,8 +119,8 @@ At least one of zipcode or city/state information must be included." />
 
     <div class="ref-description">
     
-    <p>For a given address, extract property information including building data and Zestimates.
-At least one of zipcode or city/state information must be included.</p>
+    <p>For a given Zillow property ID, find valuation data for comparable recent property sales,
+and return both the property valuation estimate as well as other property characteristics for each property</p>
     
     </div>
 
@@ -162,6 +162,8 @@ At least one of zipcode or city/state information must be included.</p>
 <span class='no'>zpid</span><span class='kw'>=</span><span class='st'>'1340244'</span></div><span class='co'># NOT RUN {</span>
 <span class='fu'>GetDeepComps</span>(<span class='no'>zpid</span>, <span class='kw'>count</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>rentzestimate</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
  <span class='kw'>api_key</span><span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>'ZillowR-zws_id'</span>), <span class='kw'>raw</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+
+
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>

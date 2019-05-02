@@ -115,7 +115,7 @@ zapi_key =<span class="st"> </span><span class="kw"><a href="https://www.rdocume
 <div id="calling-the-zillow-api-from-r" class="section level2">
 <h2 class="hasAnchor">
 <a href="#calling-the-zillow-api-from-r" class="anchor"></a>Calling the Zillow API from R</h2>
-<p>You can get basic information on a property based on its address using <code>GetDeepSearchResults</code>. The return is a dataframe with the property’s estimated value as well as other characteristics (i.e., bedrooms, bathrooms, etc.). To get results for more than one address at once, we recommend <code>GetDeepSearchResults_dataframe</code> rather than using an <code><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply()</a></code> or other mapping function.</p>
+<p>You can get basic information on a property based on its address using <code>GetDeepSearchResults</code>. The return is a dataframe with the property’s estimated value as well as other characteristics (i.e., bedrooms, bathrooms, etc.). To get results for more than one address at once, we recommend <code>GetDeepSearchResults_dataframe</code> rather than using an <code><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply()</a></code> or other mapping function, because some addresses have multiple properties.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/GetDeepSearchResults.html">GetDeepSearchResults</a></span>(<span class="st">'2902 Wood St.'</span>, <span class="dt">city=</span><span class="st">'Ames'</span>,<span class="dt">state=</span><span class="st">'IA'</span>, <span class="dt">zipcode=</span><span class="dv">50014</span>,
                      <span class="dt">rentzestimate=</span><span class="ot">TRUE</span>,
                      <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))
@@ -131,7 +131,7 @@ zapi_key =<span class="st"> </span><span class="kw"><a href="https://www.rdocume
 <span class="co">#&gt; #   finishedSqFt &lt;dbl&gt;, lastSoldDate &lt;chr&gt;, lastSoldPrice &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   lotSizeSqFt &lt;dbl&gt;, taxAssessment &lt;dbl&gt;, taxAssessmentYear &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   totalRooms &lt;dbl&gt;, yearBuilt &lt;dbl&gt;</span></code></pre></div>
-<p>Use the <code>GetComps</code> or <code>GetDeepComps</code> to get comparable properties for a given Zillow Property ID (limit 25 comparables). The return is a data frame with just the comparable addresses and their Zestimate values, with more property information available with <code>GetDeepComps</code>.</p>
+<p>Use the <code>GetComps</code> or <code>GetDeepComps</code> to get comparable properties for a given Zillow Property ID (limit 25 comparables). The return is a data frame with the most comparable addresses and their Zestimate values, with more property information (i.e., the <code>GetDeepSearchResults</code> variables) available from <code>GetDeepComps</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#retrieve the zpid from GetDeepSearchResults</span>
 zpidex &lt;-<span class="st"> </span><span class="kw"><a href="reference/GetDeepSearchResults.html">GetDeepSearchResults</a></span>(<span class="st">'600 S. Quail Ct.'</span>, <span class="dt">zipcode=</span><span class="dv">67114</span>,
                      <span class="dt">rentzestimate=</span><span class="ot">TRUE</span>, <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))<span class="op">$</span>zpid
@@ -144,14 +144,14 @@ zpidex &lt;-<span class="st"> </span><span class="kw"><a href="reference/GetDeep
 <span class="co">#&gt;  1 600 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
 <span class="co">#&gt;  2 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
 <span class="co">#&gt;  3 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  4 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  5 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  6 2109 S~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  7 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  8 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  9 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 10 3000 A~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 11 605 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  4 321 E ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  5 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  6 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  7 2109 S~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  8 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  9 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt; 10 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt; 11 3000 A~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
 <span class="co">#&gt; # ... with 13 more variables: zestimate &lt;dbl&gt;, zest_lastupdated &lt;date&gt;,</span>
 <span class="co">#&gt; #   zest_monthlychange &lt;dbl&gt;, zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, rentzestimate &lt;dbl&gt;, rent_lastupdated &lt;date&gt;,</span>
@@ -169,7 +169,7 @@ zpidex &lt;-<span class="st"> </span><span class="kw"><a href="reference/GetDeep
 <span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, rentzestimate &lt;dbl&gt;, rent_lastupdated &lt;date&gt;,</span>
 <span class="co">#&gt; #   rent_monthlychange &lt;dbl&gt;, rentzestimate_low &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   rentzestimate_high &lt;dbl&gt;</span></code></pre></div>
-<p>If you want more detailed information on a specific property, you can specify the ZPID and return the results with <code>GetUpdatedPropertyDetails</code>:</p>
+<p>If you want more detailed information on a specific property (such as utilities, appliances, and other building information), you can specify the ZPID and return the results with <code>GetUpdatedPropertyDetails</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/GetUpdatedPropertyDetails.html">GetUpdatedPropertyDetails</a></span>(<span class="dt">zpid=</span><span class="dv">2084934591</span> ,
                            <span class="dt">api_key=</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))
 <span class="co">#&gt;                    address zipcode city state     lat      long</span>
@@ -189,6 +189,7 @@ zpidex &lt;-<span class="st"> </span><span class="kw"><a href="reference/GetDeep
 <p>For the median rental values:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Rental values for Single Family Residences by State</span>
 <span class="kw"><a href="reference/get_rental_listings.html">get_rental_listings</a></span>(<span class="dt">type=</span><span class="st">'SFR'</span>, <span class="dt">rate=</span><span class="st">'PerSqFt'</span>,<span class="dt">geography=</span><span class="st">"State"</span>)</code></pre></div>
+<p>For both functions, the return is a dataframe with the first few columns giving the geographic region and the rest corresponding to monthly observations. This dataframe can be reshaped or formatted as necessary for analysis.</p>
 <p>Please see the vignette (under articles) to see further documentation and examples of <code>realEstAnalytics</code>’ capabilities.</p>
 </div>
 </div>

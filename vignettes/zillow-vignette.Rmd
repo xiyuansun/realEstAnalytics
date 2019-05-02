@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(zoo)
 library(realEstAnalytics)
 set_zillow_web_service_id('X1-ZWz181enkd4cgb_82rpe')
 YOURAPIKEYHERE = getOption('ZillowR-zws_id')
@@ -71,7 +72,7 @@ Additionally, we set `rentzestimate=TRUE` in the previous example, which tells t
 One note of caution when using `GetDeepSearchResults` is that it will return the results for ALL of the Zillow property IDs at an address, which can cause difficulties if one is trying to get results for multiple addresses at once, such as using the function in conjunction with the `apply()` family of functions. To avoid this, one may be able to use `GetDeepSearchResults_dataframe`, which takes a data frame of addresses as its arguments.
 
 Suppose we want to look at the results for several results at once, and we have the data stored in a data frame named `newtonaddresses` in our environment. To get the search results for the full data frame, all we need to do is supply `GetDeepSearchResults_dataframe` with the data and the column numbers corresponding to the geographic information:
-```{r}
+```{r, message=FALSE, echo=FALSE, eval=TRUE}
 library(dplyr)
 library(magrittr)
 addresses <- c('733 Normandy Ct.',
@@ -101,8 +102,9 @@ newtonaddresses <- GetComps(1340244, count=20, api_key = getOption('ZillowR-zws_
   rbind(c('3425 Locust St.', '64109', 'Kansas City', 'MO'), addex) %>%
   sample_n(size=32)
 ```
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 #there are 32 addresses, some in different zipcodes, to look up
+head(newtonaddresses)
 #GetDeepSearchResults_dataframe will get the info for us:
 
 GetDeepSearchResults_dataframe(.df=newtonaddresses,
@@ -289,21 +291,16 @@ It's clear that our home is valued ($231,234) well above the median value for th
 ```{r, echo=TRUE, results='hide', warning=F}
 #melting the data using reshape2 and zoo
 topmelted <- citytop %>% 
-  reshape2::melt(id=1:7, variable.name='Date', value.name='MedianPrice') %>%
-  dplyr::mutate(Date=(zoo::as.yearmon(Date)))
-
+  tidyr::gather( key='Date', value='MedianPrice',-c(1:7)) %>% mutate(Date=(as.yearmon(Date)))
 statemelted <- Stateseries %>%
-  reshape2::melt(id=1:3, variable.name='Date', value.name='MedianPrice') %>%
-  dplyr::mutate(Date=(zoo::as.yearmon(Date)))
-
+  tidyr::gather( key='Date', value='MedianPrice',-c(1:3)) %>% mutate(Date=(as.yearmon(Date)))
 citymelted <- cityseries %>% 
-  reshape2::melt(id=1:7, variable.name='Date', value.name='MedianPrice') %>%
-  dplyr::mutate(Date=(zoo::as.yearmon(Date)))
+  tidyr::gather( key='Date', value='MedianPrice',-c(1:7)) %>% mutate(Date=(as.yearmon(Date)))
 ```
 ```{r, echo=FALSE,fig.width=8.5, fig.height=7, warning=F}
 tscomb <- data.frame(Date=topmelted$Date, Zip=citymelted$MedianPrice, State=statemelted$MedianPrice,
                      TopTier=topmelted$MedianPrice) %>%
- reshape2::melt(id=1, variable.name="geography", value.name='price') 
+tidyr::gather(-1, key="geography", value='price') 
 
 plotZHVI<- function(ts.melted, date.min=NULL, date.max=NULL){
   if(is.null(date.min)) date.min = min(ts.melted$Date)

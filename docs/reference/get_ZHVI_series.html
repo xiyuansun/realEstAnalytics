@@ -34,7 +34,7 @@
 
 <meta property="og:description" content="Reads the static .csv file for Zillow Home Values series by type and geography,
 building a URL path to the .csv file. Options are available for a variety of home sizes and types,
-as well as tiers if you wish to view other data that is aggregated." />
+as well as tiers if you wish to view other data that is aggregated. The return is a dataframe with time series observations aggregated by region." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -122,7 +122,7 @@ as well as tiers if you wish to view other data that is aggregated." />
     
     <p>Reads the static .csv file for Zillow Home Values series by type and geography,
 building a URL path to the .csv file. Options are available for a variety of home sizes and types,
-as well as tiers if you wish to view other data that is aggregated.</p>
+as well as tiers if you wish to view other data that is aggregated. The return is a dataframe with time series observations aggregated by region.</p>
     
     </div>
 
@@ -167,14 +167,17 @@ as well as tiers if you wish to view other data that is aggregated.</p>
     <pre class="examples"><div class='input'>#All homes, bottom tier, by zipcode
 </div><span class='co'># NOT RUN {</span>
 <span class='fu'>get_ZHVI_series</span>(<span class='kw'>allhomes</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>tier</span><span class='kw'>=</span><span class='st'>"B"</span>,<span class='kw'>geography</span><span class='kw'>=</span><span class='st'>"Zip"</span>)
+
 <span class='co'># }</span><div class='input'>
 #2 bedrooms by city
 </div><span class='co'># NOT RUN {</span>
 <span class='fu'>get_ZHVI_series</span>(<span class='kw'>bedrooms</span><span class='kw'>=</span><span class='fl'>2</span>,<span class='kw'>geography</span><span class='kw'>=</span><span class='st'>"City"</span>)
+
 <span class='co'># }</span><div class='input'>
 #the ZHVI summary for all homes by State
 </div><span class='co'># NOT RUN {</span>
 <span class='fu'>get_ZHVI_series</span>(<span class='kw'>geography</span><span class='kw'>=</span><span class='st'>"State"</span>, <span class='kw'>summary</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+
 <span class='co'># }</span><div class='input'>
 
 </div></pre>
