@@ -114,7 +114,7 @@ GetDeepSearchResults_dataframe(.df=newtonaddresses,
 
 If we want to find out more characteristics of the property that we could not find with `GetDeepSearchResults`, the function `GetUpdatedPropertyDetails` may help us out. It takes a Zillow Property ID and returns much of the non-value information from the search functions, as well as additional information about parking, HVAC, appliances, and more:
 ```{r}
-exdetails <- GetUpdatedPropertyDetails(zpid=93961896 ,
+exdetails <- GetUpdatedPropertyDetails(zpid='93961896' ,
                            api_key= getOption('ZillowR-zws_id'))
 
 names(exdetails)
