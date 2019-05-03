@@ -97,98 +97,100 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the released version of realEstAnalytics from <a href="https://github.com">Github</a> with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(devtools)
-devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"xiyuansun/realEstAnalytics"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(devtools)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"xiyuansun/realEstAnalytics"</span>)</a></code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p>Here are some basic examples of interfacing with Zillow’s API in <code>R</code>. All calls to the API require a unique Zillow API key, which you can acquire by signing up at <a href="https://www.zillow.com/howto/api/APIOverview.htm" class="uri">https://www.zillow.com/howto/api/APIOverview.htm</a> .</p>
 <p>First, you should always set your API key, also known as a Zillow Web Service ID (ZWSID):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(realEstAnalytics)
-
-<span class="co">#set the ZWS_ID</span>
-<span class="kw"><a href="reference/zillow_web_service_id.html">set_zillow_web_service_id</a></span>(<span class="st">'YOUR_API_KEY'</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#retrieve the current ZWS_ID in use</span>
-zapi_key =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(realEstAnalytics)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#set the ZWS_ID</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="reference/zillow_web_service_id.html">set_zillow_web_service_id</a></span>(<span class="st">'YOUR_API_KEY'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">#retrieve the current ZWS_ID in use</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">zapi_key =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>)</a></code></pre></div>
 </div>
 <div id="calling-the-zillow-api-from-r" class="section level2">
 <h2 class="hasAnchor">
 <a href="#calling-the-zillow-api-from-r" class="anchor"></a>Calling the Zillow API from R</h2>
 <p>You can get basic information on a property based on its address using <code>GetDeepSearchResults</code>. The return is a dataframe with the property’s estimated value as well as other characteristics (i.e., bedrooms, bathrooms, etc.). To get results for more than one address at once, we recommend <code>GetDeepSearchResults_dataframe</code> rather than using an <code><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply()</a></code> or other mapping function, because some addresses have multiple properties.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/GetDeepSearchResults.html">GetDeepSearchResults</a></span>(<span class="st">'2902 Wood St.'</span>, <span class="dt">city=</span><span class="st">'Ames'</span>,<span class="dt">state=</span><span class="st">'IA'</span>, <span class="dt">zipcode=</span><span class="dv">50014</span>,
-                     <span class="dt">rentzestimate=</span><span class="ot">TRUE</span>,
-                     <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))
-<span class="co">#&gt; # A tibble: 1 x 31</span>
-<span class="co">#&gt;   address zipcode city  state   lat  long region_name region_id type </span>
-<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span>
-<span class="co">#&gt; 1 2902 W~ 50014   Ames  IA     42.0 -93.7 College Cr~ 764177    neig~</span>
-<span class="co">#&gt; # ... with 22 more variables: zestimate &lt;dbl&gt;, zest_lastupdated &lt;date&gt;,</span>
-<span class="co">#&gt; #   zest_monthlychange &lt;dbl&gt;, zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, rentzestimate &lt;dbl&gt;, rent_lastupdated &lt;date&gt;,</span>
-<span class="co">#&gt; #   rent_monthlychange &lt;dbl&gt;, rentzestimate_low &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   rentzestimate_high &lt;dbl&gt;, zpid &lt;chr&gt;, bathrooms &lt;dbl&gt;, bedrooms &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   finishedSqFt &lt;dbl&gt;, lastSoldDate &lt;chr&gt;, lastSoldPrice &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   lotSizeSqFt &lt;dbl&gt;, taxAssessment &lt;dbl&gt;, taxAssessmentYear &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   totalRooms &lt;dbl&gt;, yearBuilt &lt;dbl&gt;</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="reference/GetDeepSearchResults.html">GetDeepSearchResults</a></span>(<span class="st">'2902 Wood St.'</span>, <span class="dt">city=</span><span class="st">'Ames'</span>,<span class="dt">state=</span><span class="st">'IA'</span>, <span class="dt">zipcode=</span><span class="dv">50014</span>,</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">                     <span class="dt">rentzestimate=</span><span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">                     <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; Warning in as.POSIXlt.POSIXct(x, tz): unknown timezone 'zone/tz/2019a.1.0/</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; zoneinfo/America/Chicago'</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; # A tibble: 1 x 31</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;   address zipcode city  state   lat  long region_name region_id type </span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; 1 2902 W… 50014   Ames  IA     42.0 -93.7 College Cr… 764177    neig…</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; # … with 22 more variables: zestimate &lt;dbl&gt;, zest_lastupdated &lt;date&gt;,</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; #   zest_monthlychange &lt;dbl&gt;, zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, rentzestimate &lt;dbl&gt;, rent_lastupdated &lt;date&gt;,</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; #   rent_monthlychange &lt;dbl&gt;, rentzestimate_low &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; #   rentzestimate_high &lt;dbl&gt;, zpid &lt;chr&gt;, bathrooms &lt;dbl&gt;, bedrooms &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; #   finishedSqFt &lt;dbl&gt;, lastSoldDate &lt;chr&gt;, lastSoldPrice &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; #   lotSizeSqFt &lt;dbl&gt;, taxAssessment &lt;dbl&gt;, taxAssessmentYear &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; #   totalRooms &lt;dbl&gt;, yearBuilt &lt;dbl&gt;</span></a></code></pre></div>
 <p>Use the <code>GetComps</code> or <code>GetDeepComps</code> to get comparable properties for a given Zillow Property ID (limit 25 comparables). The return is a data frame with the most comparable addresses and their Zestimate values, with more property information (i.e., the <code>GetDeepSearchResults</code> variables) available from <code>GetDeepComps</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#retrieve the zpid from GetDeepSearchResults</span>
-zpidex &lt;-<span class="st"> </span><span class="kw"><a href="reference/GetDeepSearchResults.html">GetDeepSearchResults</a></span>(<span class="st">'600 S. Quail Ct.'</span>, <span class="dt">zipcode=</span><span class="dv">67114</span>,
-                     <span class="dt">rentzestimate=</span><span class="ot">TRUE</span>, <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))<span class="op">$</span>zpid
-
-<span class="co">#GetComps for the '600 S. Quail Ct.' address</span>
-<span class="kw"><a href="reference/GetComps.html">GetComps</a></span>(zpidex, <span class="dt">count=</span><span class="dv">10</span>, <span class="dt">rentzestimate=</span><span class="ot">TRUE</span>, <span class="dt">api_key =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))
-<span class="co">#&gt; # A tibble: 11 x 22</span>
-<span class="co">#&gt;    address zipcode city  state   lat  long region_name region_id type </span>
-<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span>
-<span class="co">#&gt;  1 600 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  2 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  3 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  4 321 E ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  5 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  6 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  7 2109 S~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  8 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  9 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 10 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 11 3000 A~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; # ... with 13 more variables: zestimate &lt;dbl&gt;, zest_lastupdated &lt;date&gt;,</span>
-<span class="co">#&gt; #   zest_monthlychange &lt;dbl&gt;, zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, rentzestimate &lt;dbl&gt;, rent_lastupdated &lt;date&gt;,</span>
-<span class="co">#&gt; #   rent_monthlychange &lt;dbl&gt;, rentzestimate_low &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   rentzestimate_high &lt;dbl&gt;, zpid &lt;chr&gt;, compscore &lt;dbl&gt;</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">#retrieve the zpid from GetDeepSearchResults</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">zpidex &lt;-<span class="st"> </span><span class="kw"><a href="reference/GetDeepSearchResults.html">GetDeepSearchResults</a></span>(<span class="st">'600 S. Quail Ct.'</span>, <span class="dt">zipcode=</span><span class="dv">67114</span>,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                     <span class="dt">rentzestimate=</span><span class="ot">TRUE</span>, <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))<span class="op">$</span>zpid</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#GetComps for the '600 S. Quail Ct.' address</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="kw"><a href="reference/GetComps.html">GetComps</a></span>(zpidex, <span class="dt">count=</span><span class="dv">10</span>, <span class="dt">rentzestimate=</span><span class="ot">TRUE</span>, <span class="dt">api_key =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; # A tibble: 11 x 22</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;    address zipcode city  state   lat  long region_name region_id type </span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;  1 600 S … 67114   Newt… KS     38.0 -97.3 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;  2 2137 B… 67114   Newt… KS     38.0 -97.4 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;  3 2112 B… 67114   Newt… KS     38.0 -97.4 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;  4 321 E … 67114   Newt… KS     38.0 -97.3 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;  5 427 Vi… 67114   Newt… KS     38.0 -97.3 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;  6 410 Vi… 67114   Newt… KS     38.0 -97.3 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;  7 2109 S… 67114   Newt… KS     38.0 -97.3 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt;  8 605 Au… 67114   Newt… KS     38.0 -97.3 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt;  9 506 Au… 67114   Newt… KS     38.0 -97.3 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; 10 618 Au… 67114   Newt… KS     38.0 -97.3 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt; 11 3000 A… 67114   Newt… KS     38.0 -97.3 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; # … with 13 more variables: zestimate &lt;dbl&gt;, zest_lastupdated &lt;date&gt;,</span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; #   zest_monthlychange &lt;dbl&gt;, zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb5-23" data-line-number="23"><span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, rentzestimate &lt;dbl&gt;, rent_lastupdated &lt;date&gt;,</span></a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="co">#&gt; #   rent_monthlychange &lt;dbl&gt;, rentzestimate_low &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="co">#&gt; #   rentzestimate_high &lt;dbl&gt;, zpid &lt;chr&gt;, compscore &lt;dbl&gt;</span></a></code></pre></div>
 <p>You can get the Zestimate (Zillow’s estimated home value) with <code>GetZestimate</code>. The return is a data frame with the Zillow-estimated value of the home, either the property value or the estimated rental value (if <code>rentzestimate=TRUE</code>). This function works with either a single Zillow property ID or a vector of IDs:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/GetZestimates.html">GetZestimate</a></span>(<span class="dt">zpids=</span> zpidex ,
-             <span class="dt">rentzestimate=</span><span class="ot">TRUE</span> , <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))
-<span class="co">#&gt; # A tibble: 1 x 20</span>
-<span class="co">#&gt;   address zipcode city  state   lat  long region_name region_id type </span>
-<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span>
-<span class="co">#&gt; 1 600 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; # ... with 11 more variables: zestimate &lt;dbl&gt;, zest_lastupdated &lt;date&gt;,</span>
-<span class="co">#&gt; #   zest_monthlychange &lt;dbl&gt;, zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, rentzestimate &lt;dbl&gt;, rent_lastupdated &lt;date&gt;,</span>
-<span class="co">#&gt; #   rent_monthlychange &lt;dbl&gt;, rentzestimate_low &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   rentzestimate_high &lt;dbl&gt;</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="reference/GetZestimates.html">GetZestimate</a></span>(<span class="dt">zpids=</span> zpidex ,</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">             <span class="dt">rentzestimate=</span><span class="ot">TRUE</span> , <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; # A tibble: 1 x 20</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;   address zipcode city  state   lat  long region_name region_id type </span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; 1 600 S … 67114   Newt… KS     38.0 -97.3 Newton      19619     city </span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; # … with 11 more variables: zestimate &lt;dbl&gt;, zest_lastupdated &lt;date&gt;,</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; #   zest_monthlychange &lt;dbl&gt;, zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, rentzestimate &lt;dbl&gt;, rent_lastupdated &lt;date&gt;,</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; #   rent_monthlychange &lt;dbl&gt;, rentzestimate_low &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; #   rentzestimate_high &lt;dbl&gt;</span></a></code></pre></div>
 <p>If you want more detailed information on a specific property (such as utilities, appliances, and other building information), you can specify the ZPID and return the results with <code>GetUpdatedPropertyDetails</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/GetUpdatedPropertyDetails.html">GetUpdatedPropertyDetails</a></span>(<span class="dt">zpid=</span><span class="dv">2084934591</span> ,
-                           <span class="dt">api_key=</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))
-<span class="co">#&gt;                    address zipcode city state     lat      long</span>
-<span class="co">#&gt; 1 312 Hayward Ave UNIT 102   50014 Ames    IA 42.0198 -93.65168</span>
-<span class="co">#&gt;            useCode bedrooms bathrooms finishedSqFt heatingSources numUnits</span>
-<span class="co">#&gt; 1 MultiFamily5Plus        1       1.0          400     Other, Gas        6</span>
-<span class="co">#&gt;   currentMonth total</span>
-<span class="co">#&gt; 1            1     1</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="reference/GetUpdatedPropertyDetails.html">GetUpdatedPropertyDetails</a></span>(<span class="dt">zpid=</span><span class="dv">2084934591</span> ,</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">                           <span class="dt">api_key=</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;                    address zipcode city state     lat      long</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; 1 312 Hayward Ave UNIT 102   50014 Ames    IA 42.0198 -93.65168</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt;            useCode bedrooms bathrooms finishedSqFt heatingSources numUnits</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; 1 MultiFamily5Plus        1       1.0          400     Other, Gas        6</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;   currentMonth total</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; 1            1     1</span></a></code></pre></div>
 </div>
 <div id="non-api-regional-time-series-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#non-api-regional-time-series-data" class="anchor"></a>Non-API Regional Time Series Data</h2>
 <p>There are also a few options for retrieving non-API data. Get the time series of property values aggregated by region and type with <code>get_rental_listings</code> and/or <code>get_ZHVI_series</code>. These return dataframes of time series data for the selected geographic aggregation level and property type, read from a static .csv hosted by Zillow. For options on the arguments, see the introduction vignette.</p>
 <p>For the median home property values:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Pull the data by zipcode for 4 bedrooms</span>
-<span class="kw"><a href="reference/get_ZHVI_series.html">get_ZHVI_series</a></span>(<span class="dt">bedrooms=</span><span class="dv">3</span>,<span class="dt">geography=</span><span class="st">"Zip"</span>)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#Pull the data by zipcode for 4 bedrooms</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="reference/get_ZHVI_series.html">get_ZHVI_series</a></span>(<span class="dt">bedrooms=</span><span class="dv">3</span>,<span class="dt">geography=</span><span class="st">"Zip"</span>)</a></code></pre></div>
 <p>For the median rental values:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Rental values for Single Family Residences by State</span>
-<span class="kw"><a href="reference/get_rental_listings.html">get_rental_listings</a></span>(<span class="dt">type=</span><span class="st">'SFR'</span>, <span class="dt">rate=</span><span class="st">'PerSqFt'</span>,<span class="dt">geography=</span><span class="st">"State"</span>)</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">#Rental values for Single Family Residences by State</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw"><a href="reference/get_rental_listings.html">get_rental_listings</a></span>(<span class="dt">type=</span><span class="st">'SFR'</span>, <span class="dt">rate=</span><span class="st">'PerSqFt'</span>,<span class="dt">geography=</span><span class="st">"State"</span>)</a></code></pre></div>
 <p>For both functions, the return is a dataframe with the first few columns giving the geographic region and the rest corresponding to monthly observations. This dataframe can be reshaped or formatted as necessary for analysis.</p>
 <p>Please see the vignette (under articles) to see further documentation and examples of <code>realEstAnalytics</code>’ capabilities.</p>
 </div>

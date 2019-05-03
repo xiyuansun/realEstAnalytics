@@ -71,7 +71,6 @@ GetUpdatedPropertyDetails <- function(
 
   outdf <- data.frame(address_data,editted_factsdata,pageview_data)
 
-  outdf <- data.frame(address_data,editted_factsdata,pagevew_data)
   return(outdf)
 }
 
