@@ -177,10 +177,10 @@ dim(richdata)
 
 What just happened here? We used our original address and obtained its Zillow property ID with `GetDeepSearchResults`, then used that ZPID with `GetComps` to get 25 comparable properties. Then we took the ZPIDs from those comparables and applied `GetDeepComps` to each, resulting in an expanded number of properties. We can then bind all of the data together with `bind_rows()` from the `dplyr` package, and take the distinct addresses to get a rich dataset for our area for purposes of analysis.
 
-*Note:* In this example we sent over 100 requests to the API. Remember that Zillow limits the number of requests you can make in a day, so be careful using these functions in conjunction with `apply()` or similar functions. You may get locked out!
+*CAUTION:* In this example we sent over 100 requests to the API. Remember that Zillow limits the number of requests you can make in a day, so be careful using these functions in conjunction with `apply()` or similar functions. You may get locked out! Additionally, it is not recommended to use more than the above number of addresses (i.e., less than 50), lest you be accused of 'spidering' Zillow's API. Please read their Terms of Service carefully when signing up for a Zillow Web Services ID. Just because you can get data, doesn't mean you should!
 
 ## Home Price Charts with `GetChart`
-You can obtain a URL for a the Zestimates for a property with `GetChart`. The return from the API is a link to the image of the chart, which can be displayed in `R` with whatever package you prefer. Sometimes the URLs need some cleaning in order to correctly be able to read the image.
+You can obtain a URL for a the Zestimates for a property with `GetChart`. The return from the API is a link to the image of the chart, which can be displayed in `R` with whatever package you prefer. Sometimes the URLs need some cleaning in order to correctly be able to read the image. For example, a 10 year historical valuation chart for our property can be called with:
 ```{r}
 library(XML)
 #Get Chart returns a list with the API's response
