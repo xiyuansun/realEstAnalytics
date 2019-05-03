@@ -72,7 +72,7 @@ Additionally, we set `rentzestimate=TRUE` in the previous example, which tells t
 One note of caution when using `GetDeepSearchResults` is that it will return the results for ALL of the Zillow property IDs at an address, which can cause difficulties if one is trying to get results for multiple addresses at once, such as using the function in conjunction with the `apply()` family of functions. To avoid this, one may be able to use `GetDeepSearchResults_dataframe`, which takes a data frame of addresses as its arguments.
 
 Suppose we want to look at the results for several results at once, and we have the data stored in a data frame named `newtonaddresses` in our environment. To get the search results for the full data frame, all we need to do is supply `GetDeepSearchResults_dataframe` with the data and the column numbers corresponding to the geographic information:
-```{r, message=FALSE, echo=FALSE, eval=TRUE}
+```{r, message=FALSE, echo=FALSE, eval=FALSE}
 library(dplyr)
 library(magrittr)
 addresses <- c('733 Normandy Ct.',
@@ -102,7 +102,7 @@ newtonaddresses <- GetComps(1340244, count=20, api_key = getOption('ZillowR-zws_
   rbind(c('3425 Locust St.', '64109', 'Kansas City', 'MO'), addex) %>%
   sample_n(size=32)
 ```
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 #there are 32 addresses, some in different zipcodes, to look up
 head(newtonaddresses)
 #GetDeepSearchResults_dataframe will get the info for us:
@@ -152,7 +152,7 @@ GetZestimate(zpids=c(zpidex,109818062,1341669,1341715) ,
 Suppose we want to build a larger dataset based on only our original address. This would facilitate an analysis of recent property sales in the general area to gain insight into the housing market.
 
 We have seen how `GetComps` can get a few comparable properties in the area. If we want to build a larger dataset, we can chain the `GetDeepSearchResults`,`GetComps`, and `GetDeepComps` functions together to get more properties in an area after starting with one location. To speed the cleaning and combining, we use `dplyr` and `%>%` from `magrittr` in the tidyverse family, with an `lapply`:
-```{r}
+```{r, eval=FALSE}
 library(purrr)
 #build a dataset in one sequence of commands
 #starting from one address

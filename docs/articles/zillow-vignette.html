@@ -154,40 +154,11 @@ zapi_key =<span class="st"> </span><span class="kw"><a href="https://www.rdocume
 <p>Suppose we want to look at the results for several results at once, and we have the data stored in a data frame named <code>newtonaddresses</code> in our environment. To get the search results for the full data frame, all we need to do is supply <code>GetDeepSearchResults_dataframe</code> with the data and the column numbers corresponding to the geographic information:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#there are 32 addresses, some in different zipcodes, to look up</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(newtonaddresses)
-<span class="co">#&gt; # A tibble: 6 x 4</span>
-<span class="co">#&gt;   address            zipcode city        state</span>
-<span class="co">#&gt;   &lt;chr&gt;              &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;</span>
-<span class="co">#&gt; 1 605 Autumn Rdg     67114   Newton      KS   </span>
-<span class="co">#&gt; 2 3425 Locust St.    64109   Kansas City MO   </span>
-<span class="co">#&gt; 3 839 Meadowlark Ln  67114   Newton      KS   </span>
-<span class="co">#&gt; 4 2137 Beltline      67114   Newton      KS   </span>
-<span class="co">#&gt; 5 3013 Autumn Rdg    67114   Newton      KS   </span>
-<span class="co">#&gt; 6 601 Stone Creek Dr 67114   Newton      KS</span>
 <span class="co">#GetDeepSearchResults_dataframe will get the info for us:</span>
 
 <span class="kw"><a href="../reference/GetDeepSearchResults_dataframe.html">GetDeepSearchResults_dataframe</a></span>(<span class="dt">.df=</span>newtonaddresses,
                                <span class="dt">col.address=</span><span class="dv">1</span> , <span class="dt">col.zipcode=</span><span class="dv">2</span> , <span class="dt">col.city=</span><span class="dv">3</span> , <span class="dt">col.state=</span><span class="dv">4</span>,
-                               <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))
-<span class="co">#&gt; # A tibble: 37 x 26</span>
-<span class="co">#&gt;    address zipcode city  state   lat  long region_name region_id type </span>
-<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span>
-<span class="co">#&gt;  1 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  2 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
-<span class="co">#&gt;  3 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
-<span class="co">#&gt;  4 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
-<span class="co">#&gt;  5 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
-<span class="co">#&gt;  6 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
-<span class="co">#&gt;  7 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
-<span class="co">#&gt;  8 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
-<span class="co">#&gt;  9 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
-<span class="co">#&gt; 10 839 Me~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; # ... with 27 more rows, and 17 more variables: zestimate &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   zest_lastupdated &lt;date&gt;, zest_monthlychange &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;, zestimate_high &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   zpid &lt;chr&gt;, bathrooms &lt;dbl&gt;, bedrooms &lt;dbl&gt;, finishedSqFt &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   lastSoldDate &lt;chr&gt;, lastSoldPrice &lt;dbl&gt;, lotSizeSqFt &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   taxAssessment &lt;dbl&gt;, taxAssessmentYear &lt;dbl&gt;, totalRooms &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   yearBuilt &lt;dbl&gt;</span></code></pre></div>
+                               <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))</code></pre></div>
 <p>If we want to find out more characteristics of the property that we could not find with <code>GetDeepSearchResults</code>, the function <code>GetUpdatedPropertyDetails</code> may help us out. It takes a Zillow Property ID and returns much of the non-value information from the search functions, as well as additional information about parking, HVAC, appliances, and more:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">exdetails &lt;-<span class="st"> </span><span class="kw"><a href="../reference/GetUpdatedPropertyDetails.html">GetUpdatedPropertyDetails</a></span>(<span class="dt">zpid=</span><span class="st">'93961896'</span> ,
                            <span class="dt">api_key=</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))
@@ -221,16 +192,16 @@ zpidex &lt;-<span class="st"> </span><span class="kw"><a href="../reference/GetD
 <span class="co">#&gt;    address zipcode city  state   lat  long region_name region_id type </span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span>
 <span class="co">#&gt;  1 600 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  2 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  3 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  4 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  5 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  6 2109 S~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  7 605 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  8 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  9 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 10 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 11 3000 A~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  2 605 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  3 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  4 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  5 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  6 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  7 839 Me~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  8 623 Me~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  9 735 Qu~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt; 10 612 Qu~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt; 11 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
 <span class="co">#&gt; # ... with 13 more variables: zestimate &lt;dbl&gt;, zest_lastupdated &lt;date&gt;,</span>
 <span class="co">#&gt; #   zest_monthlychange &lt;dbl&gt;, zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, rentzestimate &lt;dbl&gt;, rent_lastupdated &lt;date&gt;,</span>
@@ -243,16 +214,16 @@ zpidex &lt;-<span class="st"> </span><span class="kw"><a href="../reference/GetD
 <span class="co">#&gt;    address zipcode city  state   lat  long region_name region_id type </span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span>
 <span class="co">#&gt;  1 600 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  2 919 N ~ 67114   Newt~ KS     38.1 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  3 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  4 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  5 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  6 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  7 2109 S~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  8 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  9 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 10 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 11 3000 A~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  2 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  3 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  4 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  5 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  6 2109 S~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  7 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  8 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  9 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt; 10 3000 A~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt; 11 605 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
 <span class="co">#&gt; # ... with 18 more variables: zestimate &lt;dbl&gt;, zest_lastupdated &lt;date&gt;,</span>
 <span class="co">#&gt; #   zest_monthlychange &lt;dbl&gt;, zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, zpid &lt;chr&gt;, compscore &lt;dbl&gt;, bathrooms &lt;dbl&gt;,</span>
@@ -305,23 +276,7 @@ richdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Ge
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span>(zpid, <span class="dt">.keep_all=</span><span class="ot">TRUE</span>)
 
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(richdata)
-<span class="co">#&gt; # A tibble: 6 x 27</span>
-<span class="co">#&gt;   address zipcode city  state   lat  long region_name region_id type </span>
-<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span>
-<span class="co">#&gt; 1 600 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 2 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt; 3 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt; 4 321 E ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 5 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; 6 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt; # ... with 18 more variables: zestimate &lt;dbl&gt;, zest_lastupdated &lt;date&gt;,</span>
-<span class="co">#&gt; #   zest_monthlychange &lt;dbl&gt;, zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   zestimate_high &lt;dbl&gt;, zpid &lt;chr&gt;, compscore &lt;dbl&gt;, bathrooms &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   bedrooms &lt;dbl&gt;, finishedSqFt &lt;dbl&gt;, lastSoldDate &lt;chr&gt;,</span>
-<span class="co">#&gt; #   lastSoldPrice &lt;dbl&gt;, lotSizeSqFt &lt;dbl&gt;, taxAssessment &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   taxAssessmentYear &lt;dbl&gt;, totalRooms &lt;dbl&gt;, yearBuilt &lt;dbl&gt;</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(richdata)
-<span class="co">#&gt; [1] 51 27</span></code></pre></div>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(richdata)</code></pre></div>
 <p>What just happened here? We used our original address and obtained its Zillow property ID with <code>GetDeepSearchResults</code>, then used that ZPID with <code>GetComps</code> to get 25 comparable properties. Then we took the ZPIDs from those comparables and applied <code>GetDeepComps</code> to each, resulting in an expanded number of properties. We can then bind all of the data together with <code>bind_rows()</code> from the <code>dplyr</code> package, and take the distinct addresses to get a rich dataset for our area for purposes of analysis.</p>
 <p><em>CAUTION:</em> In this example we sent over 100 requests to the API. Remember that Zillow limits the number of requests you can make in a day, so be careful using these functions in conjunction with <code><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply()</a></code> or similar functions. You may get locked out! Additionally, it is not recommended to use more than the above number of addresses (i.e., less than 50), lest you be accused of ‘spidering’ Zillow’s API. Please read their Terms of Service carefully when signing up for a Zillow Web Services ID. Just because you can get data, doesn’t mean you should!</p>
 </div>
