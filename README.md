@@ -11,7 +11,9 @@ The goal of realEstAnalytics is to provide an R function for each zillow API ser
 Website
 -------
 
-The package is hosted at <https://www.realestanalyticsr.com/>
+-   The package is hosted at <https://www.realestanalyticsr.com/>
+
+-   For an Rshiny app demonstrating some of the package's capabilities, go to <https://xiyuansun2010.shinyapps.io/realEstAnalytics_shiny_app/> (Note: Valid API key required for use)
 
 Installation
 ------------
@@ -45,7 +47,7 @@ zapi_key = getOption('ZillowR-zws_id')
 Calling the Zillow API from R
 -----------------------------
 
-You can get basic information on a property based on its address using `GetDeepSearchResults`. The return is a dataframe with the property's estimated value as well as other characteristics (i.e., bedrooms, bathrooms, etc.). To get results for more than one address at once, we recommend `GetDeepSearchResults_dataframe` rather than using an `apply()` or other mapping function.
+You can get basic information on a property based on its address using `GetDeepSearchResults`. The return is a dataframe with the property's estimated value as well as other characteristics (i.e., bedrooms, bathrooms, etc.). To get results for more than one address at once, we recommend `GetDeepSearchResults_dataframe` rather than using an `apply()` or other mapping function, because some addresses have multiple properties.
 
 ``` r
 GetDeepSearchResults('2902 Wood St.', city='Ames',state='IA', zipcode=50014,
@@ -65,7 +67,7 @@ GetDeepSearchResults('2902 Wood St.', city='Ames',state='IA', zipcode=50014,
 #> #   totalRooms <dbl>, yearBuilt <dbl>
 ```
 
-Use the `GetComps` or `GetDeepComps` to get comparable properties for a given Zillow Property ID (limit 25 comparables). The return is a data frame with just the comparable addresses and their Zestimate values, with more property information available with `GetDeepComps`.
+Use the `GetComps` or `GetDeepComps` to get comparable properties for a given Zillow Property ID (limit 25 comparables). The return is a data frame with the most comparable addresses and their Zestimate values, with more property information (i.e., the `GetDeepSearchResults` variables) available from `GetDeepComps`.
 
 ``` r
 #retrieve the zpid from GetDeepSearchResults
@@ -83,11 +85,11 @@ GetComps(zpidex, count=10, rentzestimate=TRUE, api_key = getOption('ZillowR-zws_
 #>  4 427 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
 #>  5 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
 #>  6 2109 S~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
-#>  7 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
-#>  8 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
-#>  9 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
-#> 10 3000 A~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
-#> 11 605 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
+#>  7 605 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
+#>  8 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
+#>  9 506 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
+#> 10 618 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
+#> 11 3000 A~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city 
 #> # ... with 13 more variables: zestimate <dbl>, zest_lastupdated <date>,
 #> #   zest_monthlychange <dbl>, zest_percentile <dbl>, zestimate_low <dbl>,
 #> #   zestimate_high <dbl>, rentzestimate <dbl>, rent_lastupdated <date>,
@@ -111,7 +113,7 @@ GetZestimate(zpids= zpidex ,
 #> #   rentzestimate_high <dbl>
 ```
 
-If you want more detailed information on a specific property, you can specify the ZPID and return the results with `GetUpdatedPropertyDetails`:
+If you want more detailed information on a specific property (such as utilities, appliances, and other building information), you can specify the ZPID and return the results with `GetUpdatedPropertyDetails`:
 
 ``` r
 GetUpdatedPropertyDetails(zpid=2084934591 ,
@@ -142,5 +144,7 @@ For the median rental values:
 #Rental values for Single Family Residences by State
 get_rental_listings(type='SFR', rate='PerSqFt',geography="State")
 ```
+
+For both functions, the return is a dataframe with the first few columns giving the geographic region and the rest corresponding to monthly observations. This dataframe can be reshaped or formatted as necessary for analysis.
 
 Please see the vignette (under articles) to see further documentation and examples of `realEstAnalytics`' capabilities.

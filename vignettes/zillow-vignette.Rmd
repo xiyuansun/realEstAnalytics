@@ -53,7 +53,7 @@ zapi_key = getOption('ZillowR-zws_id')
 It is helpful to set this when you start your session, so that you do not need to continually reference it if making many calls to the API.
 
 ## Returning Property Information with `GetUpdatedPropertyDetails`,`GetDeepSearchResults` and `GetDeepSearchResults_dataframe`
-Suppose we're interested in moving to Newton, KS, and are considering a number of different homes in the area for purchase. One particular home we're interested in is located at 600 S. Quail Ct. in Newton. We can obtain information on the property using the `DeepSearchResults` function, which will pull the data corresponding to all of the Zillow Property IDs at a given address.
+Suppose we're interested in moving to Newton, KS, and are considering a number of different homes in the area for purchase. One particular home we're interested in is located at 600 S. Quail Ct. in Newton. We can obtain information on the property using the `GetDeepSearchResults` function, which will pull the data corresponding to all of the Zillow Property IDs at a given address.
 ```{r}
 GetDeepSearchResults('600 S. Quail Ct.', city='Newton',state='KS', zipcode=NULL,
                      api_key=getOption('ZillowR-zws_id'))

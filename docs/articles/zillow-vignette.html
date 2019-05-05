@@ -80,7 +80,7 @@
       <h1>Exploring Zillow Real Estate Data: Introduction to realEstAnalytics</h1>
                         <h4 class="author">Steve Harms</h4>
             
-            <h4 class="date">2019-05-04</h4>
+            <h4 class="date">2019-05-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/xiyuansun/realEstAnalytics/blob/master/vignettes/zillow-vignette.Rmd"><code>vignettes/zillow-vignette.Rmd</code></a></small>
       <div class="hidden name"><code>zillow-vignette.Rmd</code></div>
@@ -120,7 +120,7 @@ zapi_key =<span class="st"> </span><span class="kw"><a href="https://www.rdocume
 <h2 class="hasAnchor">
 <a href="#returning-property-information-with-getupdatedpropertydetailsgetdeepsearchresults-and-getdeepsearchresults_dataframe" class="anchor"></a>Returning Property Information with <code>GetUpdatedPropertyDetails</code>,<code>GetDeepSearchResults</code> and <code>GetDeepSearchResults_dataframe</code>
 </h2>
-<p>Suppose we’re interested in moving to Newton, KS, and are considering a number of different homes in the area for purchase. One particular home we’re interested in is located at 600 S. Quail Ct. in Newton. We can obtain information on the property using the <code>DeepSearchResults</code> function, which will pull the data corresponding to all of the Zillow Property IDs at a given address.</p>
+<p>Suppose we’re interested in moving to Newton, KS, and are considering a number of different homes in the area for purchase. One particular home we’re interested in is located at 600 S. Quail Ct. in Newton. We can obtain information on the property using the <code>GetDeepSearchResults</code> function, which will pull the data corresponding to all of the Zillow Property IDs at a given address.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/GetDeepSearchResults.html">GetDeepSearchResults</a></span>(<span class="st">'600 S. Quail Ct.'</span>, <span class="dt">city=</span><span class="st">'Newton'</span>,<span class="dt">state=</span><span class="st">'KS'</span>, <span class="dt">zipcode=</span><span class="ot">NULL</span>,
                      <span class="dt">api_key=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">getOption</a></span>(<span class="st">'ZillowR-zws_id'</span>))
 <span class="co">#&gt; # A tibble: 1 x 26</span>
@@ -155,14 +155,14 @@ zapi_key =<span class="st"> </span><span class="kw"><a href="https://www.rdocume
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#there are 32 addresses, some in different zipcodes, to look up</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(newtonaddresses)
 <span class="co">#&gt; # A tibble: 6 x 4</span>
-<span class="co">#&gt;   address              zipcode city      state</span>
-<span class="co">#&gt;   &lt;chr&gt;                &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;</span>
-<span class="co">#&gt; 1 605 Autumn Rdg       67114   Newton    KS   </span>
-<span class="co">#&gt; 2 300 Sherman Dr       67114   Newton    KS   </span>
-<span class="co">#&gt; 3 600 S Quail Ct       67114   Newton    KS   </span>
-<span class="co">#&gt; 4 6219 NW Parkview St. 67219   Park City KS   </span>
-<span class="co">#&gt; 5 2314 S Anderson Ave  67114   Newton    KS   </span>
-<span class="co">#&gt; 6 121 S Hess Ave.      67062   Hesston   KS</span>
+<span class="co">#&gt;   address            zipcode city         state</span>
+<span class="co">#&gt;   &lt;chr&gt;              &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;</span>
+<span class="co">#&gt; 1 2137 Beltline      67114   Newton       KS   </span>
+<span class="co">#&gt; 2 410 Victoria Rd    67114   Newton       KS   </span>
+<span class="co">#&gt; 3 2801 Goldenrod Rd. 67117   North Newton KS   </span>
+<span class="co">#&gt; 4 105 S Logan St.    67114   Newton       KS   </span>
+<span class="co">#&gt; 5 839 Meadowlark Ln  67114   Newton       KS   </span>
+<span class="co">#&gt; 6 1412 W. 8th St.    67114   Newton       KS</span>
 <span class="co">#GetDeepSearchResults_dataframe will get the info for us:</span>
 
 <span class="kw"><a href="../reference/GetDeepSearchResults_dataframe.html">GetDeepSearchResults_dataframe</a></span>(<span class="dt">.df=</span>newtonaddresses,
@@ -171,16 +171,16 @@ zapi_key =<span class="st"> </span><span class="kw"><a href="https://www.rdocume
 <span class="co">#&gt; # A tibble: 37 x 26</span>
 <span class="co">#&gt;    address zipcode city  state   lat  long region_name region_id type </span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;</span>
-<span class="co">#&gt;  1 605 Au~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  2 300 Sh~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  3 600 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
-<span class="co">#&gt;  4 6219 N~ 67219   Park~ KS     37.8 -97.3 Park City   6403      city </span>
-<span class="co">#&gt;  5 2314 S~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
-<span class="co">#&gt;  6 121 S ~ 67062   Hess~ KS     38.1 -97.4 Hesston     52496     city </span>
-<span class="co">#&gt;  7 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
-<span class="co">#&gt;  8 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
-<span class="co">#&gt;  9 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
-<span class="co">#&gt; 10 3425 L~ 64109   Kans~ MO     39.1 -94.6 North Hyde~ 274720    neig~</span>
+<span class="co">#&gt;  1 2137 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  2 410 Vi~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  3 2801 G~ 67117   Nort~ KS     38.1 -97.4 North Newt~ 46801     city </span>
+<span class="co">#&gt;  4 105 S ~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  5 839 Me~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  6 1412 W~ 67114   Newt~ KS     38.1 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  7 919 N ~ 67114   Newt~ KS     38.1 -97.3 Newton      19619     city </span>
+<span class="co">#&gt;  8 2112 B~ 67114   Newt~ KS     38.0 -97.4 Newton      19619     city </span>
+<span class="co">#&gt;  9 3000 A~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
+<span class="co">#&gt; 10 612 Qu~ 67114   Newt~ KS     38.0 -97.3 Newton      19619     city </span>
 <span class="co">#&gt; # ... with 27 more rows, and 17 more variables: zestimate &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   zest_lastupdated &lt;date&gt;, zest_monthlychange &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   zest_percentile &lt;dbl&gt;, zestimate_low &lt;dbl&gt;, zestimate_high &lt;dbl&gt;,</span>
@@ -225,37 +225,37 @@ deepcomps &lt;-<span class="st"> </span><span class="kw"><a href="../reference/G
 
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(deepcomps)
 <span class="co">#&gt; Classes 'tbl_df', 'tbl' and 'data.frame':    11 obs. of  27 variables:</span>
-<span class="co">#&gt;  $ address           : chr  "600 S Quail Ct" "2137 Beltline" "2112 Beltline Ct" "427 Victoria Rd" ...</span>
+<span class="co">#&gt;  $ address           : chr  "600 S Quail Ct" "919 N Blaine St" "2137 Beltline" "2112 Beltline Ct" ...</span>
 <span class="co">#&gt;  $ zipcode           : chr  "67114" "67114" "67114" "67114" ...</span>
 <span class="co">#&gt;  $ city              : chr  "Newton" "Newton" "Newton" "Newton" ...</span>
 <span class="co">#&gt;  $ state             : chr  "KS" "KS" "KS" "KS" ...</span>
-<span class="co">#&gt;  $ lat               : num  38 38 38 38 38 ...</span>
-<span class="co">#&gt;  $ long              : num  -97.3 -97.4 -97.4 -97.3 -97.3 ...</span>
+<span class="co">#&gt;  $ lat               : num  38 38.1 38 38 38 ...</span>
+<span class="co">#&gt;  $ long              : num  -97.3 -97.3 -97.4 -97.4 -97.3 ...</span>
 <span class="co">#&gt;  $ region_name       : chr  "Newton" "Newton" "Newton" "Newton" ...</span>
 <span class="co">#&gt;  $ region_id         : chr  "19619" "19619" "19619" "19619" ...</span>
 <span class="co">#&gt;  $ type              : chr  "city" "city" "city" "city" ...</span>
-<span class="co">#&gt;  $ zestimate         : num  228947 271036 199758 191942 165483 ...</span>
-<span class="co">#&gt;  $ zest_lastupdated  : Date, format: "2019-05-03" "2019-05-03" ...</span>
-<span class="co">#&gt;  $ zest_monthlychange: num  -451 2210 1181 2408 877 ...</span>
-<span class="co">#&gt;  $ zest_percentile   : num  96 98 93 92 86 84 79 98 98 97 ...</span>
-<span class="co">#&gt;  $ zestimate_low     : num  212921 257484 189770 182345 152244 ...</span>
-<span class="co">#&gt;  $ zestimate_high    : num  249552 284588 209746 201539 173757 ...</span>
-<span class="co">#&gt;  $ zpid              : chr  "1340244" "109818062" "109782360" "1341630" ...</span>
-<span class="co">#&gt;  $ compscore         : num  NA 10 11 6 6 9 9 7 6 5 ...</span>
-<span class="co">#&gt;  $ bathrooms         : num  3 3 2 3 3 3 2 3 3 3 ...</span>
-<span class="co">#&gt;  $ bedrooms          : num  4 6 3 4 3 4 3 4 5 4 ...</span>
-<span class="co">#&gt;  $ finishedSqFt      : num  1726 2669 1355 2570 2604 ...</span>
-<span class="co">#&gt;  $ lastSoldDate      : chr  "06/01/2007" "06/15/2018" "09/21/2018" "09/10/2018" ...</span>
-<span class="co">#&gt;  $ lastSoldPrice     : num  230000 262900 193950 185000 NA ...</span>
-<span class="co">#&gt;  $ lotSizeSqFt       : num  33024 13503 11325 13939 12632 ...</span>
-<span class="co">#&gt;  $ taxAssessment     : num  214800 228000 187430 171970 152500 ...</span>
+<span class="co">#&gt;  $ zestimate         : num  229365 86515 271009 199880 192078 ...</span>
+<span class="co">#&gt;  $ zest_lastupdated  : Date, format: "2019-05-04" "2019-05-04" ...</span>
+<span class="co">#&gt;  $ zest_monthlychange: num  -42 129 2114 1265 2485 ...</span>
+<span class="co">#&gt;  $ zest_percentile   : num  96 48 98 93 92 86 84 98 98 97 ...</span>
+<span class="co">#&gt;  $ zestimate_low     : num  213309 82189 257459 189886 182474 ...</span>
+<span class="co">#&gt;  $ zestimate_high    : num  243127 90841 284559 209874 201682 ...</span>
+<span class="co">#&gt;  $ zpid              : chr  "1340244" "1339246" "109818062" "109782360" ...</span>
+<span class="co">#&gt;  $ compscore         : num  NA 16 10 11 6 6 9 7 6 5 ...</span>
+<span class="co">#&gt;  $ bathrooms         : num  3 2 3 2 3 3 3 3 3 3 ...</span>
+<span class="co">#&gt;  $ bedrooms          : num  4 3 6 3 4 3 4 4 5 4 ...</span>
+<span class="co">#&gt;  $ finishedSqFt      : num  1726 1408 2669 1355 2570 ...</span>
+<span class="co">#&gt;  $ lastSoldDate      : chr  "06/01/2007" "10/18/2018" "06/15/2018" "09/21/2018" ...</span>
+<span class="co">#&gt;  $ lastSoldPrice     : num  230000 NA 262900 193950 185000 ...</span>
+<span class="co">#&gt;  $ lotSizeSqFt       : num  33024 13068 13503 11325 13939 ...</span>
+<span class="co">#&gt;  $ taxAssessment     : num  214800 71200 228000 187430 171970 ...</span>
 <span class="co">#&gt;  $ taxAssessmentYear : num  2018 2018 2018 2018 2018 ...</span>
-<span class="co">#&gt;  $ totalRooms        : num  8 18 5 10 11 7 5 7 7 7 ...</span>
-<span class="co">#&gt;  $ yearBuilt         : num  1993 2008 2017 1994 1994 ...</span>
+<span class="co">#&gt;  $ totalRooms        : num  8 5 18 5 10 11 7 7 7 7 ...</span>
+<span class="co">#&gt;  $ yearBuilt         : num  1993 1964 2008 2017 1994 ...</span>
 
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(deepcomps<span class="op">$</span>zestimate)
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">#&gt;  147820  178713  228947  218629  264659  271919</span></code></pre></div>
+<span class="co">#&gt;   86515  178688  229365  213149  265037  271457</span></code></pre></div>
 </div>
 <div id="retrieving-basic-property-value-estimates-with-getzestimate" class="section level2">
 <h2 class="hasAnchor">
@@ -597,7 +597,7 @@ KSrentals &lt;-<span class="st"> </span><span class="kw"><a href="../reference/g
 <span class="co">#&gt; # A tibble: 1 x 1</span>
 <span class="co">#&gt;   rentpersqft</span>
 <span class="co">#&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt; 1       0.637</span></code></pre></div>
+<span class="co">#&gt; 1       0.608</span></code></pre></div>
 <p>The most recent observation suggests that rent in Kansas is almost $0.87 per square foot for 4 bedroom homes, but our target home’s estimated rent value is approximately $0.58. This generally holds in line with what we found with the property value previously. Our new home is much cheaper than the rest of the state.</p>
 </div>
 <div id="manipulate-the-xml-data-yourself-with-rawtrue" class="section level2">

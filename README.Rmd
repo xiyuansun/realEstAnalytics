@@ -25,7 +25,10 @@ YOURAPIKEYHERE = getOption('ZillowR-zws_id')
 The goal of realEstAnalytics is to provide an R function for each zillow API service, making it easy to make API calls and process the responses into R-friendly data structures. 
 
 ## Website
-The package is hosted at https://www.realestanalyticsr.com/
+- The package is hosted at https://www.realestanalyticsr.com/
+
+- For an Rshiny app demonstrating some of the package's capabilities, go to https://xiyuansun2010.shinyapps.io/realEstAnalytics_shiny_app/ 
+    (Note: Valid API key required for use)
 
 ## Installation
 
