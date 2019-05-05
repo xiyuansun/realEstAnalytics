@@ -36,3 +36,18 @@ test_that(" output is a dataframe", {
   expect_s3_class(GetComps('1341571', count=10, rentzestimate=FALSE, api_key=zapi_key,raw=FALSE), "data.frame")
 })
 
+test_that(" rentzestimate output is a dataframe", {
+  # expect data frame
+  expect_s3_class(GetComps('1341571', count=10, rentzestimate=TRUE, api_key=zapi_key,raw=FALSE), "data.frame")
+})
+
+test_that(" bad zpid returns warning", {
+  # expect data frame
+  expect_true(GetComps(zpid=2084934591, count=10,
+                           api_key = getOption('ZillowR-zws_id'))==2084934591)
+})
+
+test_that(" raw returns XML document", {
+  # expect xml document
+  expect_s3_class(GetComps(zpid=1341669,rentzestimate=FALSE,api_key=zapi_key, raw=TRUE), c("xml_document", "xml_node"))
+})

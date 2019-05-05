@@ -41,3 +41,14 @@ test_that(" output is a dataframe", {
   # expect data frame
   expect_s3_class(GetZestimate(zpids='1341571',rentzestimate=FALSE,api_key=zapi_key), "data.frame")
 })
+
+test_that(" raw returns XML document", {
+  # expect xml document
+  expect_s3_class(GetZestimate(zpids='1341571',rentzestimate=FALSE,api_key=zapi_key, raw=TRUE)[[1]], "xml_nodeset")
+})
+
+test_that(" vector input, output is a dataframe", {
+  # expect data frame
+  expect_s3_class(GetZestimate(zpids=c(1341571,109818062,1341669,1341715) ,
+                  rentzestimate=TRUE , api_key=getOption('ZillowR-zws_id')), "data.frame")
+})

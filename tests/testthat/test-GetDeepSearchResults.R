@@ -44,3 +44,23 @@ test_that(" output is a dataframe", {
   expect_s3_class(GetDeepSearchResults(address='312 Hayward Ave.', city='Ames', state='IA', zipcode='50014', api_key=zapi_key), "data.frame")
 })
 
+test_that(" bad address gives warning", {
+  # expect data frame
+  expect_warning(GetDeepSearchResults(address='312 Hayward Ave. UNIT 3311', city='Ames', state='IA',
+                                      zipcode='50014', api_key=zapi_key))
+})
+
+test_that(" rentzestimate returns rent zestimates", {
+  # expect data frame
+  expect_true('rentzestimate' %in% (GetDeepSearchResults(address='312 Hayward Ave.',
+                                       city='Ames', state='IA', zipcode='50014',
+                                       api_key=zapi_key, rentzestimate=TRUE) %>% names())
+              )
+})
+
+test_that(" raw returns raw", {
+  # expect data frame
+  expect_s3_class(GetDeepSearchResults(address='312 Hayward Ave.',
+                                       city='Ames', state='IA', zipcode='50014', api_key=zapi_key, raw=TRUE),
+                  c("xml_document", "xml_node"))
+})
