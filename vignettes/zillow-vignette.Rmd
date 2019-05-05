@@ -72,7 +72,7 @@ Additionally, we set `rentzestimate=TRUE` in the previous example, which tells t
 One note of caution when using `GetDeepSearchResults` is that it will return the results for ALL of the Zillow property IDs at an address, which can cause difficulties if one is trying to get results for multiple addresses at once, such as using the function in conjunction with the `apply()` family of functions. To avoid this, one may be able to use `GetDeepSearchResults_dataframe`, which takes a data frame of addresses as its arguments.
 
 Suppose we want to look at the results for several results at once, and we have the data stored in a data frame named `newtonaddresses` in our environment. To get the search results for the full data frame, all we need to do is supply `GetDeepSearchResults_dataframe` with the data and the column numbers corresponding to the geographic information:
-```{r, message=FALSE, echo=FALSE, eval=FALSE}
+```{r, message=FALSE, echo=FALSE}
 library(dplyr)
 library(magrittr)
 addresses <- c('733 Normandy Ct.',
@@ -102,7 +102,7 @@ newtonaddresses <- GetComps(1340244, count=20, api_key = getOption('ZillowR-zws_
   rbind(c('3425 Locust St.', '64109', 'Kansas City', 'MO'), addex) %>%
   sample_n(size=32)
 ```
-```{r,eval=FALSE}
+```{r}
 #there are 32 addresses, some in different zipcodes, to look up
 head(newtonaddresses)
 #GetDeepSearchResults_dataframe will get the info for us:
@@ -134,10 +134,15 @@ zpidex <- GetDeepSearchResults('600 S. Quail Ct.', zipcode=67114,
                      rentzestimate=TRUE, api_key=getOption('ZillowR-zws_id'))$zpid
 
 #GetComps for the '600 S. Quail Ct.' address
-GetComps(zpidex, count=10, rentzestimate=TRUE, api_key = getOption('ZillowR-zws_id'))
+GetComps(zpidex, count=10, rentzestimate=TRUE, api_key = getOption('ZillowR-zws_id')) %>% 
+  dim()
 
 #GetDeepComps returns the same information as GetComps, with additional property data
-GetDeepComps(zpidex, count=10, rentzestimate=FALSE, api_key = getOption('ZillowR-zws_id'))
+deepcomps <- GetDeepComps(zpidex, count=10, rentzestimate=FALSE, api_key = getOption('ZillowR-zws_id'))
+
+str(deepcomps)
+
+summary(deepcomps$zestimate)
 ```
 
 ## Retrieving Basic Property Value Estimates with `GetZestimate`
@@ -148,36 +153,25 @@ GetZestimate(zpids=c(zpidex,109818062,1341669,1341715) ,
              rentzestimate=TRUE , api_key=getOption('ZillowR-zws_id'))
 ```
 
-## Combining the API Calls to Build a Local Housing Dataset
-Suppose we want to build a larger dataset based on only our original address. This would facilitate an analysis of recent property sales in the general area to gain insight into the housing market.
-
-We have seen how `GetComps` can get a few comparable properties in the area. If we want to build a larger dataset, we can chain the `GetDeepSearchResults`,`GetComps`, and `GetDeepComps` functions together to get more properties in an area after starting with one location. To speed the cleaning and combining, we use `dplyr` and `%>%` from `magrittr` in the tidyverse family, with an `lapply`:
-```{r, eval=FALSE}
-library(purrr)
-#build a dataset in one sequence of commands
-#starting from one address
-richdata <- GetDeepSearchResults('600 S. Quail Ct.',
-                     zipcode=67114,
-                     rentzestimate=TRUE,
-                     api_key=getOption('ZillowR-zws_id')) %>%
-  dplyr::select(zpid) %>%
-  purrr::as_vector("character") %>% 
-  GetComps(count=25, api_key=getOption('ZillowR-zws_id')) %>%
-  dplyr::select(zpid) %>%
-  purrr::as_vector("character") %>% 
+## Combining the API Calls to Build a Local Housing Dataset: Note of Caution
+Suppose we want to build a larger dataset based on only our original address. This would facilitate an analysis of recent property sales in the general area to gain insight into the housing market. Conveniently, many of the functions in the realEstAnalytics package either (i) allow for vector inputs of Zillow property IDs, or (ii) allow for easy implementation of mapping functions like `apply()` or `purrr::map()` to retrieve multiple pieces of data at once. Users familiar with the aforementioned mapping techniques should be able to see how one could (in theory) retrieve data on more than 100 properties in one stroke by applying a function to many property IDs at once, such as:
+```{r, eval=FALSE, echo=TRUE}
+  ZPID_list %>% 
   lapply(GetDeepComps,
-         count=12,
+         count=25,
          api_key=getOption('ZillowR-zws_id')) %>% 
-  dplyr::bind_rows() %>% 
-  dplyr::distinct(zpid, .keep_all=TRUE)
-
-head(richdata)
-dim(richdata)
+  bind_rows() 
 ```
 
-What just happened here? We used our original address and obtained its Zillow property ID with `GetDeepSearchResults`, then used that ZPID with `GetComps` to get 25 comparable properties. Then we took the ZPIDs from those comparables and applied `GetDeepComps` to each, resulting in an expanded number of properties. We can then bind all of the data together with `bind_rows()` from the `dplyr` package, and take the distinct addresses to get a rich dataset for our area for purposes of analysis.
+The above `lapply()` would take every Zillow property ID in `ZPID-list` and return 25 comparable properties' information. While realEstAnalytics is not capable of restricting such a mass data pull, a few notes of caution are necessary:
 
-*CAUTION:* In this example we sent over 100 requests to the API. Remember that Zillow limits the number of requests you can make in a day, so be careful using these functions in conjunction with `apply()` or similar functions. You may get locked out! Additionally, it is not recommended to use more than the above number of addresses (i.e., less than 50), lest you be accused of 'spidering' Zillow's API. Please read their Terms of Service carefully when signing up for a Zillow Web Services ID. Just because you can get data, doesn't mean you should!
+- Your daily API calls are limited to 1000 per day
+  + Repeatedly calling the API over a long list of inputs can eat these up quickly
+- In excess, it is a violation of Zillow's Terms of Service and could result in termination of your key
+  + Excessive calls could be construed as 'spidering' Zillow's site, especially if you are chaining calls together or automating an API call
+  + Zillow prefers that only a small number of properties' details be displayed to any user at a given time
+
+Because of this, the authors of realEstAnalytics recommend only using the property information for a small number of homes at any given time. Anything larger than the packages sample data provided in `newtonhouses` puts the user at risk of trouble with Zillow. Just because you're able to access data, does not mean you should abuse your priveleges.
 
 ## Home Price Charts with `GetChart`
 You can obtain a URL for a the Zestimates for a property with `GetChart`. The return from the API is a link to the image of the chart, which can be displayed in `R` with whatever package you prefer. Sometimes the URLs need some cleaning in order to correctly be able to read the image. For example, a 10 year historical valuation chart for our property can be called with:
@@ -289,7 +283,7 @@ The first 3 to 7 (depending on the dataset) columns returned correspond to geogr
 It's clear that our home is valued ($231,234) well above the median value for the zipcode, but this particular city appears to be much cheaper than the rest of the state of Kansas. It looks like Newton and Kansas did not recieve the worst of the housing crisis, and that the city and state are on a sharp upward trend.
 
 ```{r, echo=TRUE, results='hide', warning=F}
-#melting the data using reshape2 and zoo
+#formatting with tidyr and zoo
 topmelted <- citytop %>% 
   tidyr::gather( key='Date', value='MedianPrice',-c(1:7)) %>% mutate(Date=(as.yearmon(Date)))
 statemelted <- Stateseries %>%

@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetDeepSearchResults_dataframe.R
 \name{GetDeepSearchResults_dataframe}
 \alias{GetDeepSearchResults_dataframe}
-\title{Get the 'Deep Search' results from the Zillow API}
+\title{Get the 'Deep Search' results from the Zillow API for a dataframe of addresses}
 \usage{
 GetDeepSearchResults_dataframe(.df, col.address, col.zipcode = NULL,
   col.city = NULL, col.state = NULL, rentzestimate = F, api_key,

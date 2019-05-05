@@ -1,4 +1,4 @@
-#' Get the 'Deep Search' results from the Zillow API
+#' Get the 'Deep Search' results from the Zillow API for a dataframe of addresses
 #'
 #' A wrapper for \code{GetDeepSearchResults} that takes data frames with address information as inputs rather than a single address,
 #' and returns the search results for all addresses
